@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 
 @app.route('/admin')
-def dashboardpy():
+def dashboardpyth():
     return render_template('index.html')
 
 @app.route('/about')
@@ -18,6 +18,10 @@ def contact():
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/profile')
+def profile():
+    return render_template('profile_admin.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
