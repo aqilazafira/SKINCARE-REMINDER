@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style_home.css') }}"
+    />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <h2>SKINCARE REMINDER</h2>
+      </div>
+      <ul class="menu">
+        <li><a href="#">🏠 HOME</a></li>
+        <li><a href="#">📋 REKOMENDASI</a></li>
+        <li><a href="#">💬 FEEDBACK</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="profile-card">
+        <div class="profile-header">
+          <h2>PROFILE</h2>
+        </div>
+        <div class="profile-details">
+          <img
+            src="{{ url_for('static', filename='images/user-icon.png') }}"
+            alt="User Icon"
+            class="profile-icon"
+          />
+          <h3>Admin</h3>
+          <form>
+            <label for="name">Nama</label>
+            <input type="text" id="name" value="User" disabled />
+
+            <label for="email">Email</label>
+            <input type="email" id="email" value="user@gmail.com" disabled />
+
+            <label for="phone">No. Tlp</label>
+            <input type="text" id="phone" value="+62 823 2345-6784" disabled />
+
+            <label for="type">Jenis Kulit</label>
+            <input type="text" id="type" value="Normal" disabled />
+
+            <label for="role">Role</label>
+            <input type="text" id="role" value="User" disabled />
+
+            <label for="password">Password</label>
+            <input type="password" id="password" value="********" disabled />
+            <button type="button" class="edit-btn">Edit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
