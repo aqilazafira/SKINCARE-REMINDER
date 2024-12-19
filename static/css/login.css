@@ -1,0 +1,120 @@
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fce4ec;
+  }
+  
+  .login-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Left Side - Form */
+  .login-form {
+    width: 50%;
+    background-color: #f8bbd0;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  
+  .login-form .logo img {
+    width: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .login-form h1 {
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    width: 80%;
+  }
+  
+  .input-group label img {
+    width: 20px;
+    margin-right: 10px;
+  }
+  
+  .input-group input {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+  }
+  
+  .button-group .btn {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+  }
+  
+  .button-group .login-btn {
+    background-color: #ec407a;
+    color: white;
+  }
+  
+  .button-group .login-btn:hover {
+    background-color: #d81b60;
+  }
+  
+  .button-group .register-btn {
+    background-color: white;
+    color: #ec407a;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    line-height: 35px;
+  }
+  
+  .button-group .register-btn:hover {
+    background-color: #f8bbd0;
+    color: white;
+  }
+  
+  /* Right Side - Illustration */
+  .login-illustration {
+    width: 50%;
+    background-color: #fce4ec;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login-illustration img {
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .login-illustration h1 {
+    font-size: 28px;
+    color: #ec407a;
+  }
+  

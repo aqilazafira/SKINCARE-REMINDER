@@ -1,0 +1,106 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Sidebar Styling */
+  .sidebar {
+    background-color: #f8bbd0;
+    padding: 20px;
+    width: 20%;
+    height: 100%;
+    color: white;
+  }
+  
+  .sidebar h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    margin: 15px 0;
+    font-size: 16px;
+  }
+  
+  .sidebar ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .sidebar .copyright {
+    position: absolute;
+    bottom: 20px;
+    font-size: 12px;
+  }
+  
+  /* Main Content Styling */
+  .main-content {
+    width: 80%;
+    padding: 40px;
+    text-align: center;
+    background-color: #fce4ec;
+  }
+  
+  .welcome-header h1 {
+    color: #ec407a;
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  .welcome-header p {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+  
+  .welcome-content img {
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .welcome-content p {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+  
+  /* Buttons Section */
+  .buttons-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .buttons-section .btn {
+    background-color: #f48fb1;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .buttons-section .btn:hover {
+    background-color: #ec407a;
+  }
+  
+  /* Specific Buttons */
+  .login-btn {
+    background-color: #f48fb1;
+  }
+  
+  .register-btn {
+    background-color: #d81b60;
+  }
+  

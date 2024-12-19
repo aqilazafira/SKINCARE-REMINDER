@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jenis Kulit - Skincare Reminder</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/rekomendasi.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h1>SKINCARE REMINDER</h1>
+        <ul>
+          <li><a href="/">HOME</a></li>
+          <li>REKOMENDASI</li>
+          <li>FEEDBACK</li>
+          <li>MANAJEMEN</li>
+        </ul>
+        <p class="copyright">COPYRIGHT</p>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="header">
+          <h2>Pilih Jenis Kulit Mu</h2>
+          <p>Penyesuaian berdasarkan kebutuhan kulitmu.</p>
+        </div>
+
+        <!-- Form Pilih Jenis Kulit -->
+        <div class="skin-selection">
+          <form action="/submit-skin-type" method="post">
+            <div class="radio-group">
+              <label>
+                <input type="radio" name="skin_type" value="normal" />
+                Normal
+              </label>
+              <label>
+                <input type="radio" name="skin_type" value="kering" />
+                Kering
+              </label>
+              <label>
+                <input type="radio" name="skin_type" value="berminyak" />
+                Berminyak
+              </label>
+              <label>
+                <input type="radio" name="skin_type" value="kombinasi" />
+                Kombinasi
+              </label>
+              <label>
+                <input type="radio" name="skin_type" value="berjerawat" />
+                Berjerawat
+              </label>
+            </div>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

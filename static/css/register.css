@@ -1,0 +1,104 @@
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fce4ec;
+  }
+  
+  .register-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  /* Left Side - Form */
+  .register-form {
+    width: 50%;
+    background-color: #f8bbd0;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  
+  .register-form .logo img {
+    width: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .register-form h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    width: 80%;
+  }
+  
+  .input-group label img {
+    width: 20px;
+    margin-right: 10px;
+  }
+  
+  .input-group input {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: center;
+    width: 80%;
+  }
+  
+  .button-group .btn {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-group .register-btn {
+    background-color: #ec407a;
+    color: white;
+  }
+  
+  .button-group .register-btn:hover {
+    background-color: #d81b60;
+  }
+  
+  /* Right Side - Illustration */
+  .register-illustration {
+    width: 50%;
+    background-color: #fce4ec;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .register-illustration img {
+    width: 300px;
+    margin-bottom: 20px;
+  }
+  
+  .register-illustration h1 {
+    font-size: 28px;
+    color: #ec407a;
+  }
+  

@@ -23,5 +23,21 @@ def home():
 def profile():
     return render_template('profile_admin.html')
 
+@app.route('/welcomepage')
+def welocome():
+    return render_template('welcome_page.html')
+
+@app.route('/rekomendasi')
+def rekomendasi():
+    return render_template('rekomendasi.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
