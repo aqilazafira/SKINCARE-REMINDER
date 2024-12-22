@@ -1,0 +1,103 @@
+/* Reset dasar */
+body, h1, h2, h3, p, table, th, td {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #fff5f5; /* Warna latar belakang pink lembut */
+    color: #333; /* Warna teks */
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ff69b4; /* Warna pink */
+}
+
+/* Tabel */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffe4e4; /* Warna latar tabel */
+}
+
+th, td {
+    border: 1px solid #ffa3a3; /* Warna border */
+    text-align: center;
+    padding: 10px;
+}
+
+th {
+    background-color: #ffb6c1; /* Warna pink lebih terang */
+    color: #fff;
+    font-weight: bold;
+}
+
+td img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Tombol */
+button, a {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    text-decoration: none;
+    color: #fff;
+    background-color: #ff69b4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+button:hover, a:hover {
+    background-color: #ff4787; /* Warna hover */
+}
+
+/* Sidebar navigasi */
+.sidebar {
+    width: 200px;
+    background-color: #ffb6c1; /* Warna pink terang */
+    padding: 15px;
+    border-radius: 10px;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    padding: 10px;
+    background-color: #ff69b4;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.sidebar ul li a:hover {
+    background-color: #ff4787;
+}
+
+/* Untuk konten utama */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}

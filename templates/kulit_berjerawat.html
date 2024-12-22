@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kulit Berjerawat</title>
+    <link rel="stylesheet" href="/static/css/kulit_berjerawat.css" />
+  </head>
+  <body>
+    <h1>Rekomendasi Skincare untuk Kulit Berjerawat</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Gambar</th>
+          <th>Merk</th>
+          <th>Jenis Skincare</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in data %}
+        <tr>
+          <td>
+            <img
+              src="/static/img/{{ item.gambar }}"
+              alt="{{ item.merk }}"
+              width="100"
+            />
+          </td>
+          <td>{{ item.merk }}</td>
+          <td>{{ item.jenis }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skincare Reminder - Kulit Normal</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/kulit_normalcss') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Skincare Reminder</h1>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/rekomendasi">Rekomendasi</a>
+        <a href="/kulit_kering">Kulit Kering</a>
+        <a href="/kulit_normal">Kulit Normal</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Rekomendasi untuk Kulit Normal</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Gambar</th>
+            <th>Merk</th>
+            <th>Jenis Skincare</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <img
+                src="{{ url_for('static', filename='images/sample.png') }}"
+                alt="Sample"
+                width="100"
+              />
+            </td>
+            <td>Merk Contoh</td>
+            <td>Cleanser</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

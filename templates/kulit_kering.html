@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skincare Reminder - Rekomendasi</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/kulit_kering.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Skincare Reminder</h1>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/rekomendasi">Rekomendasi</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Rekomendasi Produk</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Gambar</th>
+            <th>Merk</th>
+            <th>Jenis Skincare</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <img
+                src="{{ url_for('static', filename='images/sample.png') }}"
+                alt="Sample"
+                width="100"
+              />
+            </td>
+            <td>Merk Contoh</td>
+            <td>Toner</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

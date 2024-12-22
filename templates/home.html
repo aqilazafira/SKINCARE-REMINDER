@@ -10,31 +10,42 @@
     />
   </head>
   <body>
-    <header>
-      <div class="logo">
-        <img
-          src="{{ url_for('static', filename='images/logo.png') }}"
-          alt="Skincare Reminder Logo"
-        />
-      </div>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Rekomendasi</a></li>
-          <li><a href="#">Feedback</a></li>
-          <li><a href="#">Timeline</a></li>
-          <li><a href="#">Profil</a></li>
-        </ul>
-      </nav>
-    </header>
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div>
+          <h2>User</h2>
+          <ul>
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="rekomendasi.html">Rekomendasi</a></li>
+            <li><a href="#">Feedback</a></li>
+            <li><a href="#">Timeline</a></li>
+            <li><a href="#">Profil</a></li>
+          </ul>
+        </div>
+        <button class="logout">Logout</button>
+      </aside>
 
-    <main>
-      <h1>Welcome to Skincare Reminder</h1>
-      <p>Keep track of your skincare routine effortlessly!</p>
-    </main>
-
-    <footer>
-      <p>&copy; 2024 Skincare Reminder. All rights reserved.</p>
-    </footer>
+      <!-- Main Content -->
+      <main class="content">
+        <header>
+          <h1>Skincare Reminder</h1>
+          <div class="notification">
+            <span>Pengingat</span>
+            <img
+              src="{{ url_for('static', filename='images/user-icon.png') }}"
+              alt="User Icon"
+            />
+          </div>
+        </header>
+        <section class="logo">
+          <img
+            src="{{ url_for('static', filename='images/skincare-logo.png') }}"
+            alt="Skincare Reminder Logo"
+          />
+        </section>
+      </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>
 </html>

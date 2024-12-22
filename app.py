@@ -1,34 +1,54 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-# Route untuk halaman home
+# Data dummy untuk kategori skincare
+skincare_data = {
+    "kulit_kering": [
+        {"gambar": "kering1.jpg", "merk": "Brand A", "jenis": "Cleanser"},
+        {"gambar": "kering2.jpg", "merk": "Brand B", "jenis": "Toner"}
+    ],
+    "kulit_normal": [
+        {"gambar": "normal1.jpg", "merk": "Brand C", "jenis": "Moisturizer"},
+        {"gambar": "normal2.jpg", "merk": "Brand D", "jenis": "Serum"}
+    ],
+    "kulit_kombinasi": [
+        {"gambar": "kombinasi1.jpg", "merk": "Brand E", "jenis": "Essence"},
+        {"gambar": "kombinasi2.jpg", "merk": "Brand F", "jenis": "Sunscreen"}
+    ],
+    "kulit_berjerawat": [
+        {"gambar": "berjerawat1.jpg", "merk": "Brand G", "jenis": "Acne Cleanser"},
+        {"gambar": "berjerawat2.jpg", "merk": "Brand H", "jenis": "Spot Treatment"}
+    ]
+}
+
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('index.html')
 
-# Route untuk halaman rekomendasi
-@app.route('/rekomendasi', methods=['GET', 'POST'])
+@app.route('/rekomendasi')
 def rekomendasi():
-    jenis_kulit = None
-    if request.method == 'POST':
-        jenis_kulit = request.form.get('jenis_kulit')
-        # Tambahkan logika jika ingin menggunakan data jenis_kulit lebih lanjut
-        return redirect(url_for('hasil_rekomendasi', jenis_kulit=jenis_kulit))
     return render_template('rekomendasi.html')
 
-# Route untuk hasil rekomendasi
-@app.route('/hasil_rekomendasi/<jenis_kulit>')
-def hasil_rekomendasi(jenis_kulit):
-    rekomendasi_produk = {
-        'kering': 'Gunakan pelembap intensif dan serum hydrating.',
-        'normal': 'Gunakan produk ringan seperti gel moisturizer.',
-        'kombinasi': 'Gunakan pelembap ringan di zona T dan hydrating di area kering.',
-        'berjerawat': 'Gunakan produk dengan kandungan salicylic acid dan non-komedogenik.',
-        'berminyak': 'Gunakan produk berbasis gel dan bebas minyak.'
-    }
-    rekomendasi = rekomendasi_produk.get(jenis_kulit, 'Jenis kulit tidak ditemukan.')
-    return render_template('hasil_rekomendasi.html', jenis_kulit=jenis_kulit, rekomendasi=rekomendasi)
+@app.route('/kulit_kering')
+def kulit_kering():
+    data = skincare_data.get("kulit_kering", [])
+    return render_template('kulit_kering.html', data=data)
+
+@app.route('/kulit_normal')
+def kulit_normal():
+    data = skincare_data.get("kulit_normal", [])
+    return render_template('kulit_normal.html', data=data)
+
+@app.route('/kulit_kombinasi')
+def kulit_kombinasi():
+    data = skincare_data.get("kulit_kombinasi", [])
+    return render_template('kulit_kombinasi.html', data=data)
+
+@app.route('/kulit_berjerawat')
+def kulit_berjerawat():
+    data = skincare_data.get("kulit_berjerawat", [])
+    return render_template('kulit_berjerawat.html', data=data)
 
 if __name__ == '__main__':
     app.run(debug=True)
