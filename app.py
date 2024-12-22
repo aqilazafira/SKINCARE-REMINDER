@@ -1,43 +1,34 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-
-@app.route('/admin')
-def dashboardpyth():
-    return render_template('index.html')
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
+# Route untuk halaman home
 @app.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/profile')
-def profile():
-    return render_template('profile_admin.html')
-
-@app.route('/welcomepage')
-def welocome():
-    return render_template('welcome_page.html')
-
-@app.route('/rekomendasi')
+# Route untuk halaman rekomendasi
+@app.route('/rekomendasi', methods=['GET', 'POST'])
 def rekomendasi():
+    jenis_kulit = None
+    if request.method == 'POST':
+        jenis_kulit = request.form.get('jenis_kulit')
+        # Tambahkan logika jika ingin menggunakan data jenis_kulit lebih lanjut
+        return redirect(url_for('hasil_rekomendasi', jenis_kulit=jenis_kulit))
     return render_template('rekomendasi.html')
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-@app.route('/register')
-def register():
-    return render_template('register.html')
+# Route untuk hasil rekomendasi
+@app.route('/hasil_rekomendasi/<jenis_kulit>')
+def hasil_rekomendasi(jenis_kulit):
+    rekomendasi_produk = {
+        'kering': 'Gunakan pelembap intensif dan serum hydrating.',
+        'normal': 'Gunakan produk ringan seperti gel moisturizer.',
+        'kombinasi': 'Gunakan pelembap ringan di zona T dan hydrating di area kering.',
+        'berjerawat': 'Gunakan produk dengan kandungan salicylic acid dan non-komedogenik.',
+        'berminyak': 'Gunakan produk berbasis gel dan bebas minyak.'
+    }
+    rekomendasi = rekomendasi_produk.get(jenis_kulit, 'Jenis kulit tidak ditemukan.')
+    return render_template('hasil_rekomendasi.html', jenis_kulit=jenis_kulit, rekomendasi=rekomendasi)
 
 if __name__ == '__main__':
     app.run(debug=True)

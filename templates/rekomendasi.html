@@ -3,63 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jenis Kulit - Skincare Reminder</title>
+    <title>Rekomendasi</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/rekomendasi.css') }}"
+      href="{{ url_for('static', filename='css/style.css') }}"
     />
   </head>
   <body>
     <div class="container">
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <h1>SKINCARE REMINDER</h1>
+      <aside class="sidebar">
         <ul>
-          <li><a href="/">HOME</a></li>
-          <li>REKOMENDASI</li>
-          <li>FEEDBACK</li>
-          <li>MANAJEMEN</li>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li>
+            <a href="{{ url_for('rekomendasi') }}" class="active"
+              >Rekomendasi</a
+            >
+          </li>
+          <li><a href="{{ url_for('feedback') }}">Feedback</a></li>
+          <li><a href="{{ url_for('timeline') }}">Time Line</a></li>
+          <li><a href="{{ url_for('profile') }}">Profil</a></li>
+          <li><a href="{{ url_for('logout') }}" class="logout">Logout</a></li>
         </ul>
-        <p class="copyright">COPYRIGHT</p>
-      </div>
+      </aside>
 
-      <!-- Main Content -->
-      <div class="main-content">
-        <div class="header">
-          <h2>Pilih Jenis Kulit Mu</h2>
-          <p>Penyesuaian berdasarkan kebutuhan kulitmu.</p>
-        </div>
-
-        <!-- Form Pilih Jenis Kulit -->
-        <div class="skin-selection">
-          <form action="/submit-skin-type" method="post">
-            <div class="radio-group">
-              <label>
-                <input type="radio" name="skin_type" value="normal" />
-                Normal
-              </label>
-              <label>
-                <input type="radio" name="skin_type" value="kering" />
-                Kering
-              </label>
-              <label>
-                <input type="radio" name="skin_type" value="berminyak" />
-                Berminyak
-              </label>
-              <label>
-                <input type="radio" name="skin_type" value="kombinasi" />
-                Kombinasi
-              </label>
-              <label>
-                <input type="radio" name="skin_type" value="berjerawat" />
-                Berjerawat
-              </label>
-            </div>
+      <main class="content">
+        <header>
+          <h1>Skincare Reminder</h1>
+          <div class="user-info">
+            <span>User</span>
+            <img
+              src="{{ url_for('static', filename='images/user_icon.png') }}"
+              alt="User Icon"
+            />
+          </div>
+        </header>
+        <section class="recommendation">
+          <h2>Pilih Jenis Kulitmu</h2>
+          <form action="/submit_skin_type" method="POST">
+            <label>
+              <input type="radio" name="skin_type" value="kering" /> Kering
+            </label>
+            <label>
+              <input type="radio" name="skin_type" value="normal" /> Normal
+            </label>
+            <label>
+              <input type="radio" name="skin_type" value="kombinasi" />
+              Kombinasi
+            </label>
+            <label>
+              <input type="radio" name="skin_type" value="berjerawat" />
+              Berjerawat
+            </label>
+            <label>
+              <input type="radio" name="skin_type" value="berminyak" />
+              Berminyak
+            </label>
             <button type="submit">Submit</button>
           </form>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>
