@@ -50,5 +50,13 @@ def kulit_berjerawat():
     data = skincare_data.get("kulit_berjerawat", [])
     return render_template('kulit_berjerawat.html', data=data)
 
+@app.route('/kulit_berminyak')
+def kulit_berminyak():
+    return render_template('kulit_berminyak.html')
+
+@app.route('/kulit_berminyak')
+def kulit_berminyak():
+    return render_template('kulit_berminyak.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
