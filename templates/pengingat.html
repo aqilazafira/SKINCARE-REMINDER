@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skincare Reminder - Pengingat</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/pengingat.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div class="nav-left">
+        <img
+          src="{{ url_for('static', filename='images/logo.png') }}"
+          alt="Logo"
+          class="logo"
+        />
+        <span class="app-name">SKINCARE REMINDER</span>
+        <div class="notification">
+          <img
+            src="{{ url_for('static', filename='images/bell.png') }}"
+            alt="Notification"
+            class="bell-icon"
+          />
+          <span>Pengingat</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <span class="user-label">User</span>
+        <span class="username">USER</span>
+        <img
+          src="{{ url_for('static', filename='images/user.png') }}"
+          alt="User"
+          class="user-icon"
+        />
+      </div>
+    </nav>
+
+    <div class="container">
+      <aside class="sidebar">
+        <nav class="side-nav">
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/home-icon.png') }}"
+              alt="Home"
+            />
+            <span>home</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/recommendation-icon.png') }}"
+              alt="Recommendations"
+            />
+            <span>rekomendasi</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/feedback-icon.png') }}"
+              alt="Feedback"
+            />
+            <span>feedback</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/timeline-icon.png') }}"
+              alt="Timeline"
+            />
+            <span>time line</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/profile-icon.png') }}"
+              alt="Profile"
+            />
+            <span>profil</span>
+          </a>
+        </nav>
+        <a href="{{ url_for('logout') }}" class="logout-btn">LOGOUT</a>
+      </aside>
+
+      <main class="main-content">
+        <div class="calendar-section">
+          <div class="date-selector">
+            <div class="selected-date">
+              <span>Mon, Aug 17</span>
+              <button class="edit-date">✏️</button>
+            </div>
+            <div class="calendar">
+              <div class="calendar-header">
+                <button class="prev-month">←</button>
+                <span>August 2025</span>
+                <button class="next-month">→</button>
+              </div>
+              <div class="weekdays">
+                <div>S</div>
+                <div>M</div>
+                <div>T</div>
+                <div>W</div>
+                <div>T</div>
+                <div>F</div>
+                <div>S</div>
+              </div>
+              <div class="days">
+                <div class="day other-month">30</div>
+                <div class="day other-month">31</div>
+                <div class="day">1</div>
+                <div class="day">2</div>
+                <div class="day">3</div>
+                <div class="day">4</div>
+                <div class="day">5</div>
+                <div class="day">6</div>
+                <div class="day">7</div>
+                <div class="day">8</div>
+                <div class="day">9</div>
+                <div class="day">10</div>
+                <div class="day">11</div>
+                <div class="day">12</div>
+                <div class="day">13</div>
+                <div class="day">14</div>
+                <div class="day">15</div>
+                <div class="day">16</div>
+                <div class="day selected">17</div>
+                <div class="day">18</div>
+                <div class="day">19</div>
+                <div class="day">20</div>
+                <div class="day">21</div>
+                <div class="day">22</div>
+                <div class="day">23</div>
+                <div class="day">24</div>
+                <div class="day">25</div>
+                <div class="day">26</div>
+                <div class="day">27</div>
+                <div class="day">28</div>
+                <div class="day">29</div>
+                <div class="day">30</div>
+                <div class="day">31</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="schedule-section">
+          <h2>JADWAL SKINCARE</h2>
+          <div class="schedule-grid">
+            <div class="schedule-card">
+              <h3>SENIN</h3>
+              <button class="edit-btn">Edit</button>
+            </div>
+            <div class="schedule-card">
+              <h3>SELASA</h3>
+              <button class="edit-btn">Edit</button>
+            </div>
+            <div class="schedule-card">
+              <h3>RABU</h3>
+              <button class="edit-btn">Edit</button>
+            </div>
+            <div class="schedule-card">
+              <h3>KAMIS</h3>
+              <button class="edit-btn">Edit</button>
+            </div>
+            <div class="schedule-card">
+              <h3>JUM'AT</h3>
+              <button class="edit-btn">Edit</button>
+            </div>
+            <div class="schedule-card">
+              <h3>SABTU</h3>
+              <button class="edit-btn">Edit</button>
+            </div>
+            <div class="schedule-card">
+              <h3>MINGGU</h3>
+              <button class="edit-btn">Edit</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
