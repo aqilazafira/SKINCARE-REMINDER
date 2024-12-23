@@ -19,12 +19,16 @@ skincare_data = {
     "kulit_berjerawat": [
         {"gambar": "berjerawat1.jpg", "merk": "Brand G", "jenis": "Acne Cleanser"},
         {"gambar": "berjerawat2.jpg", "merk": "Brand H", "jenis": "Spot Treatment"}
+    ],
+    "kulit_berminyak": [
+        {"gambar": "berminyak1.jpg", "merk": "Brand I", "jenis": "Oil Cleanser"},
+        {"gambar": "berminyak2.jpg", "merk": "Brand J", "jenis": "Mattifying Moisturizer"}
     ]
 }
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('home.html')
 
 @app.route('/rekomendasi')
 def rekomendasi():
@@ -54,9 +58,21 @@ def kulit_berjerawat():
 def kulit_berminyak():
     return render_template('kulit_berminyak.html')
 
-@app.route('/kulit_berminyak')
-def kulit_berminyak():
-    return render_template('kulit_berminyak.html')
+@app.route('/pengingat')
+def pengingat():
+    return render_template('pengingat.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    return 'TODO'
 
 if __name__ == '__main__':
     app.run(debug=True)

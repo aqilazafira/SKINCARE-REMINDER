@@ -1,0 +1,40 @@
+<aside class="sidebar">
+  <nav class="side-nav">
+    <a href="/" class="nav-item active">
+      <img
+        src="{{ url_for('static', filename='images/home-icon.png') }}"
+        alt="Home"
+      />
+      <span>home</span>
+    </a>
+    <a href="/rekomendasi" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/recommendation-icon.png') }}"
+        alt="Recommendations"
+      />
+      <span>rekomendasi</span>
+    </a>
+    <a href="/feedback" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/feedback-icon.png') }}"
+        alt="Feedback"
+      />
+      <span>feedback</span>
+    </a>
+    <a href="#" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/timeline-icon.png') }}"
+        alt="Timeline"
+      />
+      <span>time line</span>
+    </a>
+    <a href="#" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/profile-icon.png') }}"
+        alt="Profile"
+      />
+      <span>profil</span>
+    </a>
+  </nav>
+  <a href="{{ url_for('logout') }}" class="logout-btn">LOGOUT</a>
+</aside>
