@@ -3,55 +3,99 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rekomendasi</title>
+    <title>Skincare Reminder - Rekomendasi</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/rekomendasicss') }}"
+      href="{{ url_for('static', filename='css/rekomendasi.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
     />
   </head>
   <body>
-    <div class="container">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div>
-          <h2>User</h2>
-          <ul>
-            <li><a href="home.html">Home</a></li>
-            <li><a href="#" class="active">Rekomendasi</a></li>
-            <li><a href="#">Feedback</a></li>
-            <li><a href="#">Timeline</a></li>
-            <li><a href="#">Profil</a></li>
-          </ul>
+    <nav class="top-nav">
+      <div class="nav-left">
+        <img
+          src="{{ url_for('static', filename='images/logo.png') }}"
+          alt="Logo"
+          class="logo"
+        />
+        <span class="app-name">SKINCARE REMINDER</span>
+        <div class="notification">
+          <img
+            src="{{ url_for('static', filename='images/bell.png') }}"
+            alt="Notification"
+            class="bell-icon"
+          />
+          <span>Pengingat</span>
         </div>
-        <button class="logout">Logout</button>
+      </div>
+      <div class="nav-right">
+        <span class="user-label">User</span>
+        <span class="username">USER</span>
+        <img
+          src="{{ url_for('static', filename='images/user.png') }}"
+          alt="User"
+          class="user-icon"
+        />
+      </div>
+    </nav>
+
+    <div class="container">
+      <aside class="sidebar">
+        <nav class="side-nav">
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/home-icon.png') }}"
+              alt="Home"
+            />
+            <span>home</span>
+          </a>
+          <a href="#" class="nav-item active">
+            <img
+              src="{{ url_for('static', filename='images/recommendation-icon.png') }}"
+              alt="Recommendations"
+            />
+            <span>rekomendasi</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/feedback-icon.png') }}"
+              alt="Feedback"
+            />
+            <span>feedback</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/timeline-icon.png') }}"
+              alt="Timeline"
+            />
+            <span>time line</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/profile-icon.png') }}"
+              alt="Profile"
+            />
+            <span>profil</span>
+          </a>
+        </nav>
+        <a href="{{ url_for('logout') }}" class="logout-btn">LOGOUT</a>
       </aside>
 
-      <!-- Main Content -->
-      <main class="content">
-        <header>
-          <h1>Skincare Reminder</h1>
-          <div class="notification">
-            <span>Pengingat</span>
-            <img
-              src="{{ url_for('static', filename='images/user-icon.png') }}"
-              alt="User Icon"
-            />
+      <main class="main-content">
+        <div class="skin-type-container">
+          <h2>PILIH JENIS KULIT MU</h2>
+          <div class="skin-type-buttons">
+            <button class="skin-type-btn">Kering</button>
+            <button class="skin-type-btn">Normal</button>
+            <button class="skin-type-btn">Kombinasi</button>
+            <button class="skin-type-btn">Berjerawat</button>
+            <button class="skin-type-btn">Berminyak</button>
           </div>
-        </header>
-        <section class="recommendation">
-          <div class="card">
-            <h2>Pilih Jenis Kulitmu</h2>
-            <ul>
-              <li><button>Kering</button></li>
-              <li><button>Normal</button></li>
-              <li><button>Kombinasi</button></li>
-              <li><button>Berjerawat</button></li>
-              <li><button>Berminyak</button></li>
-            </ul>
-          </div>
-        </section>
+        </div>
       </main>
     </div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>
 </html>

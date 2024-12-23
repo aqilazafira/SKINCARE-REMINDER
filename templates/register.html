@@ -3,112 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register - Skincare Reminder</title>
+    <title>Skincare Reminder - Register</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/register.css') }}"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div class="register-container">
-      <!-- Left Side - Form -->
-      <div class="register-form">
+    <div class="container">
+      <div class="register-card">
         <div class="logo">
           <img
-            src="{{ url_for('static', filename='logo.png') }}"
+            src="{{ url_for('static', filename='images/logo.png') }}"
             alt="Skincare Reminder Logo"
           />
         </div>
-        <h1>SKINCARE REMINDER</h1>
-        <form action="/register" method="POST">
+        <h1>SKINCARE<br />REMINDER</h1>
+
+        <form action="{{ url_for('register') }}" method="POST">
           <div class="input-group">
-            <label for="username">
-              <img
-                src="{{ url_for('static', filename='user-icon.png') }}"
-                alt="User Icon"
-              />
-            </label>
+            <span class="icon">@</span>
+            <input type="email" name="email" placeholder="Email" required />
+          </div>
+
+          <div class="input-group">
+            <span class="icon">👤</span>
             <input
               type="text"
-              id="username"
               name="username"
               placeholder="Username"
               required
             />
           </div>
+
           <div class="input-group">
-            <label for="email">
-              <img
-                src="{{ url_for('static', filename='email-icon.png') }}"
-                alt="Email Icon"
-              />
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              required
-            />
-          </div>
-          <div class="input-group">
-            <label for="number">
-              <img
-                src="{{ url_for('static', filename='phone-icon.png') }}"
-                alt="Phone Icon"
-              />
-            </label>
-            <input
-              type="tel"
-              id="number"
-              name="number"
-              placeholder="Number"
-              required
-            />
-          </div>
-          <div class="input-group">
-            <label for="password">
-              <img
-                src="{{ url_for('static', filename='password-icon.png') }}"
-                alt="Password Icon"
-              />
-            </label>
+            <span class="icon">🔑</span>
             <input
               type="password"
-              id="password"
               name="password"
               placeholder="Password"
               required
             />
+            <span class="toggle-password">👁️</span>
           </div>
+
           <div class="input-group">
-            <label for="confirm-password">
-              <img
-                src="{{ url_for('static', filename='password-icon.png') }}"
-                alt="Confirm Password Icon"
-              />
-            </label>
+            <span class="icon">🔑</span>
             <input
               type="password"
-              id="confirm-password"
-              name="confirm-password"
+              name="confirm_password"
               placeholder="Confirm Password"
               required
             />
+            <span class="toggle-password">👁️</span>
           </div>
-          <div class="button-group">
-            <button type="submit" class="btn register-btn">REGISTER</button>
-          </div>
+
+          <button type="submit" class="btn register-btn">REGISTER</button>
         </form>
       </div>
 
-      <!-- Right Side - Illustration -->
-      <div class="register-illustration">
+      <div class="illustration">
         <img
-          src="{{ url_for('static', filename='illustration.png') }}"
-          alt="Register Illustration"
+          src="{{ url_for('static', filename='images/character.png') }}"
+          alt="Skincare Character"
         />
-        <h1>SKINCARE REMINDER</h1>
+        <div class="brand-text">
+          <h2>SKINCARE</h2>
+          <h3>REMINDER</h3>
+        </div>
       </div>
     </div>
   </body>

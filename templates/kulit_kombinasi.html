@@ -3,42 +3,124 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skincare Reminder</title>
-    <link rel="stylesheet" href="/static/css/kulit_kombinasi.css" />
+    <title>Skincare Reminder - Kulit Kombinasi</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/kulit_kombinasi.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
+    <nav class="top-nav">
+      <div class="nav-left">
+        <img
+          src="{{ url_for('static', filename='images/logo.png') }}"
+          alt="Logo"
+          class="logo"
+        />
+        <span class="app-name">SKINCARE REMINDER</span>
+        <div class="notification">
+          <img
+            src="{{ url_for('static', filename='images/bell.png') }}"
+            alt="Notification"
+            class="bell-icon"
+          />
+          <span>Pengingat</span>
+        </div>
+      </div>
+      <div class="nav-right">
+        <span class="user-label">User</span>
+        <span class="username">USER</span>
+        <img
+          src="{{ url_for('static', filename='images/user.png') }}"
+          alt="User"
+          class="user-icon"
+        />
+      </div>
+    </nav>
+
     <div class="container">
-      <header>
-        <h1>Skincare Reminder</h1>
-      </header>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Rekomendasi</a></li>
-          <li><a href="#">Feedback</a></li>
-          <li><a href="#">Time Line</a></li>
-          <li><a href="#">Profil</a></li>
-        </ul>
-      </nav>
-      <main>
-        <h2>Kulit Kombinasi</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Gambar</th>
-              <th>Merk</th>
-              <th>Jenis Skincare</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Data akan dimasukkan di sini -->
-          </tbody>
-        </table>
+      <aside class="sidebar">
+        <nav class="side-nav">
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/home-icon.png') }}"
+              alt="Home"
+            />
+            <span>home</span>
+          </a>
+          <a href="#" class="nav-item active">
+            <img
+              src="{{ url_for('static', filename='images/recommendation-icon.png') }}"
+              alt="Recommendations"
+            />
+            <span>rekomendasi</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/feedback-icon.png') }}"
+              alt="Feedback"
+            />
+            <span>feedback</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/timeline-icon.png') }}"
+              alt="Timeline"
+            />
+            <span>time line</span>
+          </a>
+          <a href="#" class="nav-item">
+            <img
+              src="{{ url_for('static', filename='images/profile-icon.png') }}"
+              alt="Profile"
+            />
+            <span>profil</span>
+          </a>
+        </nav>
+        <a href="{{ url_for('logout') }}" class="logout-btn">LOGOUT</a>
+      </aside>
+
+      <main class="main-content">
+        <div class="skin-type-header">
+          <h2>kulit kombinasi</h2>
+        </div>
+
+        <div class="products-table">
+          <div class="table-header">
+            <div class="header-cell">Gambar</div>
+            <div class="header-cell">Merk</div>
+            <div class="header-cell">Jenis skincare</div>
+          </div>
+
+          <div class="table-row">
+            <div class="table-cell">
+              <div class="image-placeholder"></div>
+            </div>
+            <div class="table-cell"></div>
+            <div class="table-cell"></div>
+          </div>
+
+          <div class="table-row">
+            <div class="table-cell">
+              <div class="image-placeholder"></div>
+            </div>
+            <div class="table-cell"></div>
+            <div class="table-cell"></div>
+          </div>
+
+          <div class="table-row">
+            <div class="table-cell">
+              <div class="image-placeholder"></div>
+            </div>
+            <div class="table-cell"></div>
+            <div class="table-cell"></div>
+          </div>
+        </div>
       </main>
-      <footer>
-        <button id="logout">Logout</button>
-      </footer>
     </div>
-    <script src="/static/js/script.js"></script>
   </body>
 </html>

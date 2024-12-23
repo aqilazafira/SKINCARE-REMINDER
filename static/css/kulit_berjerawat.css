@@ -1,103 +1,217 @@
-/* Reset dasar */
-body, h1, h2, h3, p, table, th, td {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    background-color: #fff5f5; /* Warna latar belakang pink lembut */
-    color: #333; /* Warna teks */
-    padding: 20px;
+    background-color: #f5f5f5;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #ff69b4; /* Warna pink */
+.top-nav {
+    background-color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Tabel */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: #ffe4e4; /* Warna latar tabel */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 }
 
-th, td {
-    border: 1px solid #ffa3a3; /* Warna border */
-    text-align: center;
-    padding: 10px;
+.logo {
+    width: 40px;
+    height: 40px;
 }
 
-th {
-    background-color: #ffb6c1; /* Warna pink lebih terang */
-    color: #fff;
-    font-weight: bold;
+.app-name {
+    color: #4a90a0;
+    font-weight: 600;
 }
 
-td img {
-    max-width: 100px;
-    height: auto;
-    border-radius: 5px;
+.notification {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ff69b4;
 }
 
-/* Tombol */
-button, a {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px 0;
-    text-decoration: none;
-    color: #fff;
-    background-color: #ff69b4;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
+.bell-icon {
+    width: 24px;
+    height: 24px;
 }
 
-button:hover, a:hover {
-    background-color: #ff4787; /* Warna hover */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-/* Sidebar navigasi */
+.user-label {
+    color: #ff69b4;
+}
+
+.username {
+    color: #666;
+}
+
+.user-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.container {
+    display: flex;
+    min-height: calc(100vh - 72px);
+}
+
 .sidebar {
-    width: 200px;
-    background-color: #ffb6c1; /* Warna pink terang */
-    padding: 15px;
-    border-radius: 10px;
-    position: fixed;
-    top: 20px;
-    left: 20px;
+    width: 250px;
+    background-color: #ffd1dc;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.sidebar ul {
-    list-style: none;
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.sidebar ul li {
-    margin: 15px 0;
-}
-
-.sidebar ul li a {
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
     text-decoration: none;
-    color: #fff;
-    font-weight: bold;
-    display: block;
-    padding: 10px;
+    color: #333;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.nav-item img {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-item:hover,
+.nav-item.active {
     background-color: #ff69b4;
-    border-radius: 5px;
+    color: white;
+}
+
+.logout-btn {
+    background-color: #ff0000;
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem;
+    border-radius: 8px;
     text-align: center;
+    font-weight: 500;
+    margin-top: 2rem;
 }
 
-.sidebar ul li a:hover {
-    background-color: #ff4787;
-}
-
-/* Untuk konten utama */
 .main-content {
-    margin-left: 250px;
-    padding: 20px;
+    flex: 1;
+    padding: 2rem;
+}
+
+.skin-type-header {
+    background-color: #ff69b4;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.skin-type-header h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.products-table {
+    background-color: #ffd1dc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background-color: #ff69b4;
+    color: white;
+    padding: 1rem;
+}
+
+.header-cell {
+    text-align: center;
+    font-weight: 500;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.table-cell {
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+}
+
+.image-placeholder {
+    width: 120px;
+    height: 120px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    .nav-left {
+        gap: 1rem;
+    }
+    
+    .app-name {
+        display: none;
+    }
+    
+    .products-table {
+        margin: 0 -1rem;
+        border-radius: 0;
+    }
+    
+    .table-cell {
+        min-height: 100px;
+    }
+    
+    .image-placeholder {
+        width: 80px;
+        height: 80px;
+    }
 }

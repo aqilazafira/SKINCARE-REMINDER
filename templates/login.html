@@ -3,68 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Skincare Reminder</title>
+    <title>Skincare Reminder - Login</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/login.css') }}"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div class="login-container">
-      <!-- Left Side - Form -->
-      <div class="login-form">
+    <div class="container">
+      <div class="login-card">
         <div class="logo">
           <img
-            src="{{ url_for('static', filename='logo.png') }}"
+            src="{{ url_for('static', filename='images/logo.png') }}"
             alt="Skincare Reminder Logo"
           />
         </div>
         <h1>SKINCARE REMINDER</h1>
-        <form action="/login" method="POST">
+
+        <form action="{{ url_for('login') }}" method="POST">
           <div class="input-group">
-            <label for="email">
-              <img
-                src="{{ url_for('static', filename='email-icon.png') }}"
-                alt="Email Icon"
-              />
-            </label>
+            <span class="icon">@</span>
             <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
+              type="text"
+              name="username"
+              placeholder="Username"
               required
             />
           </div>
+
           <div class="input-group">
-            <label for="password">
-              <img
-                src="{{ url_for('static', filename='password-icon.png') }}"
-                alt="Password Icon"
-              />
-            </label>
+            <span class="icon">🔑</span>
             <input
               type="password"
-              id="password"
               name="password"
               placeholder="Password"
               required
             />
+            <span class="toggle-password">👁️</span>
           </div>
-          <div class="button-group">
-            <button type="submit" class="btn login-btn">LOGIN</button>
-            <a href="/register" class="btn register-btn">REGISTER</a>
-          </div>
+
+          <button type="submit" class="btn login-btn">LOGIN</button>
         </form>
+
+        <a href="{{ url_for('register') }}" class="btn register-btn"
+          >REGISTER</a
+        >
       </div>
 
-      <!-- Right Side - Illustration -->
-      <div class="login-illustration">
+      <div class="illustration">
         <img
-          src="{{ url_for('static', filename='illustration.png') }}"
-          alt="Login Illustration"
+          src="{{ url_for('static', filename='images/character.png') }}"
+          alt="Skincare Character"
         />
-        <h1>SKINCARE REMINDER</h1>
+        <div class="brand-text">
+          <h2>SKINCARE</h2>
+          <h3>REMINDER</h3>
+        </div>
       </div>
     </div>
   </body>

@@ -1,120 +1,137 @@
-/* General Styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #fce4ec;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.login-card {
+  background-color: #ffa6d4;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo img {
+  width: 60px;
+  height: 60px;
+}
+
+h1 {
+  color: #333;
+  font-size: 1.8rem;
+  margin: 1rem 0 2rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 40px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+}
+
+.input-group .icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s;
+}
+
+.login-btn {
+  background-color: white;
+  color: #333;
+}
+
+.register-btn {
+  background-color: white;
+  color: #333;
+}
+
+.login-btn:hover,
+.register-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.illustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.illustration img {
+  max-width: 300px;
+  margin-bottom: 1rem;
+}
+
+.brand-text {
+  text-align: center;
+}
+
+.brand-text h2,
+.brand-text h3 {
+  color: #4a90a0;
+  font-size: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+      flex-direction: column;
   }
   
-  .login-container {
-    display: flex;
-    height: 100vh;
+  .illustration {
+      display: none;
   }
   
-  /* Left Side - Form */
-  .login-form {
-    width: 50%;
-    background-color: #f8bbd0;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
+  .login-card {
+      max-width: 100%;
   }
-  
-  .login-form .logo img {
-    width: 80px;
-    margin-bottom: 20px;
-  }
-  
-  .login-form h1 {
-    font-size: 28px;
-    margin-bottom: 40px;
-  }
-  
-  .input-group {
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    padding: 5px 10px;
-    width: 80%;
-  }
-  
-  .input-group label img {
-    width: 20px;
-    margin-right: 10px;
-  }
-  
-  .input-group input {
-    border: none;
-    outline: none;
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-  }
-  
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-  }
-  
-  .button-group .btn {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 10px;
-  }
-  
-  .button-group .login-btn {
-    background-color: #ec407a;
-    color: white;
-  }
-  
-  .button-group .login-btn:hover {
-    background-color: #d81b60;
-  }
-  
-  .button-group .register-btn {
-    background-color: white;
-    color: #ec407a;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-    line-height: 35px;
-  }
-  
-  .button-group .register-btn:hover {
-    background-color: #f8bbd0;
-    color: white;
-  }
-  
-  /* Right Side - Illustration */
-  .login-illustration {
-    width: 50%;
-    background-color: #fce4ec;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .login-illustration img {
-    width: 300px;
-    margin-bottom: 20px;
-  }
-  
-  .login-illustration h1 {
-    font-size: 28px;
-    color: #ec407a;
-  }
-  
+}
