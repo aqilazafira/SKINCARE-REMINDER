@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skincare Reminder - Form Input</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/input.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-card">
+        <h1>FORM INPUT</h1>
+
+        <form action="{{ url_for('save_schedule') }}" method="POST">
+          <div class="form-group">
+            <label for="schedule">JADWAL TERSIMPAN</label>
+            <div class="select-wrapper">
+              <select id="schedule" name="schedule" required>
+                <option value="" disabled selected>Pilih jadwal</option>
+                <option value="daily">Harian</option>
+                <option value="weekly">Mingguan</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>WAKTU PENGINGAT</label>
+            <div class="time-picker">
+              <div class="time-input">
+                <input
+                  type="number"
+                  name="hours"
+                  min="1"
+                  max="12"
+                  value="8"
+                  required
+                />
+                <span>:</span>
+                <input
+                  type="number"
+                  name="minutes"
+                  min="0"
+                  max="59"
+                  value="00"
+                  required
+                />
+                <select name="period">
+                  <option value="AM">AM</option>
+                  <option value="PM" selected>PM</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">SIMPAN</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
