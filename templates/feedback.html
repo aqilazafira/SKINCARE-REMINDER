@@ -43,10 +43,9 @@
     </nav>
 
     <div class="container">
-      <aside class="sidebar">
-        <nav class="side-nav">
-          <a href="#" class="nav-item">
-            <img
+      {% include "components/sidebar.html" %}
+
+      <img
               src="{{ url_for('static', filename='images/home-icon.png') }}"
               alt="Home"
             />

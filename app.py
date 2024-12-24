@@ -1,78 +1,91 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-# Data dummy untuk kategori skincare
-skincare_data = {
-    "kulit_kering": [
-        {"gambar": "kering1.jpg", "merk": "Brand A", "jenis": "Cleanser"},
-        {"gambar": "kering2.jpg", "merk": "Brand B", "jenis": "Toner"}
-    ],
-    "kulit_normal": [
-        {"gambar": "normal1.jpg", "merk": "Brand C", "jenis": "Moisturizer"},
-        {"gambar": "normal2.jpg", "merk": "Brand D", "jenis": "Serum"}
-    ],
-    "kulit_kombinasi": [
-        {"gambar": "kombinasi1.jpg", "merk": "Brand E", "jenis": "Essence"},
-        {"gambar": "kombinasi2.jpg", "merk": "Brand F", "jenis": "Sunscreen"}
-    ],
-    "kulit_berjerawat": [
-        {"gambar": "berjerawat1.jpg", "merk": "Brand G", "jenis": "Acne Cleanser"},
-        {"gambar": "berjerawat2.jpg", "merk": "Brand H", "jenis": "Spot Treatment"}
-    ],
-    "kulit_berminyak": [
-        {"gambar": "berminyak1.jpg", "merk": "Brand I", "jenis": "Oil Cleanser"},
-        {"gambar": "berminyak2.jpg", "merk": "Brand J", "jenis": "Mattifying Moisturizer"}
-    ]
-}
-
-@app.route('/')
+# Halaman utama
+@app.route("/")
 def home():
-    return render_template('home.html')
+    return render_template("home.html")
 
-@app.route('/rekomendasi')
-def rekomendasi():
-    return render_template('rekomendasi.html')
+# Halaman input
+@app.route("/input")
+def input_page():
+    return render_template("input.html")
 
-@app.route('/kulit_kering')
-def kulit_kering():
-    data = skincare_data.get("kulit_kering", [])
-    return render_template('kulit_kering.html', data=data)
-
-@app.route('/kulit_normal')
-def kulit_normal():
-    data = skincare_data.get("kulit_normal", [])
-    return render_template('kulit_normal.html', data=data)
-
-@app.route('/kulit_kombinasi')
-def kulit_kombinasi():
-    data = skincare_data.get("kulit_kombinasi", [])
-    return render_template('kulit_kombinasi.html', data=data)
-
-@app.route('/kulit_berjerawat')
-def kulit_berjerawat():
-    data = skincare_data.get("kulit_berjerawat", [])
-    return render_template('kulit_berjerawat.html', data=data)
-
-@app.route('/kulit_berminyak')
+# Halaman kulit berminyak
+@app.route("/kulit_berminyak")
 def kulit_berminyak():
-    return render_template('kulit_berminyak.html')
+    return render_template("kulit_berminyak.html")
 
-@app.route('/pengingat')
-def pengingat():
-    return render_template('pengingat.html')
+# Halaman kulit kering
+@app.route("/kulit_kering")
+def kulit_kering():
+    return render_template("kulit_kering.html")
 
-@app.route('/login')
+# Halaman kulit kombinasi
+@app.route("/kulit_kombinasi")
+def kulit_kombinasi():
+    return render_template("kulit_kombinasi.html")
+
+# Halaman kulit normal
+@app.route("/kulit_normal")
+def kulit_normal():
+    return render_template("kulit_normal.html")
+
+# Halaman kulit berjerawat
+@app.route("/kulit_berjerawat")
+def kulit_berjerawat():
+    return render_template("kulit_berjerawat.html")
+
+# Halaman login
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template('login.html')
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        # Tambahkan logika autentikasi di sini
+        return redirect(url_for("home"))
+    return render_template("login.html")
 
-@app.route('/register')
+# Halaman register
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template('register.html')
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        # Tambahkan logika registrasi di sini
+        return redirect(url_for("login"))
+    return render_template("register.html")
 
-@app.route('/logout')
-def logout():
-    return 'TODO'
+# Halaman pengingat
+@app.route("/pengingat")
+def reminder_page():
+    return render_template("pengingat.html")
 
-if __name__ == '__main__':
+# Halaman rekomendasi
+@app.route("/rekomendasi")
+def rekomendasi():
+    return render_template("rekomendasi.html")
+
+# Halaman profil pengguna
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
+
+# Halaman timeline
+@app.route("/timeline")
+def timeline():
+    return render_template("timeline.html")
+
+# Halaman feedback
+@app.route("/feedback", methods=["GET", "POST"])
+def feedback():
+    if request.method == "POST":
+        feedback_text = request.form.get("feedback")
+        # Tambahkan logika penyimpanan feedback di sini
+        return redirect(url_for("home"))
+    return render_template("feedback.html")
+
+# Jalankan aplikasi
+if __name__ == "__main__":
     app.run(debug=True)

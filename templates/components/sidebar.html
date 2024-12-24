@@ -1,5 +1,6 @@
 <aside class="sidebar">
   <nav class="side-nav">
+    <!-- Home -->
     <a href="/" class="nav-item active">
       <img
         src="{{ url_for('static', filename='images/home-icon.png') }}"
@@ -7,6 +8,8 @@
       />
       <span>home</span>
     </a>
+
+    <!-- Rekomendasi -->
     <a href="/rekomendasi" class="nav-item">
       <img
         src="{{ url_for('static', filename='images/recommendation-icon.png') }}"
@@ -14,6 +17,8 @@
       />
       <span>rekomendasi</span>
     </a>
+
+    <!-- Feedback -->
     <a href="/feedback" class="nav-item">
       <img
         src="{{ url_for('static', filename='images/feedback-icon.png') }}"
@@ -21,20 +26,80 @@
       />
       <span>feedback</span>
     </a>
-    <a href="#" class="nav-item">
+
+    <!-- Timeline -->
+    <a href="/timeline" class="nav-item">
       <img
         src="{{ url_for('static', filename='images/timeline-icon.png') }}"
         alt="Timeline"
       />
       <span>time line</span>
     </a>
-    <a href="#" class="nav-item">
+
+    <!-- Profil -->
+    <a href="/profile" class="nav-item">
       <img
         src="{{ url_for('static', filename='images/profile-icon.png') }}"
         alt="Profile"
       />
       <span>profil</span>
     </a>
+
+    <!-- Pengingat -->
+    <a href="/pengingat" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/reminder-icon.png') }}"
+        alt="Reminder"
+      />
+      <span>pengingat</span>
+    </a>
+
+    <!-- Kulit Berjerawat -->
+    <a href="/kulit_berjerawat" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/acne-icon.png') }}"
+        alt="Kulit Berjerawat"
+      />
+      <span>kulit berjerawat</span>
+    </a>
+
+    <!-- Kulit Berminyak -->
+    <a href="/kulit_berminyak" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/oily-icon.png') }}"
+        alt="Kulit Berminyak"
+      />
+      <span>kulit berminyak</span>
+    </a>
+
+    <!-- Kulit Kering -->
+    <a href="/kulit_kering" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/dry-icon.png') }}"
+        alt="Kulit Kering"
+      />
+      <span>kulit kering</span>
+    </a>
+
+    <!-- Kulit Kombinasi -->
+    <a href="/kulit_kombinasi" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/combination-icon.png') }}"
+        alt="Kulit Kombinasi"
+      />
+      <span>kulit kombinasi</span>
+    </a>
+
+    <!-- Kulit Normal -->
+    <a href="/kulit_normal" class="nav-item">
+      <img
+        src="{{ url_for('static', filename='images/normal-icon.png') }}"
+        alt="Kulit Normal"
+      />
+      <span>kulit normal</span>
+    </a>
   </nav>
+
+  <!-- Tombol Logout -->
   <a href="{{ url_for('logout') }}" class="logout-btn">LOGOUT</a>
 </aside>
