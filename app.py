@@ -86,6 +86,46 @@ def feedback():
         return redirect(url_for("home"))
     return render_template("feedback.html")
 
+# Halaman feedback admin
+@app.route("/feedback_admin")
+def feedback_admin():
+    return render_template("feedback_admin.html")
+
+# Halaman home_admin
+@app.route("/home_admin")
+def home_admin():
+    return render_template("admin/home_admin.html")
+
+# Halaman kulit berjerawat admin
+@app.route("/kulitberjerawat_admin")
+def kulitberjerawat_admin():
+    return render_template("admin/kulitberjerawat_admin.html")
+
+# Halaman kulit berminyak admin
+@app.route("/kulitberminyak_admin")
+def kulitberminyak_admin():
+    return render_template("admin/kulitberminyak_admin.html")
+
+# Halaman kulit kering admin
+@app.route("/kulitkering_admin")
+def kulitkering_admin():
+    return render_template("admin/kulitkering_admin.html")
+
+# Halaman kulit kombinasi admin
+@app.route("/kulitkombinasi_admin")
+def kulitkombinasi_admin():
+    return render_template("admin/kulitkombinasi_admin.html")
+
+# Halaman kulit normal admin
+@app.route("/kulitnormal_admin")
+def kulitnormal_admin():
+    return render_template("admin/kulitnormal_admin.html")
+
+# Halaman profile admin
+@app.route("/profile_admin")
+def profile_admin():
+    return render_template("admin/profile_admin.html")
+
 @app.route("/logout")
 def logout():
     return redirect(url_for("login"))
