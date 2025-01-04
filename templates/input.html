@@ -18,7 +18,7 @@
       <div class="form-card">
         <h1>FORM INPUT</h1>
 
-        <form action="{{ url_for('save_schedule') }}" method="POST">
+        <form id="scheduleForm">
           <div class="form-group">
             <label for="schedule">JADWAL TERSIMPAN</label>
             <div class="select-wrapper">
@@ -62,7 +62,35 @@
 
           <button type="submit" class="submit-btn">SIMPAN</button>
         </form>
+
+        <div id="confirmationMessage" class="confirmation-message"></div>
       </div>
     </div>
+
+    <script>
+      document
+        .getElementById("scheduleForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          fetch("/save_schedule", {
+            method: "POST",
+            body: new FormData(this),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                document.getElementById("confirmationMessage").textContent =
+                  data.message;
+                document.getElementById("confirmationMessage").style.display =
+                  "block";
+                setTimeout(() => {
+                  document.getElementById("confirmationMessage").style.display =
+                    "none";
+                }, 3000);
+              }
+            });
+        });
+    </script>
   </body>
 </html>

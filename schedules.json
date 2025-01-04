@@ -1,0 +1,86 @@
+from flask import Flask, render_template, request, jsonify, redirect, url_for
+from datetime import datetime, timedelta
+import json
+import os
+
+app = Flask(__name__)
+
+SCHEDULES_FILE = 'schedules.json'
+
+def load_schedules():
+    if not os.path.exists(SCHEDULES_FILE):
+        return {}
+    try:
+        with open(SCHEDULES_FILE, 'r') as f:
+            return json.load(f)
+    except json.JSONDecodeError:
+        print(f"Error: {SCHEDULES_FILE} contains invalid JSON. Returning empty dict.")
+        return {}
+    except Exception as e:
+        print(f"Error reading {SCHEDULES_FILE}: {str(e)}. Returning empty dict.")
+        return {}
+
+def save_schedules(schedules):
+    try:
+        with open(SCHEDULES_FILE, 'w') as f:
+            json.dump(schedules, f)
+    except Exception as e:
+        print(f"Error saving to {SCHEDULES_FILE}: {str(e)}")
+
+@app.route('/')
+def pengingat():
+    schedules = load_schedules()
+    return render_template('pengingat.html', schedules=schedules)
+
+@app.route('/input')
+def input_schedule():
+    return render_template('input.html')
+
+@app.route('/save_schedule', methods=['POST'])
+def save_schedule():
+    schedule_type = request.form['schedule']
+    hours = int(request.form['hours'])
+    minutes = int(request.form['minutes'])
+    period = request.form['period']
+
+    # Convert to 24-hour format
+    if period == 'PM' and hours != 12:
+        hours += 12
+    elif period == 'AM' and hours == 12:
+        hours = 0
+
+    time = f"{hours:02d}:{minutes:02d}"
+
+    schedules = load_schedules()
+    schedules[schedule_type] = time
+    save_schedules(schedules)
+
+    return jsonify({"success": True, "message": "Schedule saved successfully!"})
+
+@app.route('/get_reminders')
+def get_reminders():
+    schedules = load_schedules()
+    current_time = datetime.now()
+    reminders = []
+
+    for schedule_type, time in schedules.items():
+        reminder_time = datetime.strptime(time, "%H:%M").replace(
+            year=current_time.year,
+            month=current_time.month,
+            day=current_time.day
+        )
+
+        if reminder_time < current_time:
+            reminder_time += timedelta(days=1)
+
+        if (reminder_time - current_time).total_seconds() <= 60:  # Check if within the next minute
+            reminders.append({
+                "type": schedule_type,
+                "time": time
+            })
+
+    return jsonify(reminders)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
