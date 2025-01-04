@@ -80,13 +80,16 @@ body {
     justify-content: space-between;
 }
 
-.side-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
 }
 
-.nav-item {
+.sidebar nav ul li {
+    margin-bottom: 1rem;
+}
+
+.sidebar nav ul li a {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -97,26 +100,10 @@ body {
     transition: background-color 0.3s;
 }
 
-.nav-item img {
-    width: 24px;
-    height: 24px;
-}
-
-.nav-item:hover,
-.nav-item.active {
+.sidebar nav ul li a:hover,
+.sidebar nav ul li a.active {
     background-color: #ff69b4;
     color: white;
-}
-
-.logout-btn {
-    background-color: #ff0000;
-    color: white;
-    text-decoration: none;
-    padding: 0.75rem;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: 500;
-    margin-top: 2rem;
 }
 
 .main-content {
@@ -205,10 +192,6 @@ body {
     color: white;
 }
 
-.day.other-month {
-    color: #999;
-}
-
 .schedule-section {
     margin-top: 2rem;
 }
@@ -280,3 +263,4 @@ body {
         max-width: 100%;
     }
 }
+

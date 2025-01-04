@@ -60,6 +60,11 @@ def input_page():
     return render_template("input.html")
 
 
+@app.route("/save_schedule", methods=["POST"])
+def save_schedule():
+    return redirect(url_for("pengingat"))
+
+
 # Halaman kulit berminyak
 @app.route("/kulit_berminyak")
 @login_required
@@ -158,6 +163,11 @@ def register():
 @app.route("/pengingat")
 @login_required
 def reminder_page():
+    return render_template("pengingat.html")
+
+
+@app.route("/")
+def pengingat():
     return render_template("pengingat.html")
 
 

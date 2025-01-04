@@ -43,14 +43,12 @@
     </nav>
 
     <div class="container">
-      {% include "components/sidebar.html" %}
-
       <main class="main-content">
         <div class="calendar-section">
           <div class="date-selector">
             <div class="selected-date">
               <span>Mon, Aug 17</span>
-              <button class="edit-date">✏️</button>
+              <a href="{{ url_for('input_page') }}" class="edit-btn">✏️</a>
             </div>
             <div class="calendar">
               <div class="calendar-header">
@@ -68,39 +66,11 @@
                 <div>S</div>
               </div>
               <div class="days">
-                <div class="day other-month">30</div>
-                <div class="day other-month">31</div>
-                <div class="day">1</div>
-                <div class="day">2</div>
-                <div class="day">3</div>
-                <div class="day">4</div>
-                <div class="day">5</div>
-                <div class="day">6</div>
-                <div class="day">7</div>
-                <div class="day">8</div>
-                <div class="day">9</div>
-                <div class="day">10</div>
-                <div class="day">11</div>
-                <div class="day">12</div>
-                <div class="day">13</div>
-                <div class="day">14</div>
-                <div class="day">15</div>
-                <div class="day">16</div>
-                <div class="day selected">17</div>
-                <div class="day">18</div>
-                <div class="day">19</div>
-                <div class="day">20</div>
-                <div class="day">21</div>
-                <div class="day">22</div>
-                <div class="day">23</div>
-                <div class="day">24</div>
-                <div class="day">25</div>
-                <div class="day">26</div>
-                <div class="day">27</div>
-                <div class="day">28</div>
-                <div class="day">29</div>
-                <div class="day">30</div>
-                <div class="day">31</div>
+                {% for day in range(1, 32) %}
+                <div class="day{% if day == 17 %} selected{% endif %}">
+                  {{ day }}
+                </div>
+                {% endfor %}
               </div>
             </div>
           </div>
@@ -109,34 +79,13 @@
         <div class="schedule-section">
           <h2>JADWAL SKINCARE</h2>
           <div class="schedule-grid">
+            {% for day in ['SENIN', 'SELASA', 'RABU', 'KAMIS', "JUM'AT",
+            'SABTU', 'MINGGU'] %}
             <div class="schedule-card">
-              <h3>SENIN</h3>
+              <h3>{{ day }}</h3>
               <button class="edit-btn">Edit</button>
             </div>
-            <div class="schedule-card">
-              <h3>SELASA</h3>
-              <button class="edit-btn">Edit</button>
-            </div>
-            <div class="schedule-card">
-              <h3>RABU</h3>
-              <button class="edit-btn">Edit</button>
-            </div>
-            <div class="schedule-card">
-              <h3>KAMIS</h3>
-              <button class="edit-btn">Edit</button>
-            </div>
-            <div class="schedule-card">
-              <h3>JUM'AT</h3>
-              <button class="edit-btn">Edit</button>
-            </div>
-            <div class="schedule-card">
-              <h3>SABTU</h3>
-              <button class="edit-btn">Edit</button>
-            </div>
-            <div class="schedule-card">
-              <h3>MINGGU</h3>
-              <button class="edit-btn">Edit</button>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </main>
