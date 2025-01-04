@@ -14,69 +14,57 @@
     />
   </head>
   <body>
-    <nav class="top-nav">
-      <!-- ... (previous nav content) ... -->
-    </nav>
+    {% include "components/topnav.html" %}
 
     <div class="container">
+      {% include "components/sidebar.html" %}
+
       <main class="main-content">
-        <!-- ... (previous main content) ... -->
+        <div class="calendar-section">
+          <div class="date-selector">
+            <div class="selected-date">
+              <span>Mon, Aug 17</span>
+              <a href="{{ url_for('input_page') }}" class="edit-btn">✏️</a>
+            </div>
+            <div class="calendar">
+              <div class="calendar-header">
+                <button class="prev-month">←</button>
+                <span>August 2025</span>
+                <button class="next-month">→</button>
+              </div>
+              <div class="weekdays">
+                <div>S</div>
+                <div>M</div>
+                <div>T</div>
+                <div>W</div>
+                <div>T</div>
+                <div>F</div>
+                <div>S</div>
+              </div>
+              <div class="days">
+                {% for day in range(1, 32) %}
+                <div class="day{% if day == 17 %} selected{% endif %}">
+                  {{ day }}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="schedule-section">
+          <h2>JADWAL SKINCARE</h2>
+          <div class="schedule-grid">
+            {% for day in ['SENIN', 'SELASA', 'RABU', 'KAMIS', "JUM'AT",
+            'SABTU', 'MINGGU'] %}
+            <div class="schedule-card">
+              <h3>{{ day }}</h3>
+              <button class="edit-btn">Edit</button>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
       </main>
     </div>
-
-    <div
-      id="notificationContainer"
-      class="notification-container"
-      style="display: none"
-    >
-      <div class="notification-content">
-        <h3>Reminder!</h3>
-        <p id="notificationMessage"></p>
-        <button id="closeNotification">Close</button>
-      </div>
-    </div>
-
-    <audio
-      id="notificationSound"
-      src="{{ url_for('static', filename='sounds/notification.mp3') }}"
-    ></audio>
-
-    <script>
-      function checkReminders() {
-        fetch("/get_reminders")
-          .then((response) => response.json())
-          .then((reminders) => {
-            if (reminders.length > 0) {
-              showNotification(reminders[0]);
-            }
-          });
-      }
-
-      function showNotification(reminder) {
-        document.getElementById(
-          "notificationMessage"
-        ).textContent = `Time for your ${reminder.type} skincare routine!`;
-        document.getElementById("notificationContainer").style.display = "flex";
-        document.getElementById("notificationSound").play();
-
-        // Vibration (if supported)
-        if ("vibrate" in navigator) {
-          navigator.vibrate(1000);
-        }
-      }
-
-      document
-        .getElementById("closeNotification")
-        .addEventListener("click", function () {
-          document.getElementById("notificationContainer").style.display =
-            "none";
-        });
-
-      // Check for reminders every minute
-      setInterval(checkReminders, 60000);
-
-      // Initial check
-      checkReminders();
-    </script>
   </body>
 </html>

@@ -1,13 +1,22 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
-from typing import List, Optional
+from flask_login import (
+    LoginManager,
+    login_user,
+    logout_user,
+    login_required,
+    UserMixin,
+    current_user,
+)
+from typing import Optional
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from sqlalchemy.types import String, Integer, DateTime
+import json
+import os
 import re
-
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
@@ -47,13 +56,38 @@ class User(db.Model, UserMixin):
         return f"<User: {self.username}>"
 
 
+# Load and save schedules
+SCHEDULES_FILE = "schedules.json"
+
+
+def load_schedules():
+    if not os.path.exists(SCHEDULES_FILE):
+        return {}
+    try:
+        with open(SCHEDULES_FILE, "r") as f:
+            return json.load(f)
+    except json.JSONDecodeError:
+        print(f"Error: {SCHEDULES_FILE} contains invalid JSON. Returning empty dict.")
+        return {}
+    except Exception as e:
+        print(f"Error reading {SCHEDULES_FILE}: {str(e)}. Returning empty dict.")
+        return {}
+
+
+def save_schedules(schedules):
+    try:
+        with open(SCHEDULES_FILE, "w") as f:
+            json.dump(schedules, f)
+    except Exception as e:
+        print(f"Error saving to {SCHEDULES_FILE}: {str(e)}")
+
+
 @app.route("/")
 @login_required
 def home():
     return render_template("home.html")
 
 
-# Halaman input
 @app.route("/input")
 @login_required
 def input_page():
@@ -61,46 +95,59 @@ def input_page():
 
 
 @app.route("/save_schedule", methods=["POST"])
+@login_required
 def save_schedule():
-    return redirect(url_for("pengingat"))
+    schedule_type = request.form["schedule"]
+    hours = int(request.form["hours"])
+    minutes = int(request.form["minutes"])
+    period = request.form["period"]
+
+    # Convert to 24-hour format
+    if period == "PM" and hours != 12:
+        hours += 12
+    elif period == "AM" and hours == 12:
+        hours = 0
+
+    time = f"{hours:02d}:{minutes:02d}"
+
+    schedules = load_schedules()
+    schedules[schedule_type] = time
+    save_schedules(schedules)
+
+    flash("Schedule saved successfully!", "success")
+    return redirect(url_for("reminder_page"))
 
 
-# Halaman kulit berminyak
-@app.route("/kulit_berminyak")
+@app.route("/pengingat")
 @login_required
-def kulit_berminyak():
-    return render_template("kulit_berminyak.html")
+def reminder_page():
+    schedules = load_schedules()
+    return render_template("pengingat.html", schedules=schedules)
 
 
-# Halaman kulit kering
-@app.route("/kulit_kering")
+@app.route("/get_reminders")
 @login_required
-def kulit_kering():
-    return render_template("kulit_kering.html")
+def get_reminders():
+    schedules = load_schedules()
+    current_time = datetime.now()
+    reminders = []
+
+    for schedule_type, time in schedules.items():
+        reminder_time = datetime.strptime(time, "%H:%M").replace(
+            year=current_time.year, month=current_time.month, day=current_time.day
+        )
+
+        if reminder_time < current_time:
+            reminder_time += timedelta(days=1)
+
+        if (
+            reminder_time - current_time
+        ).total_seconds() <= 60:  # Check if within the next minute
+            reminders.append({"type": schedule_type, "time": time})
+
+    return jsonify(reminders)
 
 
-# Halaman kulit kombinasi
-@app.route("/kulit_kombinasi")
-@login_required
-def kulit_kombinasi():
-    return render_template("kulit_kombinasi.html")
-
-
-# Halaman kulit normal
-@app.route("/kulit_normal")
-@login_required
-def kulit_normal():
-    return render_template("kulit_normal.html")
-
-
-# Halaman kulit berjerawat
-@app.route("/kulit_berjerawat")
-@login_required
-def kulit_berjerawat():
-    return render_template("kulit_berjerawat.html")
-
-
-# Halaman login
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -159,18 +206,6 @@ def register():
     return render_template("register.html")
 
 
-# Halaman pengingat
-@app.route("/pengingat")
-@login_required
-def reminder_page():
-    return render_template("pengingat.html")
-
-
-@app.route("/")
-def pengingat():
-    return render_template("pengingat.html")
-
-
 # Halaman rekomendasi
 @app.route("/rekomendasi")
 @login_required
@@ -179,10 +214,10 @@ def rekomendasi():
 
 
 # Halaman profil pengguna
-@login_required
 @app.route("/profile")
+@login_required
 def profile():
-    return render_template("profile.html")
+    return render_template("profile.html", user=current_user)
 
 
 # Halaman timeline
@@ -215,6 +250,36 @@ def feedback_admin():
 @login_required
 def home_admin():
     return render_template("admin/home_admin.html")
+
+
+# Halaman kulit berminyak
+@app.route("/kulit_berminyak")
+def kulit_berminyak():
+    return render_template("kulit_berminyak.html")
+
+
+# Halaman kulit kering
+@app.route("/kulit_kering")
+def kulit_kering():
+    return render_template("kulit_kering.html")
+
+
+# Halaman kulit kombinasi
+@app.route("/kulit_kombinasi")
+def kulit_kombinasi():
+    return render_template("kulit_kombinasi.html")
+
+
+# Halaman kulit normal
+@app.route("/kulit_normal")
+def kulit_normal():
+    return render_template("kulit_normal.html")
+
+
+# Halaman kulit berjerawat
+@app.route("/kulit_berjerawat")
+def kulit_berjerawat():
+    return render_template("kulit_berjerawat.html")
 
 
 # Halaman kulit berjerawat admin
@@ -266,9 +331,13 @@ def logout():
     return redirect(url_for("login"))
 
 
-# Jalankan aplikasi
+# Run the application
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+        # Create an empty schedules.json file if it doesn't exist
+        if not os.path.exists(SCHEDULES_FILE):
+            with open(SCHEDULES_FILE, "w") as f:
+                json.dump({}, f)
 
     app.run(debug=True)

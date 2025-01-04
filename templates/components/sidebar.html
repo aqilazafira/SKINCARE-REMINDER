@@ -1,4 +1,8 @@
 <aside class="sidebar">
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/sidebar.css') }}"
+  />
   <nav class="side-nav">
     <!-- Home -->
     <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">

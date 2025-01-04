@@ -1,0 +1,27 @@
+<nav class="top-nav">
+  <div class="nav-left">
+    <img
+      src="{{ url_for('static', filename='images/logo.png') }}"
+      alt="Logo"
+      class="logo"
+    />
+    <span class="app-name">SKINCARE REMINDER</span>
+    <div class="notification">
+      <img
+        src="{{ url_for('static', filename='images/bell.png') }}"
+        alt="Notification"
+        class="bell-icon"
+      />
+      <a href="/pengingat" style="text-decoration:none;color:black;"">Pengingat</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <span class="user-label">User</span>
+    <span class="username">USER</span>
+    <img
+      src="{{ url_for('static', filename='images/user.png') }}"
+      alt="User"
+      class="user-icon"
+    />
+  </div>
+</nav>
