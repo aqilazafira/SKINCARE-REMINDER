@@ -20,34 +20,19 @@
       {% include "components/sidebar.html" %}
 
       <main class="main-content">
-        <div class="calendar-section">
+        <div class="clock-section">
+          <div class="clock-wrapper">
+            <iframe
+              src="https://free.timeanddate.com/clock/i8nbe2ld/n108/szw210/szh210/hoc000/hbw2/hfceee/cf100/hncccc/fdi76/mqc000/mql10/mqw4/mqd98/mhc000/mhl10/mhw4/mhd98/mmc000/mml10/mmw1/mmd98"
+              frameborder="0"
+              width="210"
+              height="210"
+            ></iframe>
+          </div>
           <div class="date-selector">
             <div class="selected-date">
-              <span>Mon, Aug 17</span>
-              <a href="{{ url_for('input_page') }}" class="edit-btn">✏️</a>
-            </div>
-            <div class="calendar">
-              <div class="calendar-header">
-                <button class="prev-month">←</button>
-                <span>August 2025</span>
-                <button class="next-month">→</button>
-              </div>
-              <div class="weekdays">
-                <div>S</div>
-                <div>M</div>
-                <div>T</div>
-                <div>W</div>
-                <div>T</div>
-                <div>F</div>
-                <div>S</div>
-              </div>
-              <div class="days">
-                {% for day in range(1, 32) %}
-                <div class="day{% if day == 17 %} selected{% endif %}">
-                  {{ day }}
-                </div>
-                {% endfor %}
-              </div>
+              <span id="currentDate">Mon, Aug 17</span>
+              <button class="edit-btn" onclick="input_page">✏️</button>
             </div>
           </div>
         </div>
@@ -59,12 +44,145 @@
             'SABTU', 'MINGGU'] %}
             <div class="schedule-card">
               <h3>{{ day }}</h3>
-              <button class="edit-btn">Edit</button>
+              <button class="edit-btn" onclick="openInputForm('{{ day }}')">
+                Edit
+              </button>
+              <div id="{{ day.lower() }}-routine" class="routine-display"></div>
             </div>
             {% endfor %}
           </div>
         </div>
       </main>
     </div>
+
+    <div id="inputFormOverlay" class="overlay">
+      <div class="input-form">
+        <h2>Set Skincare Routine</h2>
+        <form id="skincareForm">
+          <input type="hidden" id="selectedDay" name="selectedDay" />
+          <label for="time">Time:</label>
+          <input type="time" id="time" name="time" required />
+          <label for="routine">Skincare Routine:</label>
+          <textarea id="routine" name="routine" required></textarea>
+          <button type="submit">Save</button>
+          <button type="button" onclick="closeInputForm()">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="notificationOverlay" class="overlay">
+      <div class="notification-content">
+        <h3>Hey, it's skincare time!</h3>
+        <p id="notificationMessage"></p>
+        <button onclick="closeNotification()">OK</button>
+      </div>
+    </div>
+
+    <script>
+      function updateCurrentDate() {
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const now = new Date();
+        const formattedDate = `${days[now.getDay()]}, ${
+          months[now.getMonth()]
+        } ${now.getDate()}`;
+        document.getElementById("currentDate").textContent = formattedDate;
+      }
+
+      function openInputForm(day) {
+        document.getElementById("selectedDay").value = day || "";
+        document.getElementById("inputFormOverlay").style.display = "flex";
+      }
+
+      function closeInputForm() {
+        document.getElementById("inputFormOverlay").style.display = "none";
+      }
+
+      function saveSkincareRoutine(event) {
+        event.preventDefault();
+        const day = document.getElementById("selectedDay").value;
+        const time = document.getElementById("time").value;
+        const routine = document.getElementById("routine").value;
+
+        // Save to localStorage
+        const routines =
+          JSON.parse(localStorage.getItem("skincareRoutines")) || {};
+        routines[day] = { time, routine };
+        localStorage.setItem("skincareRoutines", JSON.stringify(routines));
+
+        // Update display
+        const routineDisplay = document.getElementById(
+          `${day.toLowerCase()}-routine`
+        );
+        routineDisplay.textContent = `${time} - ${routine}`;
+
+        closeInputForm();
+        setNotification(day, time, routine);
+      }
+
+      function setNotification(day, time, routine) {
+        const [hours, minutes] = time.split(":");
+        const now = new Date();
+        const notificationTime = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes
+        );
+
+        if (notificationTime < now) {
+          notificationTime.setDate(notificationTime.getDate() + 1);
+        }
+
+        const timeUntilNotification = notificationTime - now;
+        setTimeout(() => {
+          showNotification(routine);
+        }, timeUntilNotification);
+      }
+
+      function showNotification(routine) {
+        document.getElementById(
+          "notificationMessage"
+        ).textContent = `It's time for: ${routine}`;
+        document.getElementById("notificationOverlay").style.display = "flex";
+      }
+
+      function closeNotification() {
+        document.getElementById("notificationOverlay").style.display = "none";
+      }
+
+      function loadSavedRoutines() {
+        const routines =
+          JSON.parse(localStorage.getItem("skincareRoutines")) || {};
+        for (const [day, data] of Object.entries(routines)) {
+          const routineDisplay = document.getElementById(
+            `${day.toLowerCase()}-routine`
+          );
+          routineDisplay.textContent = `${data.time} - ${data.routine}`;
+          setNotification(day, data.time, data.routine);
+        }
+      }
+
+      updateCurrentDate();
+      setInterval(updateCurrentDate, 60000); // Update every minute
+      document
+        .getElementById("skincareForm")
+        .addEventListener("submit", saveSkincareRoutine);
+      loadSavedRoutines();
+    </script>
   </body>
 </html>
