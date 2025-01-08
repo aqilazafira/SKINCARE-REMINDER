@@ -1,30 +1,56 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import (
-    LoginManager,
-    login_user,
-    logout_user,
-    login_required,
-    UserMixin,
-    current_user,
-)
-from typing import Optional
-from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.sql import func
-from sqlalchemy.types import String, Integer, DateTime
 import json
 import os
 import re
 from datetime import datetime, timedelta
+from typing import Optional
+
+from flask import Flask, flash, jsonify, redirect, render_template, request, url_for
+from flask_login import (
+    LoginManager,
+    UserMixin,
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+)
+from flask_mail import Mail, Message
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.sql import func
+from sqlalchemy.types import DateTime, Integer, String
+from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 app.config["SECRET_KEY"] = "pusing"
 
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config["MAIL_USERNAME"] = "hartaticpg@gmail.com"
+app.config["MAIL_PASSWORD"] = "gpzi zzvd jebq ordv"
+app.config["MAIL_DEFAULT_SENDER"] = "hartaticpg@gmail.com"
+
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+
+mail = Mail(app)
+
+
+@app.route("/mail")
+def handle_email():
+    msg = Message(
+        subject="Love letter",
+        recipients=["gearykeaton@gmail.com"],
+    )
+    msg.body = ""
+
+    try:
+        mail.send(msg)
+        return 'Email sent!'
+    except Exception as e:
+        return f'Error sending email: {str(e)}'
 
 
 @login_manager.user_loader
@@ -37,14 +63,10 @@ class User(db.Model, UserMixin):
 
     id: Mapped[int] = mapped_column("user_id", Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
-    email: Mapped[Optional[str]] = mapped_column(
-        String(120), unique=True, nullable=True
-    )
+    email: Mapped[Optional[str]] = mapped_column(String(120), unique=True, nullable=True)
     password_hash: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     created_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, default=func.now())
-    updated_at: Mapped[Optional[DateTime]] = mapped_column(
-        DateTime, default=func.now(), onupdate=func.now()
-    )
+    updated_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
 
     def set_password(self, password: str) -> None:
         self.password_hash = generate_password_hash(password)
@@ -140,9 +162,7 @@ def get_reminders():
         if reminder_time < current_time:
             reminder_time += timedelta(days=1)
 
-        if (
-            reminder_time - current_time
-        ).total_seconds() <= 60:  # Check if within the next minute
+        if (reminder_time - current_time).total_seconds() <= 60:  # Check if within the next minute
             reminders.append({"type": schedule_type, "time": time})
 
     return jsonify(reminders)

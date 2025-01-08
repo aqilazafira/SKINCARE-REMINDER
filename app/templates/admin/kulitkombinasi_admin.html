@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skincare Reminder - Admin Rekomendasi</title>
+    <title>Skincare Reminder - Admin Kulit Kombinasi</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/admin/kulitkering_admin.css') }}"
+      href="{{ url_for('static', filename='css/admin/kulitkombinasi_admin.css') }}"
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
@@ -58,9 +58,9 @@
             />
             <span>rekomendasi</span>
             <div class="subnav">
-              <a href="#" class="subnav-item active">kulit kering</a>
+              <a href="#" class="subnav-item">kulit kering</a>
               <a href="#" class="subnav-item">kulit normal</a>
-              <a href="#" class="subnav-item">kulit kombinasi</a>
+              <a href="#" class="subnav-item active">kulit kombinasi</a>
               <a href="#" class="subnav-item">kulit berjerawat</a>
               <a href="#" class="subnav-item">kulit berminyak</a>
             </div>
@@ -80,7 +80,7 @@
             <span>profil</span>
           </a>
         </nav>
-        <a href="{{ url_for('admin.logout') }}" class="logout-btn">LOGOUT</a>
+        <a href="/logout" class="logout-btn">LOGOUT</a>
       </aside>
 
       <main class="main-content">
