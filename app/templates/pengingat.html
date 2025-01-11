@@ -1,17 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skincare Reminder - Pengingat</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/pengingat.css') }}"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pengingat.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
   </head>
   <body>
     {% include "components/topnav.html" %}
@@ -39,14 +33,14 @@
         <div class="schedule-section">
           <h2>JADWAL SKINCARE</h2>
           <div class="schedule-grid">
-            {% for day in ['SENIN', 'SELASA', 'RABU', 'KAMIS', "JUM'AT",
-            'SABTU', 'MINGGU'] %}
+            {% for day in ['SENIN', 'SELASA', 'RABU', 'KAMIS', "JUMAT", 'SABTU', 'MINGGU'] %}
             <div class="schedule-card">
               <h3>{{ day }}</h3>
-              <button class="edit-btn" onclick="openInputForm('{{ day }}')">
-                Edit
-              </button>
-              <div id="{{ day.lower() }}-routine" class="routine-display"></div>
+              <button class="edit-btn" onclick="openInputForm('{{ day }}')">Edit</button>
+              <div id="{{ day.lower() }}-routine" class="routine-display">
+                {% for routine in user_reminders %} {% if routine.day == day %} {{ routine.hour }}:{{ routine.minute }}
+                - {{ routine.skincare_types }} {% endif %} {% endfor %}
+              </div>
             </div>
             {% endfor %}
           </div>
@@ -61,43 +55,100 @@
           <input type="hidden" id="selectedDay" name="selectedDay" />
           <label for="time">Time:</label>
           <input type="time" id="time" name="time" required />
+
           <label for="routine">Skincare Routine:</label>
-          <textarea id="routine" name="routine" required></textarea>
+          <input type="hidden" id="skincareTypes" name="skincareTypes" required />
+          <div id="selectedSkincareTypes" class="selected-skincare-types"></div>
+          <div class="dropdown">
+            <button class="dropdown-toggle">Routines</button>
+            <ul class="dropdown-menu">
+              <li>
+                <label><input type="checkbox" value="Cleanser" /> Cleanser</label>
+              </li>
+              <li>
+                <label><input type="checkbox" value="Toner" /> Toner</label>
+              </li>
+              <li>
+                <label><input type="checkbox" value="Serum" /> Serum</label>
+              </li>
+              <li>
+                <label><input type="checkbox" value="Moisturizer" /> Moisturizer</label>
+              </li>
+              <li>
+                <label><input type="checkbox" value="Sunscreen" /> Sunscreen</label>
+              </li>
+              <li>
+                <label><input type="checkbox" value="Exfoliator" /> Exfoliator</label>
+              </li>
+              <li>
+                <label><input type="checkbox" value="Mask" /> Mask</label>
+              </li>
+              <li>
+                <label><input type="checkbox" value="Eye Cream" /> Eye Cream</label>
+              </li>
+              <li>
+                <label><input type="checkbox" value="Face Oil" /> Face Oil</label>
+              </li>
+            </ul>
+          </div>
+
           <button type="submit">Save</button>
           <button type="button" onclick="closeInputForm()">Cancel</button>
         </form>
       </div>
     </div>
 
-    <div id="notificationOverlay" class="overlay">
-      <div class="notification-content">
-        <h3>Hey, it's skincare time!</h3>
-        <p id="notificationMessage"></p>
-        <button onclick="closeNotification()">OK</button>
-      </div>
-    </div>
-
     <script>
+      const checkboxes = document.querySelectorAll(".dropdown-menu input[type='checkbox']");
+      const skincareTypesInput = document.getElementById("skincareTypes");
+      const selectedSkincareTypesContainer = document.getElementById("selectedSkincareTypes");
+
+      checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener("change", updateSkincareTypes);
+      });
+
+      function updateSkincareTypes() {
+        const selectedTypes = Array.from(checkboxes)
+          .filter((checkbox) => checkbox.checked)
+          .map((checkbox) => checkbox.value);
+
+        skincareTypesInput.value = selectedTypes.join(",");
+        displaySelectedSkincareTypes(selectedTypes);
+      }
+
+      function displaySelectedSkincareTypes(selectedTypes) {
+        selectedSkincareTypesContainer.innerHTML = "";
+        selectedTypes.forEach((type) => {
+          const typeElement = document.createElement("div");
+          typeElement.className = "selected-type";
+
+          const typeDisplay = document.createElement("div");
+          typeDisplay.textContent = type;
+
+          const closeButton = document.createElement("button");
+          closeButton.className = "close-btn";
+          closeButton.textContent = "x";
+          closeButton.addEventListener("click", () => removeSkincareType(type));
+
+          typeElement.appendChild(typeDisplay);
+          typeElement.appendChild(closeButton);
+          selectedSkincareTypesContainer.appendChild(typeElement);
+        });
+      }
+
+      function removeSkincareType(type) {
+        const checkbox = Array.from(checkboxes).find((checkbox) => checkbox.value === type);
+        if (checkbox) {
+          checkbox.checked = false;
+          updateSkincareTypes();
+        }
+      }
+
       function updateCurrentDate() {
         const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        const months = [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ];
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         const now = new Date();
-        const formattedDate = `${days[now.getDay()]}, ${
-          months[now.getMonth()]
-        } ${now.getDate()}`;
+        const formattedDate = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
         document.getElementById("currentDate").textContent = formattedDate;
       }
 
@@ -112,76 +163,61 @@
 
       function saveSkincareRoutine(event) {
         event.preventDefault();
-        const day = document.getElementById("selectedDay").value;
-        const time = document.getElementById("time").value;
-        const routine = document.getElementById("routine").value;
-
-        // Save to localStorage
-        const routines =
-          JSON.parse(localStorage.getItem("skincareRoutines")) || {};
-        routines[day] = { time, routine };
-        localStorage.setItem("skincareRoutines", JSON.stringify(routines));
-
-        // Update display
-        const routineDisplay = document.getElementById(
-          `${day.toLowerCase()}-routine`
-        );
-        routineDisplay.textContent = `${time} - ${routine}`;
-
-        closeInputForm();
-        setNotification(day, time, routine);
-      }
-
-      function setNotification(day, time, routine) {
-        const [hours, minutes] = time.split(":");
-        const now = new Date();
-        const notificationTime = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate(),
-          hours,
-          minutes
-        );
-
-        if (notificationTime < now) {
-          notificationTime.setDate(notificationTime.getDate() + 1);
+        if (skincareTypesInput.value === "") {
+          alert("Please select at least one routine");
+          return;
         }
 
-        const timeUntilNotification = notificationTime - now;
-        setTimeout(() => {
-          showNotification(routine);
-        }, timeUntilNotification);
+        const day = document.getElementById("selectedDay").value;
+        const time = document.getElementById("time").value;
+        const skincareTypes = skincareTypesInput.value.split(",");
+        const [hour, minute] = time.split(":").map(Number);
+
+        // Update display
+        const routineDisplay = document.getElementById(`${day.toLowerCase()}-routine`);
+        routineDisplay.textContent = `${time} - ${skincareTypesInput.value}`;
+
+        closeInputForm();
+        saveSkincareRoutineApi(day, hour, minute, skincareTypes);
       }
 
-      function showNotification(routine) {
-        document.getElementById(
-          "notificationMessage"
-        ).textContent = `It's time for: ${routine}`;
-        document.getElementById("notificationOverlay").style.display = "flex";
-      }
+      function saveSkincareRoutineApi(day, hour, minute, skincareTypes) {
+        const data = {
+          day,
+          hour,
+          minute,
+          skincareTypes,
+        };
 
-      function closeNotification() {
-        document.getElementById("notificationOverlay").style.display = "none";
+        fetch("/pengingat", {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Success:", data);
+            location.reload();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       }
 
       function loadSavedRoutines() {
-        const routines =
-          JSON.parse(localStorage.getItem("skincareRoutines")) || {};
+        const routines = JSON.parse(localStorage.getItem("skincareRoutines")) || {};
         for (const [day, data] of Object.entries(routines)) {
-          const routineDisplay = document.getElementById(
-            `${day.toLowerCase()}-routine`
-          );
+          const routineDisplay = document.getElementById(`${day.toLowerCase()}-routine`);
           routineDisplay.textContent = `${data.time} - ${data.routine}`;
-          setNotification(day, data.time, data.routine);
         }
       }
 
       updateCurrentDate();
       setInterval(updateCurrentDate, 60000); // Update every minute
-      document
-        .getElementById("skincareForm")
-        .addEventListener("submit", saveSkincareRoutine);
-      loadSavedRoutines();
+      document.getElementById("skincareForm").addEventListener("submit", saveSkincareRoutine);
+      // loadSavedRoutines();
     </script>
   </body>
 </html>

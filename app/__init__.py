@@ -18,8 +18,8 @@ mail = Mail()
 def create_app():
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
-    app.config["SECRET_KEY"] = "pusing"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:password@localhost/skincare"
+    app.config["SECRET_KEY"] = "super secret key"
 
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
     app.config["MAIL_PORT"] = 587
@@ -37,7 +37,7 @@ def create_app():
         with app.app_context():
             db.drop_all()
             db.create_all()
-            app.logger.info("Initialized the database!")
+            pirnt("Initialized the database!")
 
     return app
 

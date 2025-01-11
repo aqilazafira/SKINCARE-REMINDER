@@ -1,10 +1,14 @@
-from typing import Optional, List
+from datetime import datetime
+from typing import List, Optional
+
 from flask_login import UserMixin
 from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from . import db
+from app import db
+
+
 
 class User(db.Model, UserMixin):
     __tablename__ = "users"
@@ -14,7 +18,7 @@ class User(db.Model, UserMixin):
     email: Mapped[Optional[str]] = mapped_column(String(120), unique=True, nullable=True)
     password_hash: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     role: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
-    created_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, default=func.now())
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     updated_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
 
     reminders: Mapped[List["Reminder"]] = relationship(back_populates="user")
@@ -30,20 +34,40 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"<User: {self.username}>"
 
+
 class Reminder(db.Model):
     __tablename__ = "reminders"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
+    id: Mapped[str] = mapped_column(String(128), primary_key=True)
     day: Mapped[int] = mapped_column(Integer, nullable=False)
     hour: Mapped[int] = mapped_column(Integer, nullable=False)
     minute: Mapped[int] = mapped_column(Integer, nullable=False)
-    content: Mapped[str] = mapped_column(Text, nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
+    updated_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
 
     user: Mapped["User"] = relationship(back_populates="reminders")
+    skincare_types: Mapped[List["ReminderSkincare"]] = relationship(
+        back_populates="reminder", cascade="all, delete-orphan"
+    )
 
-    def __repr__(self):
-        return f"<Reminder: {self.content[:20]}>"
+    def __repr__(self) -> str:
+            return f"<Reminder: Day={self.day}, Time={self.hour}:{self.minute}>"
+
+
+class ReminderSkincare(db.Model):
+    __tablename__ = "reminder_skincare"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    reminder_id: Mapped[int] = mapped_column(ForeignKey("reminders.id"), nullable=False)
+    skincare_type_id: Mapped[int] = mapped_column(ForeignKey("skincare_types.id"), nullable=False)
+
+    reminder: Mapped["Reminder"] = relationship(back_populates="skincare_types")
+    skincare_type: Mapped["SkincareType"] = relationship()
+
+    def __repr__(self) -> str:
+        return f"<ReminderSkincare: ReminderID={self.reminder_id}, SkincareTypeID={self.skincare_type_id}>"
+
 
 class Feedback(db.Model):
     __tablename__ = "feedback"
@@ -58,6 +82,7 @@ class Feedback(db.Model):
     def __repr__(self):
         return f"<Feedback: {self.content[:20]}>"
 
+
 class Timeline(db.Model):
     __tablename__ = "timelines"
 
@@ -70,6 +95,7 @@ class Timeline(db.Model):
 
     def __repr__(self):
         return f"<Timeline: {self.image_url}>"
+
 
 class Product(db.Model):
     __tablename__ = "products"
@@ -87,6 +113,7 @@ class Product(db.Model):
     def __repr__(self):
         return f"<Product: {self.name}>"
 
+
 class Recommendation(db.Model):
     __tablename__ = "recommendations"
 
@@ -97,6 +124,7 @@ class Recommendation(db.Model):
 
     def __repr__(self):
         return f"<Recommendation: {self.title}>"
+
 
 class SkincareType(db.Model):
     __tablename__ = "skincare_types"
