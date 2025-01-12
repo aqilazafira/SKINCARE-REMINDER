@@ -1,19 +1,18 @@
 import sqlalchemy as sa
 
 
-# from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 
+from apscheduler.schedulers.background import BackgroundScheduler
+
 db = SQLAlchemy()
 login_manager = LoginManager()
 mail = Mail()
 
-# bg_schedules = BackgroundScheduler()
-# bg_schedules.start()
-
+scheduler = BackgroundScheduler()
 
 def create_app():
     app = Flask(__name__)
@@ -37,7 +36,10 @@ def create_app():
         with app.app_context():
             db.drop_all()
             db.create_all()
-            pirnt("Initialized the database!")
+            print("Initialized the database!")
+
+    with app.app_context():
+        scheduler.start()
 
     return app
 
@@ -59,8 +61,10 @@ def register_blueprints(app):
     from app.routes.user import user_bp
     from app.routes.reminder import reminder_bp
     from app.routes.rekomendasi import rekomendasi_bp
+    from app.routes.admin import admin_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(reminder_bp)
     app.register_blueprint(rekomendasi_bp)
+    app.register_blueprint(admin_bp)

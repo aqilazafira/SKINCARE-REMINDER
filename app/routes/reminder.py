@@ -6,8 +6,10 @@ from flask_login import login_required, current_user
 from flask_mail import Message
 from sqlalchemy.sql.functions import random
 
-from app import mail, db
+from app import db
 from app.models import Reminder, ReminderSkincare, SkincareType, User
+from app.services.reminder_service import send_email
+from app.services.schedule_service import create_schedule, reschedule
 
 reminder_bp = Blueprint("reminder", __name__)
 
@@ -47,19 +49,14 @@ def save_schedule():
     day = data.get("day")
     hour = int(data.get("hour"))
     minute = int(data.get("minute"))
-    period = data.get("period")
     skincare_types = data.get("skincareTypes")
 
     print(data)
 
-    # Convert to 24-hour format
-    if period == "PM" and hour != 12:
-        hour += 12
-    elif period == "AM" and hour == 12:
-        hour = 0
-
     # Convert day from string to integer
     day = DAYS.index(day.upper())
+
+    reminder_action = lambda: send_email("714230044@ulbi.ac.id", "Reminder", "Don't forget to do your skincare routine!")
 
     reminder = Reminder.query.filter_by(user_id=current_user.id, day=day).first()
     if reminder:
@@ -68,8 +65,10 @@ def save_schedule():
         db.session.commit()
         ReminderSkincare.query.filter_by(reminder_id=reminder.id).delete()
         db.session.commit()
+        reschedule(reminder.id, hour=hour, minute=minute)
     else:
-        reminder = Reminder(id=randint(0, 99999), user_id=current_user.id, day=day, hour=hour, minute=minute)
+        job_id = create_schedule(action=reminder_action, hour=hour, minute=minute)
+        reminder = Reminder(id=job_id, user_id=current_user.id, day=day, hour=hour, minute=minute)
         db.session.add(reminder)
         db.session.commit()
 
@@ -82,18 +81,3 @@ def save_schedule():
 
     db.session.commit()
     return jsonify({"message": "Reminder added successfully"}), 201
-
-
-@reminder_bp.route("/mail")
-def handle_email():
-    msg = Message(
-        subject="Love letter",
-        recipients=["gearykeaton@gmail.com"],
-    )
-    msg.body = "I love you!"
-
-    try:
-        mail.send(msg)
-        return "Email sent!"
-    except Exception as e:
-        return f"Error sending email: {str(e)}"

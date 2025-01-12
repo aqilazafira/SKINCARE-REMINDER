@@ -1,0 +1,55 @@
+<aside class="sidebar">
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/sidebar.css') }}"
+  />
+  <nav class="side-nav">
+    <!-- Home -->
+    <a href="/admin" class="nav-item {% if request.path == '/' %}active{% endif %}">
+      <img
+        src="{{ url_for('static', filename='images/home.png') }}"
+        alt="Home"
+      />
+      <span>home</span>
+    </a>
+
+    <!-- Rekomendasi -->
+    <a
+      href="/admin/rekomendasi"
+      class="nav-item {% if request.path == '/rekomendasi' %}active{% endif %}"
+    >
+      <img
+        src="{{ url_for('static', filename='images/recommendation.png') }}"
+        alt="Recommendations"
+      />
+      <span>rekomendasi</span>
+    </a>
+
+    <!-- Feedback -->
+    <a
+      href="/admin/feedback"
+      class="nav-item {% if request.path == '/feedback' %}active{% endif %}"
+    >
+      <img
+        src="{{ url_for('static', filename='images/feedback.png') }}"
+        alt="Feedback"
+      />
+      <span>feedback</span>
+    </a>
+
+    <!-- Profil -->
+    <a
+      href="/admin/profile"
+      class="nav-item {% if request.path == '/profile' %}active{% endif %}"
+    >
+      <img
+        src="{{ url_for('static', filename='images/profile.png') }}"
+        alt="Profile"
+      />
+      <span>profil</span>
+    </a>
+  </nav>
+
+  <!-- Tombol Logout -->
+  <a href="/admin/logout" class="logout-btn">LOGOUT</a>
+</aside>

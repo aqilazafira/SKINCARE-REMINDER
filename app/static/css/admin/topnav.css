@@ -1,0 +1,57 @@
+.top-nav {
+    background-color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+}
+
+.app-name {
+    color: #4a90a0;
+    font-weight: 600;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ff69b4;
+}
+
+.bell-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.admin-label {
+    color: #ff69b4;
+    font-weight: 600;
+}
+
+.username {
+    color: #666;
+}
+
+.admin-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}

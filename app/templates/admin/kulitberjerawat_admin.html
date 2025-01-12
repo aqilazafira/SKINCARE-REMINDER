@@ -14,74 +14,10 @@
     />
   </head>
   <body>
-    <nav class="top-nav">
-      <div class="nav-left">
-        <img
-          src="{{ url_for('static', filename='images/logo.png') }}"
-          alt="Logo"
-          class="logo"
-        />
-        <span class="app-name">SKINCARE REMINDER</span>
-        <div class="notification">
-          <img
-            src="{{ url_for('static', filename='images/bell.png') }}"
-            alt="Notification"
-            class="bell-icon"
-          />
-          <span>Pengingat</span>
-        </div>
-      </div>
-      <div class="nav-right">
-        <span class="admin-label">Admin</span>
-        <span class="username">ADMIN</span>
-        <img
-          src="{{ url_for('static', filename='images/admin-icon.png') }}"
-          alt="Admin"
-          class="admin-icon"
-        />
-      </div>
-    </nav>
+    {% include "components/topnav_admin.html" %}
 
     <div class="container">
-        {% include "components/sidebar.html" %}
-
-        <img
-              src="{{ url_for('static', filename='images/home-icon.png') }}"
-              alt="Home"
-            />
-            <span>home</span>
-          </a>
-          <div class="nav-item active">
-            <img
-              src="{{ url_for('static', filename='images/recommendation-icon.png') }}"
-              alt="Recommendations"
-            />
-            <span>rekomendasi</span>
-            <div class="subnav">
-              <a href="#" class="subnav-item">kulit kering</a>
-              <a href="#" class="subnav-item">kulit normal</a>
-              <a href="#" class="subnav-item">kulit kombinasi</a>
-              <a href="#" class="subnav-item active">kulit berjerawat</a>
-              <a href="#" class="subnav-item">kulit berminyak</a>
-            </div>
-          </div>
-          <a href="#" class="nav-item">
-            <img
-              src="{{ url_for('static', filename='images/feedback-icon.png') }}"
-              alt="Feedback"
-            />
-            <span>feedback</span>
-          </a>
-          <a href="#" class="nav-item">
-            <img
-              src="{{ url_for('static', filename='images/profile-icon.png') }}"
-              alt="Profile"
-            />
-            <span>profil</span>
-          </a>
-        </nav>
-        <a href="/logout" class="logout-btn">LOGOUT</a>
-      </aside>
+      {% include "components/sidebar_admin.html" %}
 
       <main class="main-content">
         <div class="content-header">

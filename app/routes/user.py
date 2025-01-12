@@ -79,10 +79,3 @@ def logout():
 @login_required
 def profile():
     return render_template("profile.html", user=current_user)
-
-
-# Halaman profile admin
-@user_bp.route("/profile_admin")
-@login_required
-def profile_admin():
-    return render_template("admin/profile_admin.html")

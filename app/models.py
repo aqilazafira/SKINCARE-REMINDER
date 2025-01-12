@@ -9,7 +9,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from app import db
 
 
-
 class User(db.Model, UserMixin):
     __tablename__ = "users"
 
@@ -52,7 +51,7 @@ class Reminder(db.Model):
     )
 
     def __repr__(self) -> str:
-            return f"<Reminder: Day={self.day}, Time={self.hour}:{self.minute}>"
+        return f"<Reminder: Day={self.day}, Time={self.hour}:{self.minute}>"
 
 
 class ReminderSkincare(db.Model):
@@ -73,9 +72,9 @@ class Feedback(db.Model):
     __tablename__ = "feedback"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    date: Mapped[DateTime] = mapped_column(DateTime, default=func.now(), nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now(), nullable=False)
 
     user: Mapped["User"] = relationship(back_populates="feedbacks")
 
@@ -88,7 +87,7 @@ class Timeline(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     date: Mapped[DateTime] = mapped_column(DateTime, default=func.now(), nullable=False)
-    image_url: Mapped[str] = mapped_column(Text, nullable=False)
+    image_url: Mapped[str] = mapped_column(String(120), nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
 
     user: Mapped["User"] = relationship(back_populates="timelines")
@@ -101,17 +100,47 @@ class Product(db.Model):
     __tablename__ = "products"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(100), nullable=False)
-    brand: Mapped[str] = mapped_column(String(50), nullable=False)
+    brand: Mapped[str] = mapped_column(String(120), nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    recommendation_id: Mapped[int] = mapped_column(ForeignKey("recommendations.id"), nullable=True)
-    type_id: Mapped[int] = mapped_column(ForeignKey("skincare_types.id"), nullable=False)
+    image_url: Mapped[str] = mapped_column(String(120), nullable=False)
 
-    recommendation: Mapped["Recommendation"] = relationship(back_populates="products")
-    skincare_type: Mapped["SkincareType"] = relationship(back_populates="products")
+    recommendations: Mapped[List["ProductRecommendation"]] = relationship(
+        back_populates="product", cascade="all, delete-orphan"
+    )
+    skincare_types: Mapped[List["ProductSkincareType"]] = relationship(
+        back_populates="product", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
-        return f"<Product: {self.name}>"
+        return f"<Product: {self.brand} - {self.description}>"
+
+
+class ProductRecommendation(db.Model):
+    __tablename__ = "product_recommendation"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False)
+    recommendation_id: Mapped[int] = mapped_column(ForeignKey("recommendations.id"), nullable=False)
+
+    product: Mapped["Product"] = relationship(back_populates="recommendations")
+    recommendation: Mapped["Recommendation"] = relationship(back_populates="products")
+
+    def __repr__(self) -> str:
+        return f"<ProductRecommendation: ProductID={self.product_id}, RecommendationID={self.recommendation_id}>"
+
+
+class ProductSkincareType(db.Model):
+    __tablename__ = "product_skincare_type"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id"), nullable=False)
+    skincare_type_id: Mapped[int] = mapped_column(ForeignKey("skincare_types.id"), nullable=False)
+
+    product: Mapped["Product"] = relationship(back_populates="skincare_types")
+    skincare_type: Mapped["SkincareType"] = relationship(back_populates="products")
+
+    def __repr__(self) -> str:
+        return f"<ProductSkincareType: ProductID={self.product_id}, SkincareTypeID={self.skincare_type_id}>"
 
 
 class Recommendation(db.Model):
@@ -120,7 +149,9 @@ class Recommendation(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
 
-    products: Mapped[List["Product"]] = relationship(back_populates="recommendation")
+    products: Mapped[List["ProductRecommendation"]] = relationship(
+        back_populates="recommendation", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<Recommendation: {self.title}>"
@@ -132,7 +163,9 @@ class SkincareType(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
 
-    products: Mapped[List["Product"]] = relationship(back_populates="skincare_type")
+    products: Mapped[List["ProductSkincareType"]] = relationship(
+        back_populates="skincare_type", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<SkincareType: {self.title}>"

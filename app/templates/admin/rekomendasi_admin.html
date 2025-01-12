@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skincare Reminder - Admin Rekomendasi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/rekomendasi_admin.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    {% include "components/topnav_admin.html" %}
+
+    <div class="container">
+      {% include "components/sidebar_admin.html" %}
+
+      <main class="main-content">
+        <div class="content-header">
+          <button class="add-btn" onclick="openInputForm()"><span>+</span> tambah rekomendasi</button>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Gambar</th>
+                <th>Merk</th>
+                <th>Deskriptsi</th>
+                <th>Jenis skincare</th>
+                <th>Rekomendasi</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for product in products %}
+              <tr>
+                <td class="image-cell">
+                  <img src="{{ url_for('static', filename='products/' + product.image_url) }}" alt="Product Image" />
+                </td>
+                <td>{{ product.brand }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.skincare_types | join(', ') }}</td>
+                <td>{{ product.recommendations | join(', ') }}</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Hapus</button>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+    <div id="inputFormOverlay" class="overlay">
+      <div class="input-form">
+        <h2>Add Product</h2>
+        <form id="productForm" action="/timeline" enctype="multipart/form-data">
+          <label for="brand">Brand:</label>
+          <input type="text" id="brand" name="brand" required />
+
+          <label for="image">Image:</label>
+          <input type="file" id="image" name="file" accept="image/*" required />
+
+          <label for="descripotion">Description</label>
+          <textarea id="description" name="description" required></textarea>
+
+          <label for="recommendations">Recommendations:</label>
+          <input type="hidden" id="recommendations" name="recommendations" required />
+          <div id="selectedRecommendations" class="selected-recommendations"></div>
+          <div id="dropdownRecommendations" class="dropdown">
+            <button type="button" class="dropdown-toggle">Recommendations</button>
+            <ul class="dropdown-menu">
+              {% for recommendation in recommendations %}
+              <li>
+                <label><input type="checkbox" value="{{ recommendation.title }}" />{{ recommendation.title }}</label>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <label for="Skincare Types">Skincare Types:</label>
+          <input type="hidden" id="skincareTypes" name="skincareTypes" required />
+          <div id="selectedSkincareTypes" class="selected-skincare-types"></div>
+          <div id="dropdownSkincareTypes" class="dropdown">
+            <button type="button" class="dropdown-toggle">Skincare Types</button>
+            <ul class="dropdown-menu">
+              {% for type in skincare_types %}
+              <li>
+                <label><input type="checkbox" value="{{ type.title }}" />{{ type.title }}</label>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <button type="submit">Save</button>
+          <button type="button" onclick="closeInputForm()">Cancel</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      const skincareTypesCB = document.querySelectorAll("#dropdownSkincareTypes input[type='checkbox']");
+      const skincareTypesInput = document.getElementById("skincareTypes");
+      const selectedSkincareTypesContainer = document.getElementById("selectedSkincareTypes");
+
+      const recommendationsCB = document.querySelectorAll("#dropdownRecommendations input[type='checkbox']");
+      const recommendationsInput = document.getElementById("recommendations");
+      const selectedRecommendationsContainer = document.getElementById("selectedRecommendations");
+
+      document.getElementById("productForm").addEventListener("submit", saveProduct);
+
+      skincareTypesCB.forEach((checkbox) => {
+        checkbox.addEventListener("change", updateCheckboxes);
+      });
+
+      recommendationsCB.forEach((checkbox) => {
+        checkbox.addEventListener("change", updateCheckboxes);
+      });
+
+      function saveProduct(event) {
+        event.preventDefault();
+        const brand = document.getElementById("brand").value;
+        const image = document.getElementById("image").files[0];
+        const description = document.getElementById("description").value;
+
+        if (!image || brand == "" || recommendationsInput.value == "" || skincareTypesInput.value == "") {
+          alert("Please fill in all fields");
+          return;
+        }
+
+        const recommendations = recommendationsInput.value.split(",");
+        const skincareTypes = skincareTypesInput.value.split(",");
+
+        const formData = new FormData();
+        formData.append("brand", brand);
+        formData.append("description", description);
+        formData.append("file", image);
+        formData.append("recommendations", recommendations);
+        formData.append("skincareTypes", skincareTypes);
+
+        fetch("/admin/rekomendasi", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Failed to save product");
+            }
+          })
+          .then((data) => {
+            console.log("Product saved successfully:", data);
+            closeInputForm();
+            location.reload();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+        closeInputForm();
+      }
+
+      function updateCheckboxes() {
+        const selectedTypes = Array.from(skincareTypesCB)
+          .filter((checkbox) => checkbox.checked)
+          .map((checkbox) => checkbox.value);
+        skincareTypesInput.value = selectedTypes.join(",");
+
+        const selectedRecommendations = Array.from(recommendationsCB)
+          .filter((checkbox) => checkbox.checked)
+          .map((checkbox) => checkbox.value);
+        recommendationsInput.value = selectedRecommendations.join(",");
+
+        displaySelectedSkincareTypes(selectedTypes);
+        displaySelectedRecommendations(selectedRecommendations);
+      }
+
+      function displaySelectedSkincareTypes(selectedTypes) {
+        selectedSkincareTypesContainer.innerHTML = "";
+        selectedTypes.forEach((type) => {
+          const typeElement = document.createElement("div");
+          typeElement.className = "selected-type";
+
+          const typeDisplay = document.createElement("div");
+          typeDisplay.textContent = type;
+
+          const closeButton = document.createElement("button");
+          closeButton.className = "close-btn";
+          closeButton.textContent = "x";
+          closeButton.addEventListener("click", () => removeSkincareType(type));
+
+          typeElement.appendChild(typeDisplay);
+          typeElement.appendChild(closeButton);
+          selectedSkincareTypesContainer.appendChild(typeElement);
+        });
+      }
+
+      function displaySelectedRecommendations(selectedRecommendations) {
+        selectedRecommendationsContainer.innerHTML = "";
+        selectedRecommendations.forEach((recommendation) => {
+          const recommendationsElement = document.createElement("div");
+          recommendationsElement.className = "selected-recommendation";
+
+          const recommendationsDisplay = document.createElement("div");
+          recommendationsDisplay.textContent = recommendation;
+
+          const closeButton = document.createElement("button");
+          closeButton.className = "close-btn";
+          closeButton.textContent = "x";
+          closeButton.addEventListener("click", () => removeRecommendation(recommendations));
+
+          recommendationsElement.appendChild(recommendationsDisplay);
+          recommendationsElement.appendChild(closeButton);
+          selectedRecommendationsContainer.appendChild(recommendationsElement);
+        });
+      }
+
+      function removeSkincareType(type) {
+        const checkbox = Array.from(skincareTypesCB).find((checkbox) => checkbox.value === type);
+        if (checkbox) {
+          checkbox.checked = false;
+          updateCheckboxes();
+        }
+      }
+
+      function removeRecommendation(recommendation) {
+        const checkbox = Array.from(recommendationsCB).find((checkbox) => checkbox.value === type);
+        if (checkbox) {
+          checkbox.checked = false;
+          updateCheckboxes();
+        }
+      }
+
+      function openInputForm(day) {
+        document.getElementById("inputFormOverlay").style.display = "flex";
+      }
+
+      function closeInputForm() {
+        document.getElementById("inputFormOverlay").style.display = "none";
+      }
+    </script>
+  </body>
+</html>
