@@ -6,7 +6,7 @@ from flask_login.utils import request
 
 from app import db
 from app.helper.decorators import admin_required
-from app.models import Product, ProductRecommendation, ProductSkincareType, Recommendation, SkincareType
+from app.models import Product, ProductRecommendation, ProductSkincareType, Recommendation, SkincareType, Feedback
 from app.services.storage_service import allowed_file, upload_image
 
 admin_bp = Blueprint("admin", __name__)
@@ -25,7 +25,15 @@ def home_admin():
 @login_required
 @admin_required
 def feedback_admin():
-    return render_template("admin/feedback_admin.html")
+    feedbacks = Feedback.query.all()
+    return render_template("admin/feedback_admin.html", feedbacks=feedbacks)
+
+@admin_bp.route("/admin/feedback/<int:feedback_id>", methods=["DELETE"])
+def delete_feedback(feedback_id):
+    feedback = Feedback.query.get(feedback_id)
+    db.session.delete(feedback)
+    db.session.commit()
+    return jsonify({"message": "success"})
 
 
 # Halaman feedback admin
@@ -36,7 +44,6 @@ def timeline_admin():
     return render_template("admin/timeline_admin.html")
 
 
-# Halaman feedback admin
 @admin_bp.route("/admin/rekomendasi", methods=["GET", "POST"])
 @login_required
 @admin_required

@@ -23,39 +23,36 @@
         <div class="feedback-container">
           <h2 class="feedback-header">FEEDBACK MASUK</h2>
           <div class="feedback-list">
+            {% for feedback in feedbacks %}
             <div class="feedback-item">
-              <span class="feedback-number">1.</span>
-              <span class="feedback-text">Feedback satu</span>
-              <button class="delete-btn">HAPUS</button>
+              <span class="feedback-number">{{ loop.index }}</span>
+              <span class="feedback-text">{{ feedback.content }}</span>
+              <button class="delete-btn" onclick="deleteFeedback({{ feedback.id }})">HAPUS</button>
             </div>
-            <div class="feedback-item">
-              <span class="feedback-number">2.</span>
-              <span class="feedback-text">Feedback dua</span>
-              <button class="delete-btn">HAPUS</button>
-            </div>
-            <div class="feedback-item">
-              <span class="feedback-number">3.</span>
-              <span class="feedback-text">Feedback tiga</span>
-              <button class="delete-btn">HAPUS</button>
-            </div>
-            <div class="feedback-item">
-              <span class="feedback-number">4.</span>
-              <span class="feedback-text">Feedback empat</span>
-              <button class="delete-btn">HAPUS</button>
-            </div>
-            <div class="feedback-item">
-              <span class="feedback-number">5.</span>
-              <span class="feedback-text">Feedback lima</span>
-              <button class="delete-btn">HAPUS</button>
-            </div>
-            <div class="feedback-item">
-              <span class="feedback-number">6.</span>
-              <span class="feedback-text">Feedback enam</span>
-              <button class="delete-btn">HAPUS</button>
-            </div>
+            {% endfor %}
           </div>
         </div>
       </main>
     </div>
+    <script>
+      function deleteFeedback(id) {
+        fetch(`/admin/feedback/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          if (response.ok) {
+            location.reload();
+          } else {
+            console.error('Failed to delete feedback');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+    </script>
   </body>
 </html>
