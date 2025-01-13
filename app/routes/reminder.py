@@ -1,10 +1,5 @@
-from datetime import datetime, timedelta
-from random import randint
-
-from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
-from flask_login import login_required, current_user
-from flask_mail import Message
-from sqlalchemy.sql.functions import random
+from flask import Blueprint, jsonify, render_template, request, url_for
+from flask_login import current_user, login_required
 
 from app import db
 from app.models import Reminder, ReminderSkincare, SkincareType, User
@@ -14,6 +9,7 @@ from app.services.schedule_service import create_schedule, reschedule
 reminder_bp = Blueprint("reminder", __name__)
 
 DAYS = ["SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU", "MINGGU"]
+
 
 @reminder_bp.route("/pengingat", methods=["GET"])
 @login_required
@@ -42,6 +38,7 @@ def reminder_page():
 
     return render_template("pengingat.html", user_reminders=user_reminders)
 
+
 @reminder_bp.route("/pengingat", methods=["PATCH"])
 @login_required
 def save_schedule():
@@ -56,7 +53,11 @@ def save_schedule():
     # Convert day from string to integer
     day = DAYS.index(day.upper())
 
-    reminder_action = lambda: send_email("714230044@ulbi.ac.id", "Reminder", "Don't forget to do your skincare routine!")
+    reminder_action = lambda: send_email(
+        subject="Reminder",
+        receiver=current_user.email,
+        message="Don't forget to do your skincare routine!",
+    )
 
     reminder = Reminder.query.filter_by(user_id=current_user.id, day=day).first()
     if reminder:

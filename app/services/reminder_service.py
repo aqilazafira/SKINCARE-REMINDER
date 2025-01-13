@@ -1,10 +1,10 @@
-from flask import current_app
 from flask_mail import Message
 
-from app import mail
+from app import mail, scheduler
+
 
 def send_email(subject: str, receiver: str, message: str):
-    with current_app.app_context():
+    with scheduler.app.app_context():
         msg = Message(
             subject=subject,
             recipients=[receiver],

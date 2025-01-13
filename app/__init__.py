@@ -1,18 +1,16 @@
 import sqlalchemy as sa
-
-
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
-
-from apscheduler.schedulers.background import BackgroundScheduler
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 mail = Mail()
 
 scheduler = BackgroundScheduler()
+
 
 def create_app():
     app = Flask(__name__)
@@ -29,6 +27,7 @@ def create_app():
 
     initialize_extensions(app)
     register_blueprints(app)
+    register_cli_commands(app)
 
     engine = sa.create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
     inspector = sa.inspect(engine)
@@ -38,16 +37,17 @@ def create_app():
             db.create_all()
             print("Initialized the database!")
 
-    with app.app_context():
-        scheduler.start()
-
     return app
+
 
 def initialize_extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = "user.login"
     mail.init_app(app)
+
+    scheduler.app = app
+    scheduler.start()
 
     from .models import User
 
@@ -57,14 +57,22 @@ def initialize_extensions(app):
 
 
 def register_blueprints(app):
-    from app.routes.main import main_bp
-    from app.routes.user import user_bp
-    from app.routes.reminder import reminder_bp
-    from app.routes.rekomendasi import rekomendasi_bp
     from app.routes.admin import admin_bp
+    from app.routes.main import main_bp
+    from app.routes.rekomendasi import rekomendasi_bp
+    from app.routes.reminder import reminder_bp
+    from app.routes.user import user_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(reminder_bp)
     app.register_blueprint(rekomendasi_bp)
     app.register_blueprint(admin_bp)
+
+
+def register_cli_commands(app):
+    from app.seed import seed_data
+
+    @app.cli.command("seed")
+    def seed():
+        seed_data()

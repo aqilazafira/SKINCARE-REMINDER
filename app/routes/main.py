@@ -1,7 +1,7 @@
 import os
 from datetime import datetime as dt
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app import db
