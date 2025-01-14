@@ -1,6 +1,6 @@
-from ast import Bytes
 import io
 import os
+from ast import Bytes
 from datetime import datetime as dt
 
 from PIL import Image
@@ -60,3 +60,18 @@ def upload_image(image_bytes: Bytes, filename: str, path: str):
         except Exception as e:
             print(f"An error occurred: {e}")
             return False
+
+
+def delete_image(filename: str, path: str):
+    file_path = f"{UPLOAD_FOLDER}/{path}/{filename}"
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+            print(f"File {filename} deleted successfully")
+            return True
+        except Exception as e:
+            print(f"An error occurred while deleting the file: {e}")
+            return False
+    else:
+        print(f"File {filename} does not exist")
+        return False

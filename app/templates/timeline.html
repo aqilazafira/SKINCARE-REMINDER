@@ -34,11 +34,6 @@
           </div>
 
           <button class="add-image-btn" onclick="openInputForm('{{ day }}')">
-            <img
-              src="{{ url_for('static', filename='images/add-icon.png') }}"
-              alt="Add"
-              class="add-icon"
-            />
             Tambah Gambar
           </button>
         </div>
@@ -57,7 +52,10 @@
       </div>
     </div>
     <script>
-      function openInputForm(day) {
+    function closeInputForm() {
+      document.getElementById("inputFormOverlay").style.display = "none";
+    }
+      function openInputForm() {
         document.getElementById("inputFormOverlay").style.display = "flex";
       }
     </script>

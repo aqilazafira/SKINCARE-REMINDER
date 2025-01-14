@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skincare Reminder - {{ recommendation_title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rekomendasi_page.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    {% include "components/topnav.html" %}
+
+    <div class="container">
+      {% include "components/sidebar.html" %}
+
+      <main class="main-content">
+        <div class="skin-type-header">
+          <h2>{{ recommendation_title }}</h2>
+        </div>
+
+        <div class="products-table">
+          <div class="table-header">
+            <div class="header-cell">Gambar</div>
+            <div class="header-cell">Merk</div>
+            <div class="header-cell">Deskripsi</div>
+          </div>
+
+          {% for product in products %}
+          <div class="table-row">
+            <div class="table-cell">
+              <img src="{{ url_for('static', filename='products/' + product.image_url) }}" alt="Product Image" />
+            </div>
+            <div class="table-cell">{{ product.brand }}</div>
+            <div class="table-cell">{{ product.description }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

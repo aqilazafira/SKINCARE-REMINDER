@@ -6,8 +6,8 @@ from flask_login.utils import request
 
 from app import db
 from app.helper.decorators import admin_required
-from app.models import Product, ProductRecommendation, ProductSkincareType, Recommendation, SkincareType, Feedback
-from app.services.storage_service import allowed_file, upload_image
+from app.models import Feedback, Product, ProductRecommendation, ProductSkincareType, Recommendation, SkincareType
+from app.services.storage_service import allowed_file, delete_image, upload_image
 
 admin_bp = Blueprint("admin", __name__)
 
@@ -127,6 +127,68 @@ def rekomendasi_admin():
 
     return jsonify(request.form)
 
+
+@admin_bp.route("/admin/rekomendasi/<int:product_id>", methods=["PUT"])
+@login_required
+@admin_required
+def update_product(product_id):
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify({"message": "Product not found"}), 404
+
+    brand = request.form.get("brand")
+    description = request.form.get("description")
+    recommendations = request.form.get("recommendations").split(",")
+    skincare_types = request.form.get("skincareTypes").split(",")
+
+    if "file" in request.files:
+        file = request.files["file"]
+        if file and allowed_file(file.filename):
+            filename = uuid.uuid4().hex
+            image_bytes = file.read()
+            if upload_image(image_bytes=image_bytes, filename=filename, path="products"):
+                # Delete the old image file from the server
+                delete_image(product.image_url, "products")
+                product.image_url = filename + ".jpg"
+
+    product.brand = brand
+    product.description = description
+
+    # Clear existing recommendations and skincare types
+    ProductRecommendation.query.filter_by(product_id=product_id).delete()
+    ProductSkincareType.query.filter_by(product_id=product_id).delete()
+
+    for recommendation_title in recommendations:
+        recommendation = Recommendation.query.filter_by(title=recommendation_title).first()
+        if recommendation:
+            product_recommendation = ProductRecommendation(
+                product_id=product.id, recommendation_id=recommendation.id
+            )
+            db.session.add(product_recommendation)
+
+    for skincare_type_title in skincare_types:
+        skincare_type = SkincareType.query.filter_by(title=skincare_type_title).first()
+        if skincare_type:
+            product_skincare_type = ProductSkincareType(product_id=product.id, skincare_type_id=skincare_type.id)
+            db.session.add(product_skincare_type)
+
+    db.session.commit()
+
+    return jsonify({"message": "Product updated successfully"})
+
+@admin_bp.route("/admin/rekomendasi/<int:product_id>", methods=["DELETE"])
+@login_required
+@admin_required
+def delete_product(product_id):
+    product = Product.query.get(product_id)
+    if product:
+        # Delete the image file from the server
+        delete_image(product.image_url, "products")
+
+        db.session.delete(product)
+        db.session.commit()
+        return jsonify({"message": "Product deleted successfully"})
+    return jsonify({"message": "Product not found"}), 404
 
 # Halaman kulit berjerawat admin
 @admin_bp.route("/admin/kulitberjerawat")

@@ -38,14 +38,14 @@ def timeline():
         return redirect(request.url)
 
     dt_now = dt.now().strftime("%Y%m%d%H%M%S%f")
-    filename = f"{current_user.id}_{dt_now}.jpg"
+    filename = f"{current_user.id}_{dt_now}"
 
     if file and allowed_file(file.filename):
         image_bytes = file.read()
         if not upload_image(image_bytes=image_bytes, filename=filename, path="timeline"):
             return redirect(request.url)
 
-    timeline = Timeline(image_url=filename, user_id=current_user.id)
+    timeline = Timeline(image_url=filename + ".jpg", user_id=current_user.id)
     db.session.add(timeline)
     db.session.commit()
 

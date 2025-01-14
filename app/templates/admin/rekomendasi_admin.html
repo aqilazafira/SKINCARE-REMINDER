@@ -43,7 +43,7 @@
                 <td>
                   <div class="action-buttons">
                     <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Hapus</button>
+                    <button class="delete-btn" onclick="deleteProduct({{ product.id }})">Hapus</button>
                   </div>
                 </td>
               </tr>
@@ -238,6 +238,48 @@
 
       function closeInputForm() {
         document.getElementById("inputFormOverlay").style.display = "none";
+      }
+
+      function editProduct(productId) {
+        const productRow = document.querySelector(`tr[data-product-id='${productId}']`);
+        const brand = productRow.querySelector("td:nth-child(2)").textContent;
+        const description = productRow.querySelector("td:nth-child(3)").textContent;
+        const skincareTypes = productRow.querySelector("td:nth-child(4)").textContent.split(", ");
+        const recommendations = productRow.querySelector("td:nth-child(5)").textContent.split(", ");
+
+        document.getElementById("productId").value = productId;
+        document.getElementById("brand").value = brand;
+        document.getElementById("description").value = description;
+
+        skincareTypesCB.forEach((checkbox) => {
+          checkbox.checked = skincareTypes.includes(checkbox.value);
+        });
+
+        recommendationsCB.forEach((checkbox) => {
+          checkbox.checked = recommendations.includes(checkbox.value);
+        });
+
+        updateCheckboxes();
+        document.getElementById("formTitle").textContent = "Edit Product";
+        openInputForm();
+      }
+
+      function deleteProduct(productId) {
+        if (confirm("Are you sure you want to delete this product?")) {
+          fetch(`/admin/rekomendasi/${productId}`, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (response.ok) {
+                location.reload();
+              } else {
+                throw new Error("Failed to delete product");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
       }
     </script>
   </body>
