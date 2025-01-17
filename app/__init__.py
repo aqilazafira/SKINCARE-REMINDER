@@ -1,3 +1,4 @@
+import os
 import sqlalchemy as sa
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
@@ -14,16 +15,8 @@ scheduler = BackgroundScheduler()
 
 def create_app():
     app = Flask(__name__)
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:password@localhost/skincare"
-    app.config["SECRET_KEY"] = "super secret key"
-
-    app.config["MAIL_SERVER"] = "smtp.gmail.com"
-    app.config["MAIL_PORT"] = 587
-    app.config["MAIL_USE_TLS"] = True
-    app.config["MAIL_USERNAME"] = "hartaticpg@gmail.com"
-    app.config["MAIL_PASSWORD"] = "gpzi zzvd jebq ordv"
-    app.config["MAIL_DEFAULT_SENDER"] = "hartaticpg@gmail.com"
+    config_type = os.getenv("APP_SETTING", default="config.Config")
+    app.config.from_object(config_type)
 
     initialize_extensions(app)
     register_blueprints(app)
@@ -47,7 +40,9 @@ def initialize_extensions(app):
     mail.init_app(app)
 
     scheduler.app = app
-    scheduler.start()
+
+    if not app.config["TESTING"]:
+        scheduler.start()
 
     from .models import User
 

@@ -1,3 +1,5 @@
+from random import random, randint
+
 from flask import Blueprint, jsonify, render_template, request, url_for
 from flask_login import current_user, login_required
 
@@ -48,8 +50,6 @@ def save_schedule():
     minute = int(data.get("minute"))
     skincare_types = data.get("skincareTypes")
 
-    print(data)
-
     # Convert day from string to integer
     day = DAYS.index(day.upper())
 
@@ -74,7 +74,7 @@ def save_schedule():
         db.session.commit()
 
     for skincare_type in skincare_types:
-        skincare_type = skincare_type.upper()
+        skincare_type = skincare_type
         skincare_type_id = SkincareType.query.filter_by(title=skincare_type).first().id
 
         new_reminder_skincare = ReminderSkincare(reminder_id=reminder.id, skincare_type_id=skincare_type_id)
