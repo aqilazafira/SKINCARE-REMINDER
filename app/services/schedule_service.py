@@ -2,7 +2,7 @@ from typing import Callable
 
 from app import scheduler
 
-def create_schedule(action: Callable, hour, minute):
+def create_schedule(action: Callable, hour: int, minute: int):
     job = scheduler.add_job(
         action, "cron", hour=hour, minute=minute
     )

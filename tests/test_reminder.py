@@ -1,5 +1,3 @@
-from flask_login import login_user
-
 from app.models import Reminder
 
 

@@ -1,14 +1,15 @@
 from app import db
 from app.models import (
-    User,
-    Product,
-    Recommendation,
-    SkincareType,
     Feedback,
-    Timeline,
-    Reminder,
+    Product,
     ProductRecommendation,
     ProductSkincareType,
+    Recommendation,
+    Reminder,
+    ReminderSkincare,
+    SkincareType,
+    Timeline,
+    User,
 )
 
 
@@ -99,3 +100,14 @@ def test_product_skincare_type_model(init_db):
 
     assert product_skincare_type.product_id == product.id
     assert product_skincare_type.skincare_type_id == skincare_type.id
+
+
+# def test_reminder_skincare_model(init_db):
+#     reminder = Reminder.query.first()
+#     skincare_type = SkincareType.query.first()
+#     reminder_skincare = ReminderSkincare(reminder_id=reminder.id, skincare_type_id=skincare_type.id)
+#     db.session.add(reminder_skincare)
+#     db.session.commit()
+
+#     assert reminder_skincare.reminder_id == reminder.id
+#     assert reminder_skincare.skincare_type_id == skincare_type.id
