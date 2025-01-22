@@ -3,7 +3,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
 
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:password@localhost/skincare"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root@localhost/skincare"
     SECRET_KEY = "super secret key"
 
     MAIL_SERVER = "smtp.gmail.com"
