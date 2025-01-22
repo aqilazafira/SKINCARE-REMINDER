@@ -1,12 +1,10 @@
-from random import random, randint
-
-from flask import Blueprint, jsonify, render_template, request, url_for
+from flask import Blueprint, jsonify, render_template, request
 from flask_login import current_user, login_required
 
 from app import db
 from app.models import Reminder, ReminderSkincare, SkincareType, User
 from app.services.reminder_service import send_email
-from app.services.schedule_service import create_schedule, reschedule
+from app.services.schedule_service import create_schedule, delete_schedule, reschedule
 
 reminder_bp = Blueprint("reminder", __name__)
 
@@ -68,9 +66,9 @@ def save_schedule():
         db.session.commit()
         ReminderSkincare.query.filter_by(reminder_id=reminder.id).delete()
         db.session.commit()
-        reschedule(reminder.id, hour=hour, minute=minute)
+        reschedule(reminder.id, day=day, hour=hour, minute=minute)
     else:
-        job_id = create_schedule(action=reminder_action, hour=hour, minute=minute)
+        job_id = create_schedule(action=reminder_action, day=day, hour=hour, minute=minute)
         reminder = Reminder(id=job_id, user_id=current_user.id, day=day, hour=hour, minute=minute)
         db.session.add(reminder)
         db.session.commit()
@@ -84,3 +82,27 @@ def save_schedule():
 
     db.session.commit()
     return jsonify({"message": "Reminder added successfully"}), 201
+
+
+@reminder_bp.route("/pengingat", methods=["DELETE"])
+@login_required
+def delete_reminder():
+    data = request.get_json()
+    day = data.get("day")
+
+    # Convert day from string to integer
+    day_of_week = DAYS.index(day.upper())
+
+    reminder = Reminder.query.filter_by(user_id=current_user.id, day=day_of_week).first()
+
+    try:
+        delete_schedule(reminder.id)
+    except Exception:
+        pass
+
+    if reminder:
+        ReminderSkincare.query.filter_by(reminder_id=reminder.id).delete()
+        db.session.delete(reminder)
+        db.session.commit()
+        return jsonify({"message": "Reminder deleted successfully"}), 200
+    return jsonify({"message": "Reminder not found"}), 404

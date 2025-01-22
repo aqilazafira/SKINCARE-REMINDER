@@ -1,17 +1,18 @@
+from flask import current_app
 from typing import Callable
 
 from app import scheduler
 
-def create_schedule(action: Callable, hour: int, minute: int):
+def create_schedule(action: Callable, day: int, hour: int, minute: int):
     job = scheduler.add_job(
-        action, "cron", hour=hour, minute=minute
+        action, "cron", day_of_week=day, hour=hour, minute=minute
     )
-    print(f"creating schedule {hour}: {minute} {job}")
+    current_app.logger.info(f"creating schedule for {day} - {hour}:{minute}, id={job}")
     return job.id
 
 def delete_schedule(job_id):
     scheduler.remove_job(job_id)
     print("Schedule removed")
 
-def reschedule(id: str, hour: int, minute: int):
-    scheduler.reschedule_job(id, "cron", hour=hour, minute=minute)
+def reschedule(id: str, day: int, hour: int, minute: int):
+    scheduler.reschedule_job(id, "cron", day_of_week=day, hour=hour, minute=minute)

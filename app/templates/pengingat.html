@@ -37,6 +37,11 @@
             <div class="schedule-card">
               <h3>{{ day }}</h3>
               <button class="edit-btn" onclick="openInputForm('{{ day }}')">Edit</button>
+              {% for routine in user_reminders %}
+                {% if routine.day == day %}
+                  <button class="edit-btn" onclick="removeReminder('{{ day }}')">Remove</button>
+                {% endif %}
+              {% endfor %}
               <div id="{{ day.lower() }}-routine" class="routine-display">
                 {% for routine in user_reminders %} {% if routine.day == day %} {{ routine.hour }}:{{ routine.minute }}
                 - {{ routine.skincare_types }} {% endif %} {% endfor %}
@@ -191,6 +196,26 @@
 
         fetch("/pengingat", {
           method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Success:", data);
+            location.reload();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      function removeReminder(day) {
+        const data = { day };
+
+        fetch("/pengingat", {
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
