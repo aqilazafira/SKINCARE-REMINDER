@@ -1,3 +1,4 @@
+from flask import render_template
 from flask_mail import Message
 
 from app import mail, scheduler
@@ -11,6 +12,8 @@ def send_email(subject: str, receiver: str, message: str):
         )
 
         msg.body = message
+        msg.html = render_template("mail.html")
+
         print(f"Sending email to {receiver}")
 
         try:

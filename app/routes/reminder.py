@@ -53,9 +53,11 @@ def save_schedule():
     # Convert day from string to integer
     day = DAYS.index(day.upper())
 
+    receiver = current_user.email
+    message = "Don't forget to do your skincare routine! \nVisit https://localhost:5000/pengingat"
     reminder_action = lambda: send_email(
         subject="Reminder",
-        receiver=current_user.email,
+        receiver=receiver,
         message="Don't forget to do your skincare routine!",
     )
 

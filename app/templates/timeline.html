@@ -23,6 +23,7 @@
         <div class="timeline-container">
           <h2>TIME LINE</h2>
           <div class="timeline-grid">
+            {% if timelines %}
             {% for timeline in timelines %}
               <div class="timeline-card">
                 <div class="image-container">
@@ -31,6 +32,7 @@
                 <div class="date">{{ timeline.date.strftime('%d-%m-%Y') }}</div>
               </div>
             {% endfor %}
+            {% endif %}
           </div>
 
           <button class="add-image-btn" onclick="openInputForm('{{ day }}')">
