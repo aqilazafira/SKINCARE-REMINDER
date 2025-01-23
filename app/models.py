@@ -147,7 +147,7 @@ class Recommendation(db.Model):
     __tablename__ = "recommendations"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    title: Mapped[str] = mapped_column(String(100), nullable=False)
+    title: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
 
     products: Mapped[List["ProductRecommendation"]] = relationship(
         back_populates="recommendation", cascade="all, delete-orphan"
@@ -161,7 +161,7 @@ class SkincareType(db.Model):
     __tablename__ = "skincare_types"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    title: Mapped[str] = mapped_column(String(100), nullable=False)
+    title: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
 
     products: Mapped[List["ProductSkincareType"]] = relationship(
         back_populates="skincare_type", cascade="all, delete-orphan"

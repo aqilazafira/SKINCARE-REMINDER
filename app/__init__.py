@@ -68,6 +68,13 @@ def register_blueprints(app):
 def register_cli_commands(app):
     from app.seed import seed_data
 
-    @app.cli.command("seed")
-    def seed():
-        seed_data()
+    @app.cli.command("init-db")
+    def init_db():
+        with app.app_context():
+            db.create_all()
+            seed_data()
+
+    @app.cli.command("reset-db")
+    def reset_db():
+        with app.app_context():
+            db.drop_all()
