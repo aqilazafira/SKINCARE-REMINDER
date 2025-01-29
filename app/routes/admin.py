@@ -6,7 +6,7 @@ from flask_login.utils import request
 
 from app import db
 from app.helper.decorators import admin_required
-from app.models import Feedback, Product, ProductRecommendation, ProductSkincareType, Recommendation, SkincareType
+from app.models import Feedback, Product, ProductRecommendation, ProductSkincareType, Recommendation, SkincareType, User
 from app.services.storage_service import allowed_file, delete_image, upload_image
 
 admin_bp = Blueprint("admin", __name__)
@@ -236,3 +236,48 @@ def kulitnormal_admin():
 @admin_required
 def profile_admin():
     return render_template("admin/profile_admin.html")
+
+    
+@admin_bp.route("/admin/users", methods=["GET", "PUT"])
+@login_required
+@admin_required
+def users_page():
+    if request.method == "PUT":
+        id = request.form.get("id")
+        email = request.form.get("email")
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        user = User.query.get(id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        user.username = username
+        user.email = email
+        user.set_password(password)
+
+        db.session.commit()
+        return jsonify({"message": "User updated"})
+
+
+    User_record = User.query.all()
+
+    return render_template(
+        "admin/User.html",
+        users = User_record
+    )
+
+
+@admin_bp.route("/admin/users/<int:user_id>", methods=["DELETE"])
+@login_required
+@admin_required
+def delete_user(user_id):
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    db.session.delete(user)
+
+    db.session.commit()
+    return jsonify({"message": "User deleted!"})

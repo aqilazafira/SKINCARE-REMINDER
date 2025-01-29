@@ -5,7 +5,7 @@
   />
   <nav class="side-nav">
     <!-- Home -->
-    <a href="/admin" class="nav-item {% if request.path == '/' %}active{% endif %}">
+    <a href="/admin" class="nav-item {% if request.path == '/admin' %}active{% endif %}">
       <img
         src="{{ url_for('static', filename='images/home.png') }}"
         alt="Home"
@@ -13,10 +13,20 @@
       <span>home</span>
     </a>
 
+    <a
+      href="/admin/users"
+      class="nav-item {% if request.path == '/admin/users' %}active{% endif %}"
+    >
+      <img
+        src="{{ url_for('static', filename='images/profile.png') }}"
+        alt="Recommendations"
+      />
+      <span>users</span> 
+    </a>
     <!-- Rekomendasi -->
     <a
       href="/admin/rekomendasi"
-      class="nav-item {% if request.path == '/rekomendasi' %}active{% endif %}"
+      class="nav-item {% if request.path == '/admin/rekomendasi' %}active{% endif %}"
     >
       <img
         src="{{ url_for('static', filename='images/recommendation.png') }}"
@@ -28,7 +38,7 @@
     <!-- Feedback -->
     <a
       href="/admin/feedback"
-      class="nav-item {% if request.path == '/feedback' %}active{% endif %}"
+      class="nav-item {% if request.path == '/admin/feedback' %}active{% endif %}"
     >
       <img
         src="{{ url_for('static', filename='images/feedback.png') }}"
@@ -40,7 +50,7 @@
     <!-- Profil -->
     <a
       href="/admin/profile"
-      class="nav-item {% if request.path == '/profile' %}active{% endif %}"
+      class="nav-item {% if request.path == '/admin/profile' %}active{% endif %}"
     >
       <img
         src="{{ url_for('static', filename='images/profile.png') }}"

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skincare Reminder - Admin User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/rekomendasi_admin.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    {% include "components/topnav_admin.html" %}
+
+    <div class="container">
+      {% include "components/sidebar_admin.html" %}
+
+      <main class="main-content">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td>{{user.email}}</td>
+                <td>{{user.username}}</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="edit-btn" onclick="openInputForm({{ user.id }}, '{{ user.email }}', '{{ user.username }}')">Edit</button>
+                    <button class="delete-btn" onclick="deleteUser({{ user.id }})">Hapus</button>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+   
+    <div id="inputFormOverlay" class="overlay">
+      <div class="input-form">
+        <h2>Edit User</h2>
+        <form id="editUserForm">
+          <input type="hidden" id="userId" name="id" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required />
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+
+          <button type="submit">Save</button>
+          <button type="button" onclick="closeInputForm()">Cancel</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      document.getElementById("editUserForm").addEventListener("submit", saveUser);
+
+      function saveUser(event) {
+        event.preventDefault();
+        const id = document.getElementById("userId").value;
+        const email = document.getElementById("email").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const formData = new FormData();
+        formData.append("id", id);
+        formData.append("email", email);
+        formData.append("username", username);
+        formData.append("password", password);
+
+        fetch("/admin/users", {
+          method: "PUT",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Failed to save product");
+            }
+          })
+          .then((data) => {
+            console.log("Product saved successfully:", data);
+            closeInputForm();
+            location.reload();
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+        closeInputForm();
+      }
+
+      function openInputForm(id, email, username) {
+        document.getElementById("inputFormOverlay").style.display = "flex";
+        document.getElementById("userId").value = id;
+        document.getElementById("email").value = email;
+        document.getElementById("username").value = username;
+      }
+
+      function closeInputForm() {
+        document.getElementById("inputFormOverlay").style.display = "none";
+      }
+
+      function deleteUser(userId) {
+        if (confirm("Are you sure you want to delete this product?")) {
+          fetch(`/admin/users/${userId}`, {
+            method: "DELETE",
+          })
+            .then((response) => {
+              if (response.ok) {
+                location.reload();
+              } else {
+                throw new Error("Failed to delete product");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+      }
+    </script>
+  </body>
+</html>
