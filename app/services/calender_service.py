@@ -10,6 +10,9 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 DAYS = ["SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU", "MINGGU"]
 
+BASE_DIR = os.path.dirname(os.path.abspath(__name__))
+CREDENTIALS_FILE = os.path.join(BASE_DIR, "token.json")
+
 # Mapping of day names to BYDAY values
 DAY_TO_BYDAY = {
     "SENIN": "MO",
@@ -31,17 +34,17 @@ def get_next_weekday(day):
 def save_calendar_event(day, time, email):
     creds = None
 
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    if os.path.exists(CREDENTIALS_FILE):
+        creds = Credentials.from_authorized_user_file(CREDENTIALS_FILE, SCOPES)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
 
-        with open("token.json", "w") as token:
+        with open(CREDENTIALS_FILE, "w") as token:
             token.write(creds.to_json())
 
     try:
@@ -86,17 +89,17 @@ def save_calendar_event(day, time, email):
 def update_calendar_event(event_id, day, time, email):
     creds = None
 
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    if os.path.exists(CREDENTIALS_FILE):
+        creds = Credentials.from_authorized_user_file(CREDENTIALS_FILE, SCOPES)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
 
-        with open("token.json", "w") as token:
+        with open(CREDENTIALS_FILE, "w") as token:
             token.write(creds.to_json())
 
     try:
@@ -127,17 +130,17 @@ def update_calendar_event(event_id, day, time, email):
 def delete_calendar_event(event_id):
     creds = None
 
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    if os.path.exists(CREDENTIALS_FILE):
+        creds = Credentials.from_authorized_user_file(CREDENTIALS_FILE, SCOPES)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
 
-        with open("token.json", "w") as token:
+        with open(CREDENTIALS_FILE, "w") as token:
             token.write(creds.to_json())
 
     try:
