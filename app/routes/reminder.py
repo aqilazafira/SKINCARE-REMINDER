@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 
 from app import db
 from app.models import Reminder, ReminderSkincare, SkincareType, User
+from app.services.calender_service import delete_calendar_event, save_calendar_event, update_calendar_event
 from app.services.reminder_service import send_email
 from app.services.schedule_service import create_schedule, delete_schedule, reschedule
 
@@ -52,7 +53,6 @@ def save_schedule():
     day = DAYS.index(day.upper())
 
     receiver = current_user.email
-    message = "Don't forget to do your skincare routine! \nVisit https://localhost:5000/pengingat"
     reminder_action = lambda: send_email(
         subject="Reminder",
         receiver=receiver,
@@ -67,11 +67,13 @@ def save_schedule():
         ReminderSkincare.query.filter_by(reminder_id=reminder.id).delete()
         db.session.commit()
         reschedule(reminder.id, day=day, hour=hour, minute=minute)
+        update_calendar_event(reminder.id, day, f"{hour}:{minute}", receiver)
     else:
         job_id = create_schedule(action=reminder_action, day=day, hour=hour, minute=minute)
         reminder = Reminder(id=job_id, user_id=current_user.id, day=day, hour=hour, minute=minute)
         db.session.add(reminder)
         db.session.commit()
+        save_calendar_event(day, f"{hour}:{minute}", receiver)
 
     for skincare_type in skincare_types:
         skincare_type = skincare_type
@@ -97,6 +99,7 @@ def delete_reminder():
 
     try:
         delete_schedule(reminder.id)
+        delete_calendar_event(reminder.id)
     except Exception:
         pass
 
