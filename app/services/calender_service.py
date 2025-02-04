@@ -65,11 +65,11 @@ def save_calendar_event(day, time, email):
             "colorId": 6,
             "start": {
                 "dateTime": event_start.isoformat(),
-                "timeZone": "UTC",
+                "timeZone": "Asia/Jakarta",
             },
             "end": {
                 "dateTime": event_end.isoformat(),
-                "timeZone": "UTC",
+                "timeZone": "Asia/Jakarta",
             },
             "recurrence": [
                 f"RRULE:FREQ=WEEKLY;COUNT=4;BYDAY={byday}",
