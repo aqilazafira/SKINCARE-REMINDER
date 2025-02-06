@@ -11,7 +11,8 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 DAYS = ["SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU", "MINGGU"]
 
 BASE_DIR = os.path.dirname(os.path.abspath(__name__))
-CREDENTIALS_FILE = os.path.join(BASE_DIR, "token.json")
+CREDENTIALS_FILE = os.path.join(BASE_DIR, "credentials.json")
+TOKEN_FILE = os.path.join(BASE_DIR, "token.json")
 
 # Mapping of day names to BYDAY values
 DAY_TO_BYDAY = {
@@ -34,8 +35,8 @@ def get_next_weekday(day):
 def save_calendar_event(day, time, email):
     creds = None
 
-    if os.path.exists(CREDENTIALS_FILE):
-        creds = Credentials.from_authorized_user_file(CREDENTIALS_FILE, SCOPES)
+    if os.path.exists(TOKEN_FILE):
+        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -44,7 +45,7 @@ def save_calendar_event(day, time, email):
             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
 
-        with open(CREDENTIALS_FILE, "w") as token:
+        with open(TOKEN_FILE, "w") as token:
             token.write(creds.to_json())
 
     try:
@@ -89,8 +90,8 @@ def save_calendar_event(day, time, email):
 def update_calendar_event(event_id, day, time, email):
     creds = None
 
-    if os.path.exists(CREDENTIALS_FILE):
-        creds = Credentials.from_authorized_user_file(CREDENTIALS_FILE, SCOPES)
+    if os.path.exists(TOKEN_FILE):
+        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -99,7 +100,7 @@ def update_calendar_event(event_id, day, time, email):
             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
 
-        with open(CREDENTIALS_FILE, "w") as token:
+        with open(TOKEN_FILE, "w") as token:
             token.write(creds.to_json())
 
     try:
@@ -130,8 +131,8 @@ def update_calendar_event(event_id, day, time, email):
 def delete_calendar_event(event_id):
     creds = None
 
-    if os.path.exists(CREDENTIALS_FILE):
-        creds = Credentials.from_authorized_user_file(CREDENTIALS_FILE, SCOPES)
+    if os.path.exists(TOKEN_FILE):
+        creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -140,7 +141,7 @@ def delete_calendar_event(event_id):
             flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_FILE, SCOPES)
             creds = flow.run_local_server(port=0)
 
-        with open(CREDENTIALS_FILE, "w") as token:
+        with open(TOKEN_FILE, "w") as token:
             token.write(creds.to_json())
 
     try:
