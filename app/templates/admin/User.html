@@ -30,8 +30,8 @@
                 <td>{{user.username}}</td>
                 <td>
                   <div class="action-buttons">
-                    <button class="edit-btn" onclick="openInputForm({{ user.id }}, '{{ user.email }}', '{{ user.username }}')">Edit</button>
-                    <button class="delete-btn" onclick="deleteUser({{ user.id }})">Hapus</button>
+                    <button class="edit-btn" onclick="openInputForm('{{ user.id }}', '{{ user.email }}', '{{ user.username }}')">Edit</button>
+                    <button class="delete-btn" onclick="deleteUser('{{ user.id }}')">Hapus</button>
                   </div>
                 </td>
               </tr>
