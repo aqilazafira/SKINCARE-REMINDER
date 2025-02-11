@@ -32,7 +32,7 @@
             </thead>
             <tbody>
               {% for product in products %}
-              <tr>
+              <tr data-product-id="{{ product.id }}">
                 <td class="image-cell">
                   <img src="{{ url_for('static', filename='products/' + product.image_url) }}" alt="Product Image" />
                 </td>
@@ -241,28 +241,34 @@
       }
 
       function editProduct(productId) {
-        const productRow = document.querySelector(`tr[data-product-id='${productId}']`);
-        const brand = productRow.querySelector("td:nth-child(2)").textContent;
-        const description = productRow.querySelector("td:nth-child(3)").textContent;
-        const skincareTypes = productRow.querySelector("td:nth-child(4)").textContent.split(", ");
-        const recommendations = productRow.querySelector("td:nth-child(5)").textContent.split(", ");
+    const productRow = document.querySelector(`tr[data-product-id='${productId}']`);
+    
+    if (!productRow) {
+        console.error(`Product with ID ${productId} not found.`);
+        return;
+    }
 
-        document.getElementById("productId").value = productId;
-        document.getElementById("brand").value = brand;
-        document.getElementById("description").value = description;
+    const brand = productRow.querySelector("td:nth-child(2)").textContent;
+    const description = productRow.querySelector("td:nth-child(3)").textContent;
+    const skincareTypes = productRow.querySelector("td:nth-child(4)").textContent.split(", ");
+    const recommendations = productRow.querySelector("td:nth-child(5)").textContent.split(", ");
 
-        skincareTypesCB.forEach((checkbox) => {
-          checkbox.checked = skincareTypes.includes(checkbox.value);
-        });
+    document.getElementById("brand").value = brand;
+    document.getElementById("description").value = description;
 
-        recommendationsCB.forEach((checkbox) => {
-          checkbox.checked = recommendations.includes(checkbox.value);
-        });
+    skincareTypesCB.forEach((checkbox) => {
+        checkbox.checked = skincareTypes.includes(checkbox.value);
+    });
 
-        updateCheckboxes();
-        document.getElementById("formTitle").textContent = "Edit Product";
-        openInputForm();
-      }
+    recommendationsCB.forEach((checkbox) => {
+        checkbox.checked = recommendations.includes(checkbox.value);
+    });
+
+    updateCheckboxes();
+    document.getElementById("formTitle").textContent = "Edit Product";
+    openInputForm();
+}
+
 
       function deleteProduct(productId) {
         if (confirm("Are you sure you want to delete this product?")) {
