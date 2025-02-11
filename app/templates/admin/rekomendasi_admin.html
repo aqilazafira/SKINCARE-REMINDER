@@ -42,8 +42,8 @@
                 <td>{{ product.recommendations | join(', ') }}</td>
                 <td>
                   <div class="action-buttons">
-                    <button class="edit-btn" onclick="editProduct({ productid })">Edit</button>
-                    <button class="delete-btn" onclick="deleteProduct({ productid })">Delete</button>
+                    <button class="edit-btn" onclick="editProduct('{{ product.id }}')">Edit</button>
+                    <button class="delete-btn" onclick="deleteProduct('{{ product.id }}')">Delete</button>
                   </div>
                 </td>
               </tr>
