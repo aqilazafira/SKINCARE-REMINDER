@@ -1,10 +1,17 @@
+import os
+
+from dotenv import load_dotenv
+
+if os.getenv("FLASK_ENV") != "production":
+    load_dotenv()
+
 class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
 
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root@localhost/skincare"
-    SECRET_KEY = "super secret key"
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "mysql+pymysql://root@localhost/skincare")
+    SECRET_KEY = os.getenv("SECRET_KEY", "super-secret")
 
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 587
