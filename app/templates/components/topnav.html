@@ -17,7 +17,7 @@
   </div>
   <div class="nav-right">
     <span class="user-label">User</span>
-    <span class="username">USER</span>
+    <span class="username">{{ current_user.username }}</span>
     <img
       src="{{ url_for('static', filename='images/user.png') }}"
       alt="User"

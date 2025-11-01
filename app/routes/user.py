@@ -26,7 +26,10 @@ def login():
 
         login_user(user, remember=True)
         flash("Login successful", "success")
-        return redirect(url_for("main.home"))
+        if user.role == "admin":
+            return redirect(url_for("admin.home_admin"))
+        else:
+            return redirect(url_for("main.home"))
 
     return render_template("login.html")
 
