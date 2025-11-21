@@ -51,6 +51,90 @@
             </tbody>
           </table>
         </div>
+
+        <hr style="margin: 3rem 0;">
+
+        <div class="content-header">
+            <h2>Manage Step-by-Step Routines</h2>
+            <a href="{{ url_for('admin.add_step') }}" class="add-btn"><span>+</span> Add New Global Step</a>
+        </div>
+
+        <div class="accordion">
+            {% for skin_type, routine in routines_by_skin_type.items() %}
+            <div class="accordion-item">
+                <button class="accordion-header">{{ skin_type|capitalize }}</button>
+                <div class="accordion-content">
+                    
+                    <div class="routine-section">
+                        <h3>Morning Routine</h3>
+                        <table class="step-table">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Time</th>
+                                    <th>Step Name</th>
+                                    <th>Detail</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for step, recommendation in routine.morning %}
+                                <tr>
+                                    <form method="POST" action="{{ url_for('admin.edit_recommendation', rec_id=recommendation.id) }}">
+                                        <td>{{ step.step_order }}</td>
+                                        <td>{{ step.default_time.strftime('%H:%M') }}</td>
+                                        <td>{{ step.name }}</td>
+                                        <td><textarea name="detail" rows="3" class="form-control">{{ recommendation.detail }}</textarea></td>
+                                        <td class="actions">
+                                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                            <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this step for all routines?');">
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="routine-section">
+                        <h3>Night Routine</h3>
+                        <table class="step-table">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Time</th>
+                                    <th>Step Name</th>
+                                    <th>Detail</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for step, recommendation in routine.night %}
+                                <tr>
+                                    <form method="POST" action="{{ url_for('admin.edit_recommendation', rec_id=recommendation.id) }}">
+                                        <td>{{ step.step_order }}</td>
+                                        <td>{{ step.default_time.strftime('%H:%M') }}</td>
+                                        <td>{{ step.name }}</td>
+                                        <td><textarea name="detail" rows="3" class="form-control">{{ recommendation.detail }}</textarea></td>
+                                        <td class="actions">
+                                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                            <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this step for all routines?');">
+                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
       </main>
     </div>
     <div id="inputFormOverlay" class="overlay">
@@ -100,6 +184,20 @@
       </div>
     </div>
     <script>
+      // Accordion
+      const accordionHeaders = document.querySelectorAll(".accordion-header");
+      accordionHeaders.forEach(button => {
+          button.addEventListener("click", () => {
+              const accordionContent = button.nextElementSibling;
+              button.classList.toggle("active");
+              if (button.classList.contains("active")) {
+                  accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+              } else {
+                  accordionContent.style.maxHeight = 0;
+              }
+          });
+      });
+
       const skincareTypesCB = document.querySelectorAll("#dropdownSkincareTypes input[type='checkbox']");
       const skincareTypesInput = document.getElementById("skincareTypes");
       const selectedSkincareTypesContainer = document.getElementById("selectedSkincareTypes");

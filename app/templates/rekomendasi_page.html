@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skincare Reminder - {{ recommendation_title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/rekomendasi_page.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recommendations.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
   </head>
-  <body>
+  <body data-skin-type="{{ skin_type }}">
     {% include "components/topnav.html" %}
 
     <div class="container">
@@ -35,7 +36,51 @@
           </div>
           {% endfor %}
         </div>
+
+        <hr style="margin: 2rem 0;">
+
+        <div class="routine-container">
+            <h1>Skincare Routine Steps</h1>
+            <p>Here is a recommended routine. Select the steps you want to schedule.</p>
+
+            <div class="routine-section">
+                <h2>Morning Routine</h2>
+                <ul id="morning-steps">
+                    {% for step in recommendations.morning %}
+                    <li>
+                        <input type="checkbox" id="morning-{{ loop.index }}" name="{{ step.step }}" checked>
+                        <label for="morning-{{ loop.index }}"><strong>{{ step.step }}:</strong> {{ step.detail }}</label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="routine-section">
+                <h2>Night Routine</h2>
+                <ul id="night-steps">
+                    {% for step in recommendations.night %}
+                    <li>
+                        <input type="checkbox" id="night-{{ loop.index }}" name="{{ step.step }}" checked>
+                        <label for="night-{{ loop.index }}"><strong>{{ step.step }}:</strong> {{ step.detail }}</label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="actions">
+                <label for="schedule-date">Select Date:</label>
+                <input type="date" id="schedule-date">
+                <button id="generate-btn">Generate My Routine</button>
+            </div>
+
+            <div id="notification" class="notification"></div>
+        </div>
       </main>
     </div>
+    <script>
+        // A placeholder user_id. In a real app, this would come from the user's session.
+        const USER_ID = "user123"; 
+    </script>
+    <script src="{{ url_for('static', filename='js/recommendations.js') }}"></script>
   </body>
 </html>

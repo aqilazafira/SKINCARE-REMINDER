@@ -1,0 +1,82 @@
+{
+  "normal": {
+    "morning": [
+      {"step": "Cleanser", "detail": "Use a gentle, hydrating cleanser to start your day."},
+      {"step": "Toner", "detail": "Apply a balancing toner to prep your skin."},
+      {"step": "Serum", "detail": "Use a Vitamin C serum for antioxidant protection."},
+      {"step": "Moisturizer", "detail": "A light lotion is perfect for keeping skin hydrated."},
+      {"step": "Sunscreen", "detail": "Apply a broad-spectrum SPF 30 or higher."}
+    ],
+    "night": [
+      {"step": "Double Cleanse", "detail": "Start with an oil-based cleanser, followed by a water-based one."},
+      {"step": "Toner", "detail": "Use the same balancing toner from the morning."},
+      {"step": "Exfoliate", "detail": "Use a gentle AHA/BHA exfoliant 2-3 times a week."},
+      {"step": "Serum", "detail": "Apply a hydrating serum with hyaluronic acid."},
+      {"step": "Moisturizer", "detail": "Use a slightly richer night cream to repair skin overnight."}
+    ]
+  },
+  "kering": {
+    "morning": [
+      {"step": "Cream Cleanser", "detail": "Wash with a non-foaming, creamy cleanser."},
+      {"step": "Hydrating Toner", "detail": "Use an alcohol-free toner with hydrating ingredients."},
+      {"step": "Hyaluronic Acid Serum", "detail": "Apply a serum to attract and hold moisture."},
+      {"step": "Rich Moisturizer", "detail": "Use a thick cream to lock in moisture."},
+      {"step": "Moisturizing Sunscreen", "detail": "Choose a sunscreen with hydrating properties, SPF 30+."}
+    ],
+    "night": [
+      {"step": "Cleansing Balm", "detail": "Melt away makeup and impurities without stripping the skin."},
+      {"step": "Hydrating Toner", "detail": "Re-apply your hydrating toner."},
+      {"step": "Facial Oil", "detail": "Add a layer of facial oil for extra nourishment."},
+      {"step": "Night Cream", "detail": "Use a rich, restorative night cream."},
+      {"step": "Eye Cream", "detail": "Apply a hydrating eye cream to prevent fine lines."}
+    ]
+  },
+  "berminyak": {
+    "morning": [
+      {"step": "Foaming Cleanser", "detail": "Use a gel or foaming cleanser with salicylic acid."},
+      {"step": "Astringent Toner", "detail": "Apply a toner to help control oil and minimize pores."},
+      {"step": "Niacinamide Serum", "detail": "Use a serum to regulate oil production and reduce inflammation."},
+      {"step": "Lightweight Moisturizer", "detail": "Use an oil-free, gel-based moisturizer."},
+      {"step": "Gel Sunscreen", "detail": "Choose a lightweight, non-comedogenic sunscreen, SPF 30+."}
+    ],
+    "night": [
+      {"step": "Double Cleanse", "detail": "Ensure all makeup and excess oil are removed."},
+      {"step": "BHA Toner", "detail": "Use a toner with salicylic acid to keep pores clear."},
+      {"step": "Retinoid", "detail": "Incorporate a retinoid to help with cell turnover and acne (start slowly)."},
+      {"step": "Gel Moisturizer", "detail": "Apply a light, hydrating gel moisturizer."},
+      {"step": "Spot Treatment", "detail": "Use a spot treatment for any active breakouts."}
+    ]
+  },
+  "kombinasi": {
+    "morning": [
+      {"step": "Gentle Cleanser", "detail": "Use a balanced, gentle cleanser that doesn't strip the skin."},
+      {"step": "Balancing Toner", "detail": "Apply a toner to hydrate dry areas and control oil in the T-zone."},
+      {"step": "Lightweight Serum", "detail": "A hydrating serum like hyaluronic acid works well for all areas."},
+      {"step": "Zonal Moisturizing", "detail": "Use a lighter moisturizer on the T-zone and a richer one on cheeks."},
+      {"step": "Sunscreen", "detail": "Apply a broad-spectrum SPF 30 or higher."}
+    ],
+    "night": [
+      {"step": "Double Cleanse", "detail": "Effectively remove impurities from the day."},
+      {"step": "Exfoliating Toner", "detail": "Use a gentle exfoliating toner 3 times a week to balance skin."},
+      {"step": "Serum", "detail": "Alternate between a hydrating and a gentle exfoliating serum."},
+      {"step": "Moisturizer", "detail": "Apply a medium-weight moisturizer all over."},
+      {"step": "Eye Cream", "detail": "Use a dedicated eye cream for the delicate eye area."}
+    ]
+  },
+  "sensitif": {
+    "morning": [
+      {"step": "Micellar Water or Gentle Cleanser", "detail": "Cleanse with a very mild, soap-free product."},
+      {"step": "Soothing Toner", "detail": "Use a fragrance-free toner with ingredients like chamomile or calendula."},
+      {"step": "Calming Serum", "detail": "Apply a serum with niacinamide or centella asiatica to reduce redness."},
+      {"step": "Hypoallergenic Moisturizer", "detail": "Use a simple, fragrance-free moisturizer."},
+      {"step": "Mineral Sunscreen", "detail": "Choose a physical (zinc oxide/titanium dioxide) sunscreen, SPF 30+."}
+    ],
+    "night": [
+      {"step": "Gentle Cleanse", "detail": "Use the same mild cleanser from the morning routine."},
+      {"step": "Soothing Toner", "detail": "Re-apply your calming toner."},
+      {"step": "Hydrating Serum", "detail": "Focus on hydration with a simple hyaluronic acid serum."},
+      {"step": "Barrier Repair Cream", "detail": "Use a moisturizer with ceramides to strengthen the skin barrier."},
+      {"step": "Avoid Retinoids/Acids", "detail": "Be cautious with strong actives. Patch test any new product."}
+    ]
+  }
+}

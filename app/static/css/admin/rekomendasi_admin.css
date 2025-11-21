@@ -164,10 +164,74 @@ tr:last-child td {
     color: white;
 }
 
-.edit-btn:hover,
-.delete-btn:hover {
-    opacity: 0.8;
+.action-buttons button:hover {
+  opacity: 0.8;
 }
+
+/* Accordion Styles */
+.accordion {
+    width: 100%;
+    margin-top: 2rem;
+}
+.accordion-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.accordion-header {
+    width: 100%;
+    background-color: #f9f9f9;
+    border: none;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.accordion-header:hover, .accordion-header.active {
+    background-color: #f0f0f0;
+}
+.accordion-content {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+.routine-section {
+    margin: 1.5rem 0;
+}
+.routine-section h3 {
+    margin-bottom: 1rem;
+}
+.step-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.step-table th, .step-table td {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.step-table thead {
+    background-color: #f9f9f9;
+}
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+.btn-primary {
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+}
+
 
 .overlay {
     display: none;

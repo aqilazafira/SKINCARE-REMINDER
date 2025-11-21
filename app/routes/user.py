@@ -25,7 +25,6 @@ def login():
             return redirect(url_for("user.login"))
 
         login_user(user, remember=True)
-        flash("Login successful", "success")
         if user.role == "admin":
             return redirect(url_for("admin.home_admin"))
         else:

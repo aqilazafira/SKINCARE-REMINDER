@@ -1,0 +1,17 @@
+{
+    "morning": [
+        {"step": "Cleanser", "time": "06:00"},
+        {"step": "Toner", "time": "06:02"},
+        {"step": "Serum", "time": "06:05"},
+        {"step": "Moisturizer", "time": "06:10"},
+        {"step": "Sunscreen", "time": "06:15"}
+    ],
+    "night": [
+        {"step": "Oil Cleanser", "time": "20:00"},
+        {"step": "Water-based Cleanser", "time": "20:05"},
+        {"step": "Exfoliator", "time": "20:10"},
+        {"step": "Toner", "time": "20:15"},
+        {"step": "Serum", "time": "20:20"},
+        {"step": "Moisturizer", "time": "20:25"}
+    ]
+}

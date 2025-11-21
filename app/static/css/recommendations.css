@@ -1,0 +1,120 @@
+.routine-container {
+    background: lightblue; /* Temporary background for debugging */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 2rem;
+    /* Removed: max-height: 500px; */
+    /* Removed: overflow-y: auto; */
+    border: 1px solid #e0e0e0;
+}
+
+.routine-container h1, .routine-container h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.routine-container h1 {
+    text-align: center;
+    font-size: 1.8em;
+}
+
+.routine-container h2 {
+    font-size: 1.4em;
+    color: #34495e;
+}
+
+.routine-container .routine-section {
+    margin-bottom: 2rem;
+}
+
+.routine-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.routine-container li {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.routine-container li input[type="checkbox"] {
+    margin-right: 15px;
+    transform: scale(1.2);
+}
+
+.routine-container li label {
+    flex: 1;
+}
+
+.routine-container li strong {
+    color: #2980b9;
+}
+
+.routine-container .actions {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    /* Removed: position: sticky; */
+    /* Removed: bottom: -2rem; */
+    background: #fff;
+    /* Removed: padding-bottom: 2rem; */
+    /* Removed: margin-bottom: -2rem; */
+}
+
+.routine-container #schedule-date {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    font-size: 1em;
+}
+
+.routine-container #generate-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.routine-container #generate-btn:hover {
+    background-color: #2980b9;
+}
+
+.routine-container #generate-btn:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+.routine-container .notification {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.routine-container .notification.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.routine-container .notification.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}

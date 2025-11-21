@@ -1,12 +1,13 @@
 import uuid
 
-from flask import Blueprint, jsonify, redirect, render_template, url_for
+from datetime import datetime
+from flask import Blueprint, jsonify, redirect, render_template, url_for, request, flash
 from flask_login import login_required
 from flask_login.utils import request
 
 from app import db
 from app.helper.decorators import admin_required
-from app.models import Feedback, Product, ProductRecommendation, ProductSkincareType, Recommendation, SkincareType, User
+from app.models import Feedback, Product, ProductRecommendation, ProductSkincareType, Recommendation, SkincareType, User, SkincareStep, SkinRecommendation
 from app.services.storage_service import allowed_file, delete_image, upload_image
 
 admin_bp = Blueprint("admin", __name__)
@@ -49,18 +50,14 @@ def timeline_admin():
 @admin_required
 def rekomendasi_admin():
     if request.method == "GET":
+        # Product data fetching (existing logic)
         products_record = Product.query.all()
-
-        # convert the recommendations and skincare_types to list of titles
         products_recommendations = [
             [recommendation.recommendation.title for recommendation in product.recommendations] for product in products_record
         ]
         products_skincare_types = [
             [skincare_type.skincare_type.title for skincare_type in product.skincare_types] for product in products_record
         ]
-
-        # update the products n recommendations and skincare_types
-        # to be list of titles
         products = []
         for product, recommendations, skincare_types in zip(products_record, products_recommendations, products_skincare_types):
             products.append(
@@ -73,17 +70,31 @@ def rekomendasi_admin():
                     "skincare_types": skincare_types,
                 }
             )
-
         recommendations = Recommendation.query.all()
         skincare_types = SkincareType.query.all()
+
+        # Routine data fetching and structuring
+        all_steps = db.session.query(SkincareStep, SkinRecommendation).join(SkinRecommendation, SkincareStep.id == SkinRecommendation.step_id).order_by(SkincareStep.routine_type, SkincareStep.step_order).all()
+        
+        routines_by_skin_type = {}
+        for step, rec in all_steps:
+            if rec.skin_type not in routines_by_skin_type:
+                routines_by_skin_type[rec.skin_type] = {'morning': [], 'night': []}
+            
+            if step.routine_type == 'Morning':
+                routines_by_skin_type[rec.skin_type]['morning'].append((step, rec))
+            else:
+                routines_by_skin_type[rec.skin_type]['night'].append((step, rec))
 
         return render_template(
             "admin/rekomendasi_admin.html",
             recommendations=recommendations,
             skincare_types=skincare_types,
             products=products,
+            routines_by_skin_type=routines_by_skin_type
         )
 
+    # ... (rest of the POST logic for product creation remains the same) ...
     if "file" not in request.files:
         print("No file part")
         return redirect(request.url)
@@ -126,6 +137,75 @@ def rekomendasi_admin():
     db.session.commit()
 
     return jsonify(request.form)
+
+
+@admin_bp.route("/admin/routines/step/add", methods=["GET", "POST"])
+@login_required
+@admin_required
+def add_step():
+    if request.method == "POST":
+        name = request.form.get("name")
+        routine_type = request.form.get("routine_type")
+        default_time_str = request.form.get("default_time")
+        step_order = request.form.get("step_order")
+        default_detail = request.form.get("default_detail")
+
+        if not all([name, routine_type, default_time_str, step_order, default_detail]):
+            flash("All fields are required.", "error")
+            return redirect(url_for("admin.add_step"))
+
+        new_step = SkincareStep(
+            name=name,
+            routine_type=routine_type,
+            default_time=datetime.strptime(default_time_str, "%H:%M").time(),
+            step_order=int(step_order),
+        )
+        db.session.add(new_step)
+        db.session.flush()
+
+        skin_types = db.session.query(SkinRecommendation.skin_type).distinct().all()
+        for st in skin_types:
+            skin_type = st[0]
+            new_rec = SkinRecommendation(
+                skin_type=skin_type,
+                step_id=new_step.id,
+                detail=default_detail
+            )
+            db.session.add(new_rec)
+        
+        db.session.commit()
+        flash(f"New step '{name}' added successfully to all routines.", "success")
+        return redirect(url_for("admin.rekomendasi_admin"))
+
+    return render_template("admin/add_step.html")
+
+
+@admin_bp.route("/admin/routines/recommendation/edit/<int:rec_id>", methods=["POST"])
+@login_required
+@admin_required
+def edit_recommendation(rec_id):
+    recommendation = SkinRecommendation.query.get_or_404(rec_id)
+    new_detail = request.form.get("detail")
+    
+    if new_detail:
+        recommendation.detail = new_detail
+        db.session.commit()
+        flash("Recommendation detail updated successfully!", "success")
+    else:
+        flash("Detail cannot be empty.", "error")
+
+    return redirect(url_for("admin.rekomendasi_admin"))
+
+
+@admin_bp.route("/admin/routines/step/delete/<int:step_id>", methods=["POST"])
+@login_required
+@admin_required
+def delete_step(step_id):
+    step = SkincareStep.query.get_or_404(step_id)
+    db.session.delete(step)
+    db.session.commit()
+    flash(f"Step '{step.name}' has been deleted from all routines.", "success")
+    return redirect(url_for("admin.rekomendasi_admin"))
 
 
 @admin_bp.route("/admin/rekomendasi/<int:product_id>", methods=["PUT"])

@@ -170,3 +170,34 @@ class SkincareType(db.Model):
 
     def __repr__(self):
         return f"<SkincareType: {self.title}>"
+
+
+class SkincareStep(db.Model):
+    __tablename__ = "skincare_steps"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    routine_type: Mapped[str] = mapped_column(String(50), nullable=False)  # "Morning" or "Night"
+    default_time: Mapped[datetime.time] = mapped_column(db.Time, nullable=False)
+    step_order: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    recommendations: Mapped[List["SkinRecommendation"]] = relationship(
+        back_populates="step", cascade="all, delete-orphan"
+    )
+
+    def __repr__(self):
+        return f"<SkincareStep: {self.routine_type} - {self.name}>"
+
+
+class SkinRecommendation(db.Model):
+    __tablename__ = "skin_recommendations"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    skin_type: Mapped[str] = mapped_column(String(50), nullable=False)  # "normal", "kering", etc.
+    step_id: Mapped[int] = mapped_column(ForeignKey("skincare_steps.id"), nullable=False)
+    detail: Mapped[str] = mapped_column(Text, nullable=False)
+
+    step: Mapped["SkincareStep"] = relationship(back_populates="recommendations")
+
+    def __repr__(self):
+        return f"<SkinRecommendation: {self.skin_type} for step {self.step_id}>"
