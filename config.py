@@ -10,7 +10,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
 
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "mysql+pymysql://root@localhost/skincare")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "mysql+pymysql://root@localhost/skincare2")
     SECRET_KEY = os.getenv("SECRET_KEY", "super-secret")
 
     MAIL_SERVER = "smtp.gmail.com"

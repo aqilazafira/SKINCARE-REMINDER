@@ -9,4 +9,6 @@ flask init-db
 
 // menjalankan aplikasi
 python run.py
-```
+
+// aktifkan virtual environment
+. .venv/Scripts/activate

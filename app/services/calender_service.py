@@ -35,6 +35,9 @@ def get_next_weekday(day):
 def save_calendar_event(day, time, email):
     creds = None
 
+    print(TOKEN_FILE)
+    print(CREDENTIALS_FILE)
+
     if os.path.exists(TOKEN_FILE):
         creds = Credentials.from_authorized_user_file(TOKEN_FILE, SCOPES)
 
