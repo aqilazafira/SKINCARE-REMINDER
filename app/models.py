@@ -43,6 +43,7 @@ class Reminder(db.Model):
     hour: Mapped[int] = mapped_column(Integer, nullable=False)
     minute: Mapped[int] = mapped_column(Integer, nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    calendar_event_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     updated_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
 
