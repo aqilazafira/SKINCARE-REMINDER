@@ -7,6 +7,42 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/rekomendasi_page.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/recommendations.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      .custom-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+      .custom-modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        width: 90%;
+        max-width: 450px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      }
+      .custom-modal-content p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+      }
+      .custom-modal-content button {
+        padding: 10px 25px;
+        border: none;
+        background-color: #ff69b4;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+    </style>
   </head>
   <body data-skin-type="{{ skin_type }}">
     {% include "components/topnav.html" %}
@@ -40,15 +76,15 @@
         <hr style="margin: 2rem 0;">
 
         <div class="routine-container">
-            <h1>Skincare Routine Steps</h1>
-            <p>Here is a recommended routine. Select the steps you want to schedule.</p>
+            <h1>Langkah-Langkah Rutinitas Skincare</h1>
+            <p>Berikut adalah rutinitas yang direkomendasikan. Pilih langkah-langkah yang ingin Anda jadwalkan.</p>
 
             <div class="routine-section">
-                <h2>Morning Routine</h2>
+                <h2>Rutinitas Pagi</h2>
                 <ul id="morning-steps">
                     {% for step in recommendations.morning %}
                     <li>
-                        <input type="checkbox" id="morning-{{ loop.index }}" name="{{ step.step }}" checked>
+                        <input type="checkbox" id="morning-{{ loop.index }}" name="{{ step.step }}">
                         <label for="morning-{{ loop.index }}"><strong>{{ step.step }}:</strong> {{ step.detail }}</label>
                     </li>
                     {% endfor %}
@@ -56,11 +92,11 @@
             </div>
 
             <div class="routine-section">
-                <h2>Night Routine</h2>
+                <h2>Rutinitas Malam</h2>
                 <ul id="night-steps">
                     {% for step in recommendations.night %}
                     <li>
-                        <input type="checkbox" id="night-{{ loop.index }}" name="{{ step.step }}" checked>
+                        <input type="checkbox" id="night-{{ loop.index }}" name="{{ step.step }}">
                         <label for="night-{{ loop.index }}"><strong>{{ step.step }}:</strong> {{ step.detail }}</label>
                     </li>
                     {% endfor %}
@@ -68,12 +104,18 @@
             </div>
 
             <div class="actions">
-                <label for="schedule-date">Select Date:</label>
-                <input type="date" id="schedule-date">
-                <button id="generate-btn">Generate My Routine</button>
+                <button id="generate-btn">Simpan</button>
             </div>
 
             <div id="notification" class="notification"></div>
+        </div>
+
+        <!-- Custom Pop-up Modal -->
+        <div id="completion-modal" class="custom-overlay">
+            <div class="custom-modal-content">
+                <p id="completion-message"></p>
+                <button id="close-modal-btn">Tutup</button>
+            </div>
         </div>
       </main>
     </div>

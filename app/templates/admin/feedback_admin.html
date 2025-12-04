@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skincare Reminder - Admin Feedback</title>
+    <title>Skincare Reminder - Masukan Admin</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/admin/feedback_admin.css') }}"
@@ -46,7 +46,7 @@
           if (response.ok) {
             location.reload();
           } else {
-            console.error('Failed to delete feedback');
+            console.error('Gagal menghapus masukan');
           }
         })
         .catch(error => {

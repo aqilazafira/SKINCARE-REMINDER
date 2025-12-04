@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skincare Reminder - Admin Rekomendasi</title>
+    <title>Skincare Reminder - Administrasi Rekomendasi</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/rekomendasi_admin.css') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
   </head>
@@ -15,7 +15,7 @@
 
       <main class="main-content">
         <div class="content-header">
-          <button class="add-btn" onclick="openInputForm()"><span>+</span> tambah rekomendasi</button>
+          <button class="add-btn" onclick="openInputForm()"><span>+</span> Tambah Rekomendasi</button>
         </div>
 
         <div class="table-container">
@@ -25,7 +25,7 @@
                 <th>Gambar</th>
                 <th>Merk</th>
                 <th>Deskripsi</th>
-                <th>Jenis skincare</th>
+                <th>Jenis Skincare</th>
                 <th>Rekomendasi</th>
                 <th>Aksi</th>
               </tr>
@@ -42,8 +42,8 @@
                 <td>{{ product.recommendations | join(', ') }}</td>
                 <td>
                   <div class="action-buttons">
-                    <button class="edit-btn" onclick="editProduct('{{ product.id }}')">Edit</button>
-                    <button class="delete-btn" onclick="deleteProduct('{{ product.id }}')">Delete</button>
+                    <button class="edit-btn" onclick="editProduct('{{ product.id }}')">Ubah</button>
+                    <button class="delete-btn" onclick="deleteProduct('{{ product.id }}')">Hapus</button>
                   </div>
                 </td>
               </tr>
@@ -55,8 +55,8 @@
         <hr style="margin: 3rem 0;">
 
         <div class="content-header">
-            <h2>Manage Step-by-Step Routines</h2>
-            <a href="{{ url_for('admin.add_step') }}" class="add-btn"><span>+</span> Add New Global Step</a>
+            <h2>Kelola Rutinitas Langkah-demi-Langkah</h2>
+            <a href="{{ url_for('admin.add_step') }}" class="add-btn"><span>+</span> Tambah Langkah Global Baru</a>
         </div>
 
         <div class="accordion">
@@ -66,15 +66,15 @@
                 <div class="accordion-content">
                     
                     <div class="routine-section">
-                        <h3>Morning Routine</h3>
+                        <h3>Rutinitas Pagi</h3>
                         <table class="step-table">
                             <thead>
                                 <tr>
-                                    <th>Order</th>
-                                    <th>Time</th>
-                                    <th>Step Name</th>
+                                    <th>Urutan</th>
+                                    <th>Waktu</th>
+                                    <th>Nama Langkah</th>
                                     <th>Detail</th>
-                                    <th>Actions</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,9 +86,9 @@
                                         <td>{{ step.name }}</td>
                                         <td><textarea name="detail" rows="3" class="form-control">{{ recommendation.detail }}</textarea></td>
                                         <td class="actions">
-                                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                            <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this step for all routines?');">
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                                            <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus langkah ini untuk semua rutinitas?');">
+                                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
                                             </form>
                                         </td>
                                     </form>
@@ -99,15 +99,15 @@
                     </div>
 
                     <div class="routine-section">
-                        <h3>Night Routine</h3>
+                        <h3>Rutinitas Malam</h3>
                         <table class="step-table">
                             <thead>
                                 <tr>
-                                    <th>Order</th>
-                                    <th>Time</th>
-                                    <th>Step Name</th>
+                                    <th>Urutan</th>
+                                    <th>Waktu</th>
+                                    <th>Nama Langkah</th>
                                     <th>Detail</th>
-                                    <th>Actions</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,9 +119,9 @@
                                         <td>{{ step.name }}</td>
                                         <td><textarea name="detail" rows="3" class="form-control">{{ recommendation.detail }}</textarea></td>
                                         <td class="actions">
-                                            <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                            <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this step for all routines?');">
-                                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                            <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                                            <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus langkah ini untuk semua rutinitas?');">
+                                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
                                             </form>
                                         </td>
                                     </form>
@@ -139,22 +139,22 @@
     </div>
     <div id="inputFormOverlay" class="overlay">
       <div class="input-form">
-        <h2>Add Product</h2>
+        <h2 id="formTitle">Tambah Produk</h2>
         <form id="productForm" action="/timeline" enctype="multipart/form-data">
-          <label for="brand">Brand:</label>
+          <label for="brand">Merk:</label>
           <input type="text" id="brand" name="brand" required />
 
-          <label for="image">Image:</label>
+          <label for="image">Gambar:</label>
           <input type="file" id="image" name="file" accept="image/*" required />
 
-          <label for="descripotion">Description</label>
+          <label for="description">Deskripsi</label>
           <textarea id="description" name="description" required></textarea>
 
-          <label for="recommendations">Recommendations:</label>
+          <label for="recommendations">Rekomendasi:</label>
           <input type="hidden" id="recommendations" name="recommendations" required />
           <div id="selectedRecommendations" class="selected-recommendations"></div>
           <div id="dropdownRecommendations" class="dropdown">
-            <button type="button" class="dropdown-toggle">Recommendations</button>
+            <button type="button" class="dropdown-toggle">Rekomendasi</button>
             <ul class="dropdown-menu">
               {% for recommendation in recommendations %}
               <li>
@@ -164,11 +164,11 @@
             </ul>
           </div>
 
-          <label for="Skincare Types">Skincare Types:</label>
+          <label for="Skincare Types">Jenis Skincare:</label>
           <input type="hidden" id="skincareTypes" name="skincareTypes" required />
           <div id="selectedSkincareTypes" class="selected-skincare-types"></div>
           <div id="dropdownSkincareTypes" class="dropdown">
-            <button type="button" class="dropdown-toggle">Skincare Types</button>
+            <button type="button" class="dropdown-toggle">Jenis Skincare</button>
             <ul class="dropdown-menu">
               {% for type in skincare_types %}
               <li>
@@ -178,8 +178,8 @@
             </ul>
           </div>
 
-          <button type="submit">Save</button>
-          <button type="button" onclick="closeInputForm()">Cancel</button>
+          <button type="submit">Simpan</button>
+          <button type="button" onclick="closeInputForm()">Batal</button>
         </form>
       </div>
     </div>
@@ -223,7 +223,7 @@
         const description = document.getElementById("description").value;
 
         if (!image || brand == "" || recommendationsInput.value == "" || skincareTypesInput.value == "") {
-          alert("Please fill in all fields");
+          alert("Harap isi semua kolom");
           return;
         }
 
@@ -245,11 +245,11 @@
             if (response.ok) {
               return response.json();
             } else {
-              throw new Error("Failed to save product");
+              throw new Error("Gagal menyimpan produk");
             }
           })
           .then((data) => {
-            console.log("Product saved successfully:", data);
+            console.log("Produk berhasil disimpan:", data);
             closeInputForm();
             location.reload();
           })
@@ -363,13 +363,13 @@
     });
 
     updateCheckboxes();
-    document.getElementById("formTitle").textContent = "Edit Product";
+    document.getElementById("formTitle").textContent = "Ubah Produk";
     openInputForm();
 }
 
 
       function deleteProduct(productId) {
-        if (confirm("Are you sure you want to delete this product?")) {
+        if (confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
           fetch(`/admin/rekomendasi/${productId}`, {
             method: "DELETE",
           })
@@ -377,7 +377,7 @@
               if (response.ok) {
                 location.reload();
               } else {
-                throw new Error("Failed to delete product");
+                throw new Error("Gagal menghapus produk");
               }
             })
             .catch((error) => {

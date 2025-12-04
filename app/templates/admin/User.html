@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skincare Reminder - Admin User</title>
+    <title>Skincare Reminder - Pengguna Admin</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/rekomendasi_admin.css') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
   </head>
@@ -19,8 +19,8 @@
             <thead>
               <tr>
                 <th>Email</th>
-                <th>Username</th>
-                <th>Action</th>
+                <th>Nama Pengguna</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
                 <td>{{user.username}}</td>
                 <td>
                   <div class="action-buttons">
-                    <button class="edit-btn" onclick="openInputForm('{{ user.id }}', '{{ user.email }}', '{{ user.username }}')">Edit</button>
+                    <button class="edit-btn" onclick="openInputForm('{{ user.id }}', '{{ user.email }}', '{{ user.username }}')">Ubah</button>
                     <button class="delete-btn" onclick="deleteUser('{{ user.id }}')">Hapus</button>
                   </div>
                 </td>
@@ -44,21 +44,21 @@
    
     <div id="inputFormOverlay" class="overlay">
       <div class="input-form">
-        <h2>Edit User</h2>
+        <h2>Ubah Pengguna</h2>
         <form id="editUserForm">
           <input type="hidden" id="userId" name="id" required />
 
           <label for="email">Email</label>
           <input type="email" id="email" name="email" required />
 
-          <label for="username">Username</label>
+          <label for="username">Nama Pengguna</label>
           <input type="text" id="username" name="username" required />
 
-          <label for="password">Password</label>
+          <label for="password">Kata Sandi</label>
           <input type="password" id="password" name="password" required />
 
-          <button type="submit">Save</button>
-          <button type="button" onclick="closeInputForm()">Cancel</button>
+          <button type="submit">Simpan</button>
+          <button type="button" onclick="closeInputForm()">Batal</button>
         </form>
       </div>
     </div>
@@ -86,7 +86,7 @@
             if (response.ok) {
               return response.json();
             } else {
-              throw new Error("Failed to save product");
+              throw new Error("Gagal menyimpan pengguna");
             }
           })
           .then((data) => {
@@ -112,7 +112,7 @@
       }
 
       function deleteUser(userId) {
-        if (confirm("Are you sure you want to delete this product?")) {
+        if (confirm("Apakah Anda yakin ingin menghapus pengguna ini?")) {
           fetch(`/admin/users/${userId}`, {
             method: "DELETE",
           })
@@ -120,7 +120,7 @@
               if (response.ok) {
                 location.reload();
               } else {
-                throw new Error("Failed to delete product");
+                throw new Error("Gagal menghapus pengguna");
               }
             })
             .catch((error) => {

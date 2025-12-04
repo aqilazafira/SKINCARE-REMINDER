@@ -1,17 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateBtn = document.getElementById('generate-btn');
-    const scheduleDateInput = document.getElementById('schedule-date');
     const notification = document.getElementById('notification');
+    
+    // Modal elements
+    const completionModal = document.getElementById('completion-modal');
+    const completionMessage = document.getElementById('completion-message');
+    const closeModalBtn = document.getElementById('close-modal-btn');
     const skinType = document.body.dataset.skinType;
+    const storageKey = `skincareState_${skinType}`;
 
-    // Set default date to today
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    scheduleDateInput.value = `${yyyy}-${mm}-${dd}`;
+    // Load saved state from Local Storage when page loads
+    loadState();
 
-    generateBtn.addEventListener('click', generateRoutine);
+    generateBtn.addEventListener('click', handleRoutineCompletion);
+    
+    if(closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            completionModal.style.display = 'none';
+        });
+    }
 
     function showNotification(message, isError = false) {
         notification.textContent = message;
@@ -28,51 +35,62 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 5000);
     }
 
-    async function generateRoutine() {
-        generateBtn.disabled = true;
-        generateBtn.textContent = 'Generating...';
-        showNotification('Scheduling your routine, please wait...', false);
+    function handleRoutineCompletion() {
+        const morningCheckboxes = document.querySelectorAll('#morning-steps input[type="checkbox"]');
+        const nightCheckboxes = document.querySelectorAll('#night-steps input[type="checkbox"]');
 
-        const selectedDate = scheduleDateInput.value;
-        if (!selectedDate) {
-            showNotification('Please select a date.', true);
-            generateBtn.disabled = false;
-            generateBtn.textContent = 'Generate My Routine';
+        const checkedMorning = document.querySelectorAll('#morning-steps input:checked').length;
+        const checkedNight = document.querySelectorAll('#night-steps input:checked').length;
+
+        const totalMorning = morningCheckboxes.length;
+        const totalNight = nightCheckboxes.length;
+
+        let message = '';
+        const isMorningComplete = (totalMorning > 0) && (checkedMorning === totalMorning);
+        const isNightComplete = (totalNight > 0) && (checkedNight === totalNight);
+        const anyChecked = (checkedMorning > 0) || (checkedNight > 0);
+
+        if (isMorningComplete && isNightComplete) {
+            message = "Self-care completed! Pilihan terbaik yang kamu ambil hari ini adalah merawat diri.";
+        } else if (isMorningComplete && checkedNight === 0) {
+            message = "Kulitmu semakin siap menghadapi hari! Hebat, kamu sudah merawat dirimu dengan baik";
+        } else if (isNightComplete && checkedMorning === 0) {
+            message = "Kerja keras seharian layak ditutup dengan perawatan. Kulitmu berterima kasih!";
+        } else if (anyChecked) { // This covers all partial completion cases
+            message = "Ambil napas sebentar, lalu lanjutkan. Kamu sudah melangkah dengan baik.";
+        } else {
+            showNotification('Pilih setidaknya satu langkah rutinitas.', true);
             return;
         }
 
-        // Get user's timezone
-        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        // Display the modal
+        if(completionModal && completionMessage) {
+            completionMessage.textContent = message;
+            completionModal.style.display = 'flex';
+        }
 
-        const payload = {
-            user_id: USER_ID, // This should be dynamically set in a real app
-            date: selectedDate,
-            user_timezone: userTimezone
-        };
+        // Save the current state of checkboxes to Local Storage
+        saveState();
+    }
 
-        try {
-            const response = await fetch(`/rekomendasi/${skinType}/generate`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
+    function saveState() {
+        const checkedIds = [];
+        document.querySelectorAll('.routine-container input:checked').forEach(cb => {
+            checkedIds.push(cb.id);
+        });
+        localStorage.setItem(storageKey, JSON.stringify(checkedIds));
+    }
+
+    function loadState() {
+        const savedState = localStorage.getItem(storageKey);
+        if (savedState) {
+            const checkedIds = JSON.parse(savedState);
+            checkedIds.forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
             });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.error || 'An unknown error occurred.');
-            }
-
-            showNotification(`Successfully created ${result.created_events.length} events in your calendar!`, false);
-
-        } catch (error) {
-            console.error('Error generating routine:', error);
-            showNotification(`Error: ${error.message}`, true);
-        } finally {
-            generateBtn.disabled = false;
-            generateBtn.textContent = 'Generate My Routine';
         }
     }
 });

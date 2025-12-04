@@ -6,6 +6,33 @@
     <title>Skincare Reminder - Pengingat</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/pengingat.css') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      .dropdown-menu {
+        display: none; /* Hide dropdown by default */
+      }
+      /* CSS Fix for Checkbox Selection Issue */
+      .dropdown-menu li {
+        list-style-type: none;
+      }
+      .dropdown-menu li label {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Adds space between checkbox and text */
+        padding: 12px 16px;
+        width: 100%;
+      }
+      .dropdown-menu li input[type="checkbox"] {
+        position: static; /* Overrides absolute positioning from external CSS */
+        width: auto;      /* Reset size */
+        height: auto;
+        opacity: 1;       /* Make checkbox visible */
+        z-index: auto;
+        cursor: pointer;
+      }
+      .dropdown-menu li label:hover {
+        background-color: #f1f1f1;
+      }
+    </style>
   </head>
   <body>
     {% include "components/topnav.html" %}
@@ -36,10 +63,10 @@
             {% for day in ['SENIN', 'SELASA', 'RABU', 'KAMIS', "JUMAT", 'SABTU', 'MINGGU'] %}
             <div class="schedule-card">
               <h3>{{ day }}</h3>
-              <button class="edit-btn" onclick="openInputForm('{{ day }}')">Edit</button>
+              <button class="edit-btn" onclick="openInputForm('{{ day }}')">Ubah</button>
               {% for routine in user_reminders %}
                 {% if routine.day == day %}
-                  <button class="edit-btn" onclick="removeReminder('{{ day }}')">Remove</button>
+                  <button class="edit-btn" onclick="removeReminder('{{ day }}')">Hapus</button>
                 {% endif %}
               {% endfor %}
               <div id="{{ day.lower() }}-routine" class="routine-display">
@@ -55,50 +82,50 @@
 
     <div id="inputFormOverlay" class="overlay">
       <div class="input-form">
-        <h2>Set Skincare Routine</h2>
+        <h2>Atur Rutinitas Skincare</h2>
         <form id="skincareForm">
           <input type="hidden" id="selectedDay" name="selectedDay" />
-          <label for="time">Time:</label>
+          <label for="time">Waktu:</label>
           <input type="time" id="time" name="time" required />
 
-          <label for="routine">Skincare Routine:</label>
+          <label for="routine">Rutinitas Skincare:</label>
           <input type="hidden" id="skincareTypes" name="skincareTypes" required />
           <div id="selectedSkincareTypes" class="selected-skincare-types"></div>
           <div class="dropdown">
-            <button class="dropdown-toggle">Routines</button>
+            <button type="button" class="dropdown-toggle">Rutinitas</button>
             <ul class="dropdown-menu">
               <li>
-                <label><input type="checkbox" value="Cleanser" /> Cleanser</label>
+                <label for="cb-cleanser"><input type="checkbox" id="cb-cleanser" value="Cleanser" /> Cleanser</label>
               </li>
               <li>
-                <label><input type="checkbox" value="Toner" /> Toner</label>
+                <label for="cb-toner"><input type="checkbox" id="cb-toner" value="Toner" /> Toner</label>
               </li>
               <li>
-                <label><input type="checkbox" value="Serum" /> Serum</label>
+                <label for="cb-serum"><input type="checkbox" id="cb-serum" value="Serum" /> Serum</label>
               </li>
               <li>
-                <label><input type="checkbox" value="Moisturizer" /> Moisturizer</label>
+                <label for="cb-moisturizer"><input type="checkbox" id="cb-moisturizer" value="Moisturizer" /> Moisturizer</label>
               </li>
               <li>
-                <label><input type="checkbox" value="Sunscreen" /> Sunscreen</label>
+                <label for="cb-sunscreen"><input type="checkbox" id="cb-sunscreen" value="Sunscreen" /> Sunscreen</label>
               </li>
               <li>
-                <label><input type="checkbox" value="Exfoliator" /> Exfoliator</label>
+                <label for="cb-exfoliator"><input type="checkbox" id="cb-exfoliator" value="Exfoliator" /> Exfoliator</label>
               </li>
               <li>
-                <label><input type="checkbox" value="Mask" /> Mask</label>
+                <label for="cb-mask"><input type="checkbox" id="cb-mask" value="Mask" /> Mask</label>
               </li>
               <li>
-                <label><input type="checkbox" value="Eye Cream" /> Eye Cream</label>
+                <label for="cb-eye-cream"><input type="checkbox" id="cb-eye-cream" value="Eye Cream" /> Eye Cream</label>
               </li>
               <li>
-                <label><input type="checkbox" value="Face Oil" /> Face Oil</label>
+                <label for="cb-face-oil"><input type="checkbox" id="cb-face-oil" value="Face Oil" /> Face Oil</label>
               </li>
             </ul>
           </div>
 
-          <button type="submit">Save</button>
-          <button type="button" onclick="closeInputForm()">Cancel</button>
+          <button type="submit">Simpan</button>
+          <button type="button" onclick="closeInputForm()">Batal</button>
         </form>
       </div>
     </div>
@@ -107,6 +134,13 @@
       const checkboxes = document.querySelectorAll(".dropdown-menu input[type='checkbox']");
       const skincareTypesInput = document.getElementById("skincareTypes");
       const selectedSkincareTypesContainer = document.getElementById("selectedSkincareTypes");
+      const dropdownToggle = document.querySelector(".dropdown-toggle");
+
+      // Make the dropdown functional
+      dropdownToggle.addEventListener("click", () => {
+        const menu = dropdownToggle.nextElementSibling;
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      });
 
       checkboxes.forEach((checkbox) => {
         checkbox.addEventListener("change", updateSkincareTypes);
@@ -132,8 +166,10 @@
 
           const closeButton = document.createElement("button");
           closeButton.className = "close-btn";
+          closeButton.type = "button";
           closeButton.textContent = "x";
-          closeButton.addEventListener("click", () => removeSkincareType(type));
+          closeButton.dataset.type = type; // Store the type in a data attribute
+          closeButton.addEventListener("click", handleRemoveClick); // Use a named handler
 
           typeElement.appendChild(typeDisplay);
           typeElement.appendChild(closeButton);
@@ -141,8 +177,14 @@
         });
       }
 
-      function removeSkincareType(type) {
-        const checkbox = Array.from(checkboxes).find((checkbox) => checkbox.value === type);
+      // Event handler for the remove button
+      function handleRemoveClick(event) {
+        const typeToRemove = event.currentTarget.dataset.type;
+        removeSkincareType(typeToRemove);
+      }
+      
+      function removeSkincareType(typeToRemove) {
+        const checkbox = Array.from(checkboxes).find((cb) => cb.value === typeToRemove);
         if (checkbox) {
           checkbox.checked = false;
           updateSkincareTypes();
@@ -150,8 +192,8 @@
       }
 
       function updateCurrentDate() {
-        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const days = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+        const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
         const now = new Date();
         const formattedDate = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
         document.getElementById("currentDate").textContent = formattedDate;
@@ -160,6 +202,9 @@
       function openInputForm(day) {
         document.getElementById("selectedDay").value = day || "";
         document.getElementById("inputFormOverlay").style.display = "flex";
+        // Reset form state when opening
+        checkboxes.forEach(cb => cb.checked = false);
+        updateSkincareTypes();
       }
 
       function closeInputForm() {
@@ -169,7 +214,7 @@
       function saveSkincareRoutine(event) {
         event.preventDefault();
         if (skincareTypesInput.value === "") {
-          alert("Please select at least one routine");
+          alert("Silakan pilih setidaknya satu rutinitas");
           return;
         }
 
@@ -178,7 +223,7 @@
         const skincareTypes = skincareTypesInput.value.split(",");
         const [hour, minute] = time.split(":").map(Number);
 
-        // Update display
+        // Optimistic UI Update
         const routineDisplay = document.getElementById(`${day.toLowerCase()}-routine`);
         routineDisplay.textContent = `${time} - ${skincareTypesInput.value}`;
 
@@ -231,18 +276,9 @@
           });
       }
 
-      function loadSavedRoutines() {
-        const routines = JSON.parse(localStorage.getItem("skincareRoutines")) || {};
-        for (const [day, data] of Object.entries(routines)) {
-          const routineDisplay = document.getElementById(`${day.toLowerCase()}-routine`);
-          routineDisplay.textContent = `${data.time} - ${data.routine}`;
-        }
-      }
-
       updateCurrentDate();
       setInterval(updateCurrentDate, 60000); // Update every minute
       document.getElementById("skincareForm").addEventListener("submit", saveSkincareRoutine);
-      // loadSavedRoutines();
     </script>
   </body>
 </html>
