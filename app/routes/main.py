@@ -16,7 +16,7 @@ UPLOAD_FOLDER = os.path.abspath(os.path.dirname(__name__)) + "/app/static/timeli
 @main_bp.route("/")
 @login_required
 def home():
-    return render_template("home.html")
+    return render_template("home.html", streak=current_user.streak)
 
 
 # Halaman timeline
