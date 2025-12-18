@@ -53,13 +53,48 @@
         </form>
       </div>
     </div>
+
+    <!-- Streak Modal -->
+    <div id="streakModal" class="modal-overlay">
+      <div class="modal-content">
+        <p>Selamat! Anda telah mencapai streak 3 hari! Teruslah konsisten!</p>
+        <button id="closeStreakModal">OK</button>
+      </div>
+    </div>
+
     <script>
-    function closeInputForm() {
-      document.getElementById("inputFormOverlay").style.display = "none";
-    }
+      // Script for input form
+      function closeInputForm() {
+        document.getElementById("inputFormOverlay").style.display = "none";
+      }
       function openInputForm() {
         document.getElementById("inputFormOverlay").style.display = "flex";
       }
+
+      // Script for streak modal
+      {% if streak == 3 %}
+        document.addEventListener('DOMContentLoaded', function() {
+          const modal = document.getElementById('streakModal');
+          const closeModalBtn = document.getElementById('closeStreakModal');
+
+          if (modal) {
+            modal.style.display = 'flex'; // Show the modal
+          }
+
+          if (closeModalBtn) {
+            closeModalBtn.onclick = function() {
+              modal.style.display = 'none';
+            }
+          }
+
+          // Close modal if overlay is clicked
+          window.onclick = function(event) {
+            if (event.target == modal) {
+              modal.style.display = 'none';
+            }
+          }
+        });
+      {% endif %}
     </script>
   </body>
 </html>

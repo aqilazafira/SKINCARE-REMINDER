@@ -293,3 +293,60 @@ body {
         height: 120px;
     }
 }
+
+/* Modal Styles for Streak Pop-up */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001; /* Ensure it's on top */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 450px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content p {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.modal-content button {
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #ff4da6;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

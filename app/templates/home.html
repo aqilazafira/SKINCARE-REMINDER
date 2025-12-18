@@ -20,19 +20,21 @@
       {% include "components/sidebar.html" %}
 
       <main class="main-content">
-        <div class="logo-container">
-          <img
-            src="{{ url_for('static', filename='images/main-logo.png') }}"
-            alt="Skincare Reminder"
-            class="main-logo"
-          />
+        <div class="content-wrapper">
+          <div class="logo-container">
+            <img
+              src="{{ url_for('static', filename='images/main-logo.png') }}"
+              alt="Skincare Reminder"
+              class="main-logo"
+            />
+          </div>
+          {% if streak == 3 %}
+            <div class="streak-message">
+              <p>Selamat! Anda telah mencapai streak 3 hari! Teruslah konsisten!</p>
+            </div>
+          {% endif %}
         </div>
       </main>
-      {% if streak == 3 %}
-        <div class="streak-message">
-          <p>Selamat! Anda telah mencapai streak 3 hari! Teruslah konsisten!</p>
-        </div>
-      {% endif %}
     </div>
   </body>
 </html>

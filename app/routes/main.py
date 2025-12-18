@@ -25,7 +25,7 @@ def home():
 def timeline():
     if request.method == "GET":
         timelines = Timeline.query.filter_by(user_id=current_user.id)
-        return render_template("timeline.html", timelines=timelines)
+        return render_template("timeline.html", timelines=timelines, streak=current_user.streak)
 
     if "file" not in request.files:
         print("No file part")
