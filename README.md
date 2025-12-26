@@ -12,3 +12,12 @@ python run.py
 
 // aktifkan virtual environment
 . .venv/Scripts/activate
+
+//tes code coverage
+python -m pytest --cov=app tests
+
+//install pytest cov
+pip install pytest-cov
+
+//update requirements
+pip freeze > ./requirements.txt
