@@ -95,6 +95,10 @@ class Timeline(db.Model):
 
     user: Mapped["User"] = relationship(back_populates="timelines")
 
+    def __init__(self, image_url: str, user_id: int):
+        self.image_url = image_url
+        self.user_id = user_id
+
     def __repr__(self):
         return f"<Timeline: {self.image_url}>"
 

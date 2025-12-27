@@ -25,6 +25,12 @@ def login():
             return redirect(url_for("user.login"))
 
         login_user(user, remember=True)
+        
+        # Check for missed days and reset streak if needed
+        # Import here to avoid circular imports
+        from app.services.streak_service import StreakService
+        StreakService.check_missed_days(user.id)
+        
         if user.role == "admin":
             return redirect(url_for("admin.home_admin"))
         else:

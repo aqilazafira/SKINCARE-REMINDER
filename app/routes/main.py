@@ -1,11 +1,11 @@
 import os
 from datetime import datetime as dt
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
 from app import db
-from app.models import Feedback, Timeline
+from app.models import Feedback, Timeline, User
 from app.services.storage_service import allowed_file, upload_image
 
 main_bp = Blueprint("main", __name__)
@@ -16,7 +16,9 @@ UPLOAD_FOLDER = os.path.abspath(os.path.dirname(__name__)) + "/app/static/timeli
 @main_bp.route("/")
 @login_required
 def home():
-    return render_template("home.html", streak=current_user.streak)
+    # Explicitly get a fresh user object from the database for the session
+    user = db.session.get(User, current_user.id)
+    return render_template("home.html", streak=user.streak)
 
 
 # Halaman timeline
@@ -25,7 +27,8 @@ def home():
 def timeline():
     if request.method == "GET":
         timelines = Timeline.query.filter_by(user_id=current_user.id)
-        return render_template("timeline.html", timelines=timelines, streak=current_user.streak)
+        user = db.session.get(User, current_user.id)
+        return render_template("timeline.html", timelines=timelines, streak=user.streak)
 
     if "file" not in request.files:
         print("No file part")
@@ -48,6 +51,13 @@ def timeline():
     timeline = Timeline(image_url=filename + ".jpg", user_id=current_user.id)
     db.session.add(timeline)
     db.session.commit()
+
+    # Re-fetch the user object from DB to get the updated streak from the trigger
+    refreshed_user = db.session.get(User, current_user.id)
+
+    # If streak just reached 3, flash a message
+    if refreshed_user and refreshed_user.streak == 3:
+        flash(f"Selamat! Anda telah mencapai streak {refreshed_user.streak} hari!", "success")
 
     return redirect(url_for("main.timeline"))
 

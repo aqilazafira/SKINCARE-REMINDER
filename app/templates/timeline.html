@@ -57,7 +57,7 @@
     <!-- Streak Modal -->
     <div id="streakModal" class="modal-overlay">
       <div class="modal-content">
-        <p>Selamat! Anda telah mencapai streak 3 hari! Teruslah konsisten!</p>
+        <p id="streakModalMessage"></p>
         <button id="closeStreakModal">OK</button>
       </div>
     </div>
@@ -71,30 +71,35 @@
         document.getElementById("inputFormOverlay").style.display = "flex";
       }
 
-      // Script for streak modal
-      {% if streak == 3 %}
-        document.addEventListener('DOMContentLoaded', function() {
-          const modal = document.getElementById('streakModal');
-          const closeModalBtn = document.getElementById('closeStreakModal');
+      // Script for streak modal, triggered by flashed messages
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('streakModal');
+            const modalMessage = document.getElementById('streakModalMessage');
+            const closeModalBtn = document.getElementById('closeStreakModal');
 
-          if (modal) {
-            modal.style.display = 'flex'; // Show the modal
-          }
-
-          if (closeModalBtn) {
-            closeModalBtn.onclick = function() {
-              modal.style.display = 'none';
+            if (modal && modalMessage) {
+              // Set the text from the first flashed message
+              modalMessage.innerText = `{{ messages[0] }}`;
+              modal.style.display = 'flex'; // Show the modal
             }
-          }
 
-          // Close modal if overlay is clicked
-          window.onclick = function(event) {
-            if (event.target == modal) {
-              modal.style.display = 'none';
+            if (closeModalBtn) {
+              closeModalBtn.onclick = function() {
+                modal.style.display = 'none';
+              }
             }
-          }
-        });
-      {% endif %}
+
+            // Close modal if overlay is clicked
+            window.onclick = function(event) {
+              if (event.target == modal) {
+                modal.style.display = 'none';
+              }
+            }
+          });
+        {% endif %}
+      {% endwith %}
     </script>
   </body>
 </html>
