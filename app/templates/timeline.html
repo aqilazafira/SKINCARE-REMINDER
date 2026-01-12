@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Skincare Reminder - Linimasa</title>
+    <title>Skincare Reminder - Timeline</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/timeline.css') }}"
@@ -21,7 +21,7 @@
 
       <main class="main-content">
         <div class="timeline-container">
-          <h2>LINIMASA</h2>
+          <h2>TIMELINE</h2>
           <div class="timeline-grid">
             {% if timelines %}
             {% for timeline in timelines %}
@@ -43,7 +43,7 @@
     </div>
     <div id="inputFormOverlay" class="overlay">
       <div class="input-form">
-        <h2>Tambah Linimasa</h2>
+        <h2>Tambah Timeline</h2>
         <form method="post" action="/timeline" enctype="multipart/form-data">
           <label for="image">Gambar:</label>
           <input type="file" id="image" name="file" accept="image/*" required />
