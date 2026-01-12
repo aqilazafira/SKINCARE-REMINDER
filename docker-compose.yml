@@ -19,6 +19,22 @@ services:
       timeout: 5s
       retries: 5
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: skincare_phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "8084:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
   web:
     build: .
     container_name: skincare_app
@@ -39,8 +55,9 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - .:/app
+      - skincare_data:/app
     restart: unless-stopped
 
 volumes:
   mysql_data:
+  skincare_data:
