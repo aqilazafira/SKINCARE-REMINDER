@@ -54,10 +54,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - skincare_data:/app
     restart: unless-stopped
 
 volumes:
   mysql_data:
-  skincare_data:
