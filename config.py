@@ -12,6 +12,7 @@ class Config(object):
 
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "mysql+pymysql://root@localhost/skincare2")
     SECRET_KEY = os.getenv("SECRET_KEY", "super-secret")
+    SERVER_NAME = os.getenv("SERVER_NAME", "localhost:5000")
 
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 587
