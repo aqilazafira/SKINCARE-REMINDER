@@ -73,25 +73,38 @@ def rekomendasi_admin():
         recommendations = Recommendation.query.all()
         skincare_types = SkincareType.query.all()
 
-        # Routine data fetching and structuring
+        # Routine data fetching and structuring with name mapping
         all_steps = db.session.query(SkincareStep, SkinRecommendation).join(SkinRecommendation, SkincareStep.id == SkinRecommendation.step_id).order_by(SkincareStep.routine_type, SkincareStep.step_order).all()
         
-        routines_by_skin_type = {}
+        # Map database skin_type values to user-facing titles
+        skin_type_map = {
+            "berminyak": "Berminyak",
+            "kering": "Kering",
+            "kombinasi": "Kombinasi",
+            "normal": "Normal",
+            "sensitif": "Berjerawat",
+            "berjerawat": "Berjerawat"
+        }
+
+        routines_by_title = {}
         for step, rec in all_steps:
-            if rec.skin_type not in routines_by_skin_type:
-                routines_by_skin_type[rec.skin_type] = {'morning': [], 'night': []}
+            # Use the map to get the display title, fallback to capitalizing the skin_type
+            title = skin_type_map.get(rec.skin_type, rec.skin_type.capitalize())
+            
+            if title not in routines_by_title:
+                routines_by_title[title] = {'morning': [], 'night': []}
             
             if step.routine_type == 'Morning':
-                routines_by_skin_type[rec.skin_type]['morning'].append((step, rec))
+                routines_by_title[title]['morning'].append((step, rec))
             else:
-                routines_by_skin_type[rec.skin_type]['night'].append((step, rec))
+                routines_by_title[title]['night'].append((step, rec))
 
         return render_template(
             "admin/rekomendasi_admin.html",
             recommendations=recommendations,
             skincare_types=skincare_types,
             products=products,
-            routines_by_skin_type=routines_by_skin_type
+            routines_by_skin_type=routines_by_title
         )
 
     # ... (rest of the POST logic for product creation remains the same) ...
@@ -143,41 +156,67 @@ def rekomendasi_admin():
 @login_required
 @admin_required
 def add_step():
+    skin_type_map = {
+        "berminyak": "Berminyak",
+        "kering": "Kering",
+        "kombinasi": "Kombinasi",
+        "normal": "Normal",
+        "sensitif": "Berjerawat",
+        "berjerawat": "Berjerawat"
+    }
+    skin_types_from_db = [st[0] for st in db.session.query(SkinRecommendation.skin_type).distinct().all()]
+
     if request.method == "POST":
         name = request.form.get("name")
         routine_type = request.form.get("routine_type")
         default_time_str = request.form.get("default_time")
         step_order = request.form.get("step_order")
-        default_detail = request.form.get("default_detail")
+        detail = request.form.get("detail")
+        selected_skin_types = request.form.getlist("skin_types")
 
-        if not all([name, routine_type, default_time_str, step_order, default_detail]):
-            flash("All fields are required.", "error")
+        if not all([name, routine_type, default_time_str, step_order, detail]):
+            flash("Mohon isi semua kolom.", "error")
             return redirect(url_for("admin.add_step"))
 
-        new_step = SkincareStep(
-            name=name,
-            routine_type=routine_type,
-            default_time=datetime.strptime(default_time_str, "%H:%M").time(),
-            step_order=int(step_order),
-        )
-        db.session.add(new_step)
-        db.session.flush()
+        if not selected_skin_types:
+            flash("Mohon pilih setidaknya satu jenis kulit.", "error")
+            # Re-populate form for rendering
+            display_skin_types = {st: skin_type_map.get(st, st.capitalize()) for st in skin_types_from_db}
+            return render_template("admin/add_step.html", skin_types=display_skin_types, form_data=request.form)
 
-        skin_types = db.session.query(SkinRecommendation.skin_type).distinct().all()
-        for st in skin_types:
-            skin_type = st[0]
-            new_rec = SkinRecommendation(
-                skin_type=skin_type,
-                step_id=new_step.id,
-                detail=default_detail
+        # Check if a step with the same name, routine_type, and step_order already exists to avoid duplicates
+        existing_step = SkincareStep.query.filter_by(name=name, routine_type=routine_type, step_order=int(step_order)).first()
+        if existing_step:
+            step_to_use = existing_step
+        else:
+            new_step = SkincareStep(
+                name=name,
+                routine_type=routine_type,
+                default_time=datetime.strptime(default_time_str, "%H:%M").time(),
+                step_order=int(step_order),
             )
-            db.session.add(new_rec)
+            db.session.add(new_step)
+            db.session.flush()
+            step_to_use = new_step
+
+        for skin_type in selected_skin_types:
+            # Prevent adding a duplicate SkinRecommendation
+            existing_rec = SkinRecommendation.query.filter_by(step_id=step_to_use.id, skin_type=skin_type).first()
+            if not existing_rec:
+                new_rec = SkinRecommendation(
+                    skin_type=skin_type,
+                    step_id=step_to_use.id,
+                    detail=detail
+                )
+                db.session.add(new_rec)
         
         db.session.commit()
-        flash(f"New step '{name}' added successfully to all routines.", "success")
+        flash(f"Langkah '{name}' berhasil ditambahkan untuk jenis kulit yang dipilih.", "success")
         return redirect(url_for("admin.rekomendasi_admin"))
 
-    return render_template("admin/add_step.html")
+    # For GET request
+    display_skin_types = {st: skin_type_map.get(st, st.capitalize()) for st in skin_types_from_db}
+    return render_template("admin/add_step.html", skin_types=display_skin_types)
 
 
 @admin_bp.route("/admin/routines/recommendation/edit/<int:rec_id>", methods=["POST"])

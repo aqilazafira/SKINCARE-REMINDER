@@ -6,6 +6,35 @@
     <title>Skincare Reminder - Administrasi Rekomendasi</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/rekomendasi_admin.css') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        .checkbox-options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Spasi antar checkbox */
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .checkbox-option input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        /* Overlay form specific styles for better spacing */
+        .input-form .form-group {
+            margin-bottom: 15px;
+        }
+        .input-form label {
+            margin-bottom: 5px;
+        }
+    </style>
   </head>
   <body>
     {% include "components/topnav_admin.html" %}
@@ -80,18 +109,22 @@
                             <tbody>
                                 {% for step, recommendation in routine.morning %}
                                 <tr>
-                                    <form method="POST" action="{{ url_for('admin.edit_recommendation', rec_id=recommendation.id) }}">
-                                        <td>{{ step.step_order }}</td>
-                                        <td>{{ step.default_time.strftime('%H:%M') }}</td>
-                                        <td>{{ step.name }}</td>
-                                        <td><textarea name="detail" rows="3" class="form-control">{{ recommendation.detail }}</textarea></td>
+                                    <td>{{ step.step_order }}</td>
+                                    <td>{{ step.default_time.strftime('%H:%M') }}</td>
+                                    <td>{{ step.name }}</td>
+                                    <form method="POST" action="{{ url_for('admin.edit_recommendation', rec_id=recommendation.id) }}" class="form-inline">
+                                        <td>
+                                            <textarea name="detail" rows="3" class="form-control">{{ recommendation.detail }}</textarea>
+                                        </td>
                                         <td class="actions">
                                             <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
-                                            <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus langkah ini untuk semua rutinitas?');">
-                                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                                            </form>
                                         </td>
                                     </form>
+                                    <td class="actions">
+                                        <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus langkah ini untuk semua rutinitas?');" class="form-inline">
+                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -113,18 +146,22 @@
                             <tbody>
                                 {% for step, recommendation in routine.night %}
                                 <tr>
-                                    <form method="POST" action="{{ url_for('admin.edit_recommendation', rec_id=recommendation.id) }}">
-                                        <td>{{ step.step_order }}</td>
-                                        <td>{{ step.default_time.strftime('%H:%M') }}</td>
-                                        <td>{{ step.name }}</td>
-                                        <td><textarea name="detail" rows="3" class="form-control">{{ recommendation.detail }}</textarea></td>
+                                    <td>{{ step.step_order }}</td>
+                                    <td>{{ step.default_time.strftime('%H:%M') }}</td>
+                                    <td>{{ step.name }}</td>
+                                    <form method="POST" action="{{ url_for('admin.edit_recommendation', rec_id=recommendation.id) }}" class="form-inline">
+                                        <td>
+                                            <textarea name="detail" rows="3" class="form-control">{{ recommendation.detail }}</textarea>
+                                        </td>
                                         <td class="actions">
                                             <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
-                                            <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus langkah ini untuk semua rutinitas?');">
-                                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-                                            </form>
                                         </td>
                                     </form>
+                                    <td class="actions">
+                                        <form method="POST" action="{{ url_for('admin.delete_step', step_id=step.id) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus langkah ini untuk semua rutinitas?');" class="form-inline">
+                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -153,29 +190,23 @@
           <label for="recommendations">Rekomendasi:</label>
           <input type="hidden" id="recommendations" name="recommendations" required />
           <div id="selectedRecommendations" class="selected-recommendations"></div>
-          <div id="dropdownRecommendations" class="dropdown">
-            <button type="button" class="dropdown-toggle">Rekomendasi</button>
-            <ul class="dropdown-menu">
-              {% for recommendation in recommendations %}
-              <li>
-                <label><input type="checkbox" value="{{ recommendation.title }}" />{{ recommendation.title }}</label>
-              </li>
-              {% endfor %}
-            </ul>
+          <div class="checkbox-options-container">
+            {% for recommendation in recommendations %}
+            <label class="checkbox-option">
+              <input type="checkbox" value="{{ recommendation.title }}" />{{ recommendation.title }}
+            </label>
+            {% endfor %}
           </div>
 
           <label for="Skincare Types">Jenis Skincare:</label>
           <input type="hidden" id="skincareTypes" name="skincareTypes" required />
           <div id="selectedSkincareTypes" class="selected-skincare-types"></div>
-          <div id="dropdownSkincareTypes" class="dropdown">
-            <button type="button" class="dropdown-toggle">Jenis Skincare</button>
-            <ul class="dropdown-menu">
-              {% for type in skincare_types %}
-              <li>
-                <label><input type="checkbox" value="{{ type.title }}" />{{ type.title }}</label>
-              </li>
-              {% endfor %}
-            </ul>
+          <div class="checkbox-options-container">
+            {% for type in skincare_types %}
+            <label class="checkbox-option">
+              <input type="checkbox" value="{{ type.title }}" />{{ type.title }}
+            </label>
+            {% endfor %}
           </div>
 
           <button type="submit">Simpan</button>
@@ -184,27 +215,27 @@
       </div>
     </div>
     <script>
-      // Accordion
-      const accordionHeaders = document.querySelectorAll(".accordion-header");
-      accordionHeaders.forEach(button => {
-          button.addEventListener("click", () => {
-              const accordionContent = button.nextElementSibling;
-              button.classList.toggle("active");
-              if (button.classList.contains("active")) {
-                  accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
-              } else {
-                  accordionContent.style.maxHeight = 0;
-              }
-          });
-      });
-
-      const skincareTypesCB = document.querySelectorAll("#dropdownSkincareTypes input[type='checkbox']");
-      const skincareTypesInput = document.getElementById("skincareTypes");
-      const selectedSkincareTypesContainer = document.getElementById("selectedSkincareTypes");
-
-      const recommendationsCB = document.querySelectorAll("#dropdownRecommendations input[type='checkbox']");
-      const recommendationsInput = document.getElementById("recommendations");
-      const selectedRecommendationsContainer = document.getElementById("selectedRecommendations");
+            // Accordion
+            const accordionHeaders = document.querySelectorAll(".accordion-header");
+            accordionHeaders.forEach(button => {
+                button.addEventListener("click", () => {
+                    const accordionContent = button.nextElementSibling;
+                    button.classList.toggle("active");
+                    if (button.classList.contains("active")) {
+                        accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+                    } else {
+                        accordionContent.style.maxHeight = 0;
+                    }
+                });
+            });
+      
+            const skincareTypesCB = document.querySelectorAll("#dropdownSkincareTypes .checkbox-option input[type='checkbox']");
+            const skincareTypesInput = document.getElementById("skincareTypes");
+            const selectedSkincareTypesContainer = document.getElementById("selectedSkincareTypes");
+      
+            const recommendationsCB = document.querySelectorAll("#dropdownRecommendations .checkbox-option input[type='checkbox']");
+            const recommendationsInput = document.getElementById("recommendations");
+            const selectedRecommendationsContainer = document.getElementById("selectedRecommendations");
 
       document.getElementById("productForm").addEventListener("submit", saveProduct);
 

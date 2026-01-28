@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/home_admin.css') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
     <style>
+        /* Existing styles */
         .main-content {
             padding: 2rem;
         }
@@ -45,6 +46,40 @@
             background-color: #ff69b4;
             color: white;
         }
+
+        /* NEW styles for checkbox group */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Menggunakan minmax yang lebih besar */
+            gap: 10px; /* Spasi antar item */
+            margin-top: 0.5rem;
+            padding: 10px; /* Padding di sekitar grup */
+            border: 1px solid #eee; /* Border ringan */
+            border-radius: 5px;
+            background-color: #fcfcfc; /* Background ringan */
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            padding: 5px; /* Padding untuk setiap item checkbox */
+            background-color: #f4f4f4; /* Background untuk setiap item */
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); /* Sedikit bayangan */
+        }
+        .form-check input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px; /* Spasi antara checkbox dan label */
+            flex-shrink: 0; /* Mencegah checkbox mengecil */
+        }
+        .form-check label {
+            margin-bottom: 0;
+            font-weight: normal; /* Kembali ke normal */
+            cursor: pointer;
+            white-space: nowrap; /* Mencegah label pecah baris */
+            overflow: hidden; /* Sembunyikan jika terlalu panjang */
+            text-overflow: ellipsis; /* Tampilkan ... jika terpotong */
+            flex-grow: 1; /* Biarkan label tumbuh mengisi ruang */
+        }
     </style>
 </head>
 <body>
@@ -55,34 +90,47 @@
 
         <main class="main-content">
             <div class="header">
-                <h1>Tambah Langkah Skincare Baru</h1>
+                
             </div>
 
             <div class="form-container">
                 <form method="POST" action="{{ url_for('admin.add_step') }}">
                     <div class="form-group">
                         <label for="name">Nama Langkah</label>
-                        <input type="text" id="name" name="name" class="form-control" required>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ form_data.name if form_data }}" required>
                     </div>
                     <div class="form-group">
                         <label for="routine_type">Jenis Rutinitas</label>
                         <select id="routine_type" name="routine_type" class="form-control" required>
-                            <option value="Morning">Pagi</option>
-                            <option value="Night">Malam</option>
+                            <option value="Morning" {% if form_data and form_data.routine_type == 'Morning' %}selected{% endif %}>Pagi</option>
+                            <option value="Night" {% if form_data and form_data.routine_type == 'Night' %}selected{% endif %}>Malam</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="default_time">Waktu Default</label>
-                        <input type="time" id="default_time" name="default_time" class="form-control" required>
+                        <input type="time" id="default_time" name="default_time" class="form-control" value="{{ form_data.default_time if form_data }}" required>
                     </div>
                     <div class="form-group">
                         <label for="step_order">Urutan</label>
-                        <input type="number" id="step_order" name="step_order" class="form-control" required>
+                        <input type="number" id="step_order" name="step_order" class="form-control" value="{{ form_data.step_order if form_data }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="default_detail">Detail Rekomendasi Default</label>
-                        <textarea id="default_detail" name="default_detail" rows="3" class="form-control" required></textarea>
-                        <small>Detail ini akan digunakan untuk semua jenis kulit untuk langkah baru ini.</small>
+                        <label for="detail">Detail Rekomendasi</label>
+                        <textarea id="detail" name="detail" rows="3" class="form-control" required>{{ form_data.detail if form_data }}</textarea>
+                        <small>Detail ini akan diterapkan pada semua jenis kulit yang dipilih.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Terapkan untuk Jenis Kulit:</label>
+                        <div class="checkbox-group">
+                            {% for db_skin_type, display_name in skin_types.items() %}
+                            <div class="form-check">
+                                <input type="checkbox" name="skin_types" value="{{ db_skin_type }}" id="check_{{ db_skin_type }}"
+                                    {% if form_data and db_skin_type in form_data.getlist('skin_types') %}checked{% endif %}>
+                                <label for="check_{{ db_skin_type }}">{{ display_name }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Tambah Langkah</button>
                 </form>
