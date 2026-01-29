@@ -7,15 +7,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/rekomendasi_admin.css') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
     <style>
-        .checkbox-options-container {
+.checkbox-options-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px; /* Spasi antar checkbox */
-            margin-top: 5px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f9f9f9;
+            gap: 12px;
+            margin-top: 8px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #fafafa;
+            min-height: 60px;
+            max-height: 200px;
+            overflow-y: auto;
         }
         .checkbox-option {
             display: flex;
@@ -175,42 +178,60 @@
       </main>
     </div>
     <div id="inputFormOverlay" class="overlay">
-      <div class="input-form">
+<div class="input-form">
         <h2 id="formTitle">Tambah Produk</h2>
         <form id="productForm" action="/timeline" enctype="multipart/form-data">
-          <label for="brand">Merk:</label>
-          <input type="text" id="brand" name="brand" required />
+          <div class="form-grid">
+            <div class="form-column">
+              <div class="form-group">
+                <label for="brand">Merk:</label>
+                <input type="text" id="brand" name="brand" required />
+              </div>
 
-          <label for="image">Gambar:</label>
-          <input type="file" id="image" name="file" accept="image/*" required />
+              <div class="form-group">
+                <label for="image">Gambar:</label>
+                <input type="file" id="image" name="file" accept="image/*" required />
+              </div>
+            </div>
 
-          <label for="description">Deskripsi</label>
-          <textarea id="description" name="description" required></textarea>
+            <div class="form-column">
+              <div class="form-group">
+                <label for="description">Deskripsi</label>
+                <textarea id="description" name="description" required></textarea>
+              </div>
 
-          <label for="recommendations">Rekomendasi:</label>
-          <input type="hidden" id="recommendations" name="recommendations" required />
-          <div id="selectedRecommendations" class="selected-recommendations"></div>
-          <div class="checkbox-options-container">
-            {% for recommendation in recommendations %}
-            <label class="checkbox-option">
-              <input type="checkbox" value="{{ recommendation.title }}" />{{ recommendation.title }}
-            </label>
-            {% endfor %}
+              <div class="form-group">
+                <label for="recommendations">Rekomendasi:</label>
+                <input type="hidden" id="recommendations" name="recommendations" required />
+                <div id="selectedRecommendations" class="selected-recommendations"></div>
+                <div id="recommendationsContainer" class="checkbox-options-container">
+                  {% for recommendation in recommendations %}
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="{{ recommendation.title }}" />{{ recommendation.title }}
+                  </label>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="Skincare Types">Jenis Skincare:</label>
+                <input type="hidden" id="skincareTypes" name="skincareTypes" required />
+                <div id="selectedSkincareTypes" class="selected-skincare-types"></div>
+                <div id="skincareTypesContainer" class="checkbox-options-container">
+                  {% for type in skincare_types %}
+                  <label class="checkbox-option">
+                    <input type="checkbox" value="{{ type.title }}" />{{ type.title }}
+                  </label>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
           </div>
 
-          <label for="Skincare Types">Jenis Skincare:</label>
-          <input type="hidden" id="skincareTypes" name="skincareTypes" required />
-          <div id="selectedSkincareTypes" class="selected-skincare-types"></div>
-          <div class="checkbox-options-container">
-            {% for type in skincare_types %}
-            <label class="checkbox-option">
-              <input type="checkbox" value="{{ type.title }}" />{{ type.title }}
-            </label>
-            {% endfor %}
+          <div class="form-actions">
+            <button type="submit">Simpan</button>
+            <button type="button" onclick="closeInputForm()">Batal</button>
           </div>
-
-          <button type="submit">Simpan</button>
-          <button type="button" onclick="closeInputForm()">Batal</button>
         </form>
       </div>
     </div>
@@ -229,11 +250,11 @@
                 });
             });
       
-            const skincareTypesCB = document.querySelectorAll("#dropdownSkincareTypes .checkbox-option input[type='checkbox']");
+const skincareTypesCB = document.querySelectorAll("#skincareTypesContainer .checkbox-option input[type='checkbox']");
             const skincareTypesInput = document.getElementById("skincareTypes");
             const selectedSkincareTypesContainer = document.getElementById("selectedSkincareTypes");
       
-            const recommendationsCB = document.querySelectorAll("#dropdownRecommendations .checkbox-option input[type='checkbox']");
+            const recommendationsCB = document.querySelectorAll("#recommendationsContainer .checkbox-option input[type='checkbox']");
             const recommendationsInput = document.getElementById("recommendations");
             const selectedRecommendationsContainer = document.getElementById("selectedRecommendations");
 
@@ -252,7 +273,7 @@
         const brand = document.getElementById("brand").value;
         const image = document.getElementById("image").files[0];
         const description = document.getElementById("description").value;
-
+        console.log ("Brand:", brand, "Image:", image, "Recommendations:", recommendationsInput.value, "Skincare Types:", skincareTypesInput.value);
         if (!image || brand == "" || recommendationsInput.value == "" || skincareTypesInput.value == "") {
           alert("Harap isi semua kolom");
           return;
@@ -353,8 +374,8 @@
         }
       }
 
-      function removeRecommendation(recommendation) {
-        const checkbox = Array.from(recommendationsCB).find((checkbox) => checkbox.value === type);
+function removeRecommendation(recommendation) {
+        const checkbox = Array.from(recommendationsCB).find((checkbox) => checkbox.value === recommendation);
         if (checkbox) {
           checkbox.checked = false;
           updateCheckboxes();

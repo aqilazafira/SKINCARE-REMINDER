@@ -251,7 +251,7 @@ tr:last-child td {
     padding: 2rem;
     border-radius: 10px;
     width: 90%;
-    max-width: 400px;
+    max-width: 900px;
 }
 
 .input-form h2 {
@@ -263,7 +263,33 @@ tr:last-child td {
 .input-form form {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
 }
 
 .input-form label {
@@ -356,22 +382,53 @@ tr:last-child td {
     background-color: #45a049;
 }
 
-#selectedSkincareTypes .selected-type,
-#selectedRecommendations .selected-recommendation {
+#selectedSkincareTypes {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 8px;
+    margin-bottom: 8px;
+    min-height: 32px;
+}
+
+#selectedRecommendations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+    min-height: 32px;
+}
+
+.selected-type,
+.selected-recommendation {
+    display: inline-flex;
+    align-items: center;
+    background-color: #ff69b4;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 16px;
+    font-size: 12px;
+    gap: 4px;
 }
 
 .selected-type .close-btn,
 .selected-recommendation .close-btn {
     background: none;
     border: none;
-    color: #ff0000;
-    font-size: 16px;
-    margin-left: 5px;
+    color: white;
+    font-size: 14px;
     cursor: pointer;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.selected-type .close-btn:hover,
+.selected-recommendation .close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -403,5 +460,23 @@ tr:last-child td {
 
     .action-buttons {
         flex-direction: column;
+    }
+
+    .input-form {
+        max-width: 400px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .form-actions button {
+        width: 100%;
     }
 }
