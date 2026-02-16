@@ -131,7 +131,15 @@
     </div>
 
     <script>
-      const userRemindersData = {{ user_reminders | tojson }};
+      const routinesByDay = {};
+      {% for routine in user_reminders %}
+        routinesByDay["{{ routine.day }}"] = {
+          hour: {{ routine.hour }},
+          minute: {{ routine.minute }},
+          skincare_types: "{{ routine.skincare_types }}"
+        };
+      {% endfor %}
+
       const checkboxes = document.querySelectorAll(".dropdown-menu input[type='checkbox']");
       const skincareTypesInput = document.getElementById("skincareTypes");
       const selectedSkincareTypesContainer = document.getElementById("selectedSkincareTypes");
@@ -204,15 +212,17 @@
         document.getElementById("selectedDay").value = day || "";
         // Reset form state
         checkboxes.forEach(cb => cb.checked = false);
+        document.getElementById('time').value = ''; // Clear time input
         updateSkincareTypes(); // Clear displayed types
 
         // Pre-populate if reminder exists for the day
-        const existingReminder = userRemindersData.find(r => r.day === day);
+        const existingReminder = routinesByDay[day];
         if (existingReminder) {
           const timeString = `${String(existingReminder.hour).padStart(2, '0')}:${String(existingReminder.minute).padStart(2, '0')}`;
           document.getElementById('time').value = timeString;
 
-          const skincareTypes = existingReminder.skincare_types.split(', ');
+          // Split by ', ' to handle cases where there are multiple skincare types
+          const skincareTypes = existingReminder.skincare_types.split(', '); 
           skincareTypes.forEach(type => {
             const checkbox = Array.from(checkboxes).find(cb => cb.value === type);
             if (checkbox) {
@@ -220,9 +230,6 @@
             }
           });
           updateSkincareTypes(); // Update displayed types based on checked checkboxes
-        } else {
-          // If no existing reminder, ensure time input is also cleared
-          document.getElementById('time').value = '';
         }
 
         document.getElementById("inputFormOverlay").style.display = "flex";
@@ -244,9 +251,9 @@
         const skincareTypes = skincareTypesInput.value.split(",");
         const [hour, minute] = time.split(":").map(Number);
 
-        // Optimistic UI Update
-        const routineDisplay = document.getElementById(`${day.toLowerCase()}-routine`);
-        routineDisplay.textContent = `${time} - ${skincareTypesInput.value}`;
+        // Optimistic UI Update - This will be refreshed by location.reload() anyway
+        // const routineDisplay = document.getElementById(`${day.toLowerCase()}-routine`);
+        // routineDisplay.textContent = `${time} - ${skincareTypesInput.value}`;
 
         closeInputForm();
         saveSkincareRoutineApi(day, hour, minute, skincareTypes);
