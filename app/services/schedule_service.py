@@ -15,4 +15,6 @@ def delete_schedule(job_id):
     print("Schedule removed")
 
 def reschedule(id: str, day: int, hour: int, minute: int):
-    scheduler.reschedule_job(id, "cron", day_of_week=day, hour=hour, minute=minute)
+    from apscheduler.triggers.cron import CronTrigger
+    trigger = CronTrigger(day_of_week=day, hour=hour, minute=minute)
+    scheduler.modify_job(id, trigger=trigger)
