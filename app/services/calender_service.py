@@ -6,6 +6,8 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+BASE_DIR = os.path.dirname(os.path.abspath(__name__))
+
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 DAYS = ["SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU", "MINGGU"]
 CREDENTIALS_FILE = os.path.join(BASE_DIR, "credentials.json")

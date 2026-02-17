@@ -9,5 +9,5 @@ __pycache__/
 *.db
 .coverage
 
-#token.json
+token.json
 # credentials.json
