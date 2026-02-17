@@ -54,7 +54,7 @@ def save_calendar_event(day, time, email):
         byday = DAY_TO_BYDAY.get(DAYS[day].upper(), "FR")
 
         event = {
-            "summary": "Skincare Reminder",
+            "summary": "Glowly",
             "location": "Home",
             "description": "Time to take care of your skin",
             "colorId": 6,

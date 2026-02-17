@@ -6,4 +6,4 @@ def test_app_config(app):
 def test_home_page(auth_client):
     response = auth_client.get('/')
     assert response.status_code == 200
-    assert b"SKINCARE REMINDER" in response.data
+    assert b"GLOWLY" in response.data
