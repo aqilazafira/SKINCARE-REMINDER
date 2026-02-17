@@ -49,8 +49,12 @@ services:
       MAIL_USERNAME: ${MAIL_USERNAME}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       MAIL_DEFAULT_SENDER: ${MAIL_DEFAULT_SENDER}
+      GUNICORN_TIMEOUT: 120 
     ports:
       - "5000:5000"
+    volumes:
+      - ./credentials.json:/app/app/services/credentials.json
+      - ./token.json:/app/app/services/token.json
     depends_on:
       db:
         condition: service_healthy

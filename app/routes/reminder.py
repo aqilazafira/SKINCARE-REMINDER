@@ -49,41 +49,60 @@ def save_schedule():
     minute = int(data.get("minute"))
     skincare_types = data.get("skincareTypes")
 
-    # Convert day from string to integer
-    day = DAYS.index(day.upper())
+    try:
+        # Convert day from string to integer
+        day_index = DAYS.index(day.upper())
 
-    receiver = current_user.email
-    reminder_action = lambda: send_email(
-        subject="Reminder",
-        receiver=receiver,
-        message="Don't forget to do your skincare routine!",
-    )
+        receiver = current_user.email
+        reminder_action = lambda: send_email(
+            subject="Reminder",
+            receiver=receiver,
+            message="Don't forget to do your skincare routine!",
+        )
 
-    reminder = Reminder.query.filter_by(user_id=current_user.id, day=day).first()
-    if reminder:
-        reminder.hour = hour
-        reminder.minute = minute
+        reminder = Reminder.query.filter_by(user_id=current_user.id, day=day_index).first()
+
+        if reminder:
+            # --- UPDATE ---
+            reminder.hour = hour
+            reminder.minute = minute
+            
+            # Reschedule external services
+            reschedule(reminder.id, day=day_index, hour=hour, minute=minute)
+            update_calendar_event(reminder.id, day_index, f"{hour}:{minute}", receiver)
+            
+            # Delete old skincare associations
+            ReminderSkincare.query.filter_by(reminder_id=reminder.id).delete()
+        else:
+            # --- CREATE ---
+            job_id = create_schedule(action=reminder_action, day=day_index, hour=hour, minute=minute)
+            reminder = Reminder(id=job_id, user_id=current_user.id, day=day_index, hour=hour, minute=minute)
+            db.session.add(reminder)
+            
+            # Schedule external services
+            save_calendar_event(day_index, f"{hour}:{minute}", receiver)
+
+        # Add new skincare associations for both Create and Update
+        for skincare_type_title in skincare_types:
+            skincare_type = SkincareType.query.filter_by(title=skincare_type_title).first()
+            if skincare_type:
+                new_reminder_skincare = ReminderSkincare(reminder_id=reminder.id, skincare_type_id=skincare_type.id)
+                db.session.add(new_reminder_skincare)
+            else:
+                # If a type from the frontend doesn't exist, this is a data integrity issue.
+                # We should fail the whole transaction.
+                raise ValueError(f"Skincare type '{skincare_type_title}' not found in database.")
+
         db.session.commit()
-        ReminderSkincare.query.filter_by(reminder_id=reminder.id).delete()
-        db.session.commit()
-        reschedule(reminder.id, day=day, hour=hour, minute=minute)
-        update_calendar_event(reminder.id, day, f"{hour}:{minute}", receiver)
-    else:
-        job_id = create_schedule(action=reminder_action, day=day, hour=hour, minute=minute)
-        reminder = Reminder(id=job_id, user_id=current_user.id, day=day, hour=hour, minute=minute)
-        db.session.add(reminder)
-        db.session.commit()
-        save_calendar_event(day, f"{hour}:{minute}", receiver)
+        
+        return jsonify({"message": "Reminder added successfully"}), 201
 
-    for skincare_type in skincare_types:
-        skincare_type = skincare_type
-        skincare_type_id = SkincareType.query.filter_by(title=skincare_type).first().id
-
-        new_reminder_skincare = ReminderSkincare(reminder_id=reminder.id, skincare_type_id=skincare_type_id)
-        db.session.add(new_reminder_skincare)
-
-    db.session.commit()
-    return jsonify({"message": "Reminder added successfully"}), 201
+    except Exception as e:
+        db.session.rollback()
+        # It would be better to log the error.
+        # from flask import current_app
+        # current_app.logger.error(f"Failed to save reminder: {e}")
+        return jsonify({"message": f"An error occurred while saving the reminder: {str(e)}"}), 500
 
 
 @reminder_bp.route("/pengingat", methods=["DELETE"])

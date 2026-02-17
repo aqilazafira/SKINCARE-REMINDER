@@ -160,7 +160,7 @@
           .filter((checkbox) => checkbox.checked)
           .map((checkbox) => checkbox.value);
 
-        skincareTypesInput.value = selectedTypes.join(",");
+        skincareTypesInput.value = selectedTypes.join(", ");
         displaySelectedSkincareTypes(selectedTypes);
       }
 
@@ -222,7 +222,7 @@
           document.getElementById('time').value = timeString;
 
           // Split by ', ' to handle cases where there are multiple skincare types
-          const skincareTypes = existingReminder.skincare_types.split(', '); 
+          const skincareTypes = existingReminder.skincare_types.split(/, ?/); 
           skincareTypes.forEach(type => {
             const checkbox = Array.from(checkboxes).find(cb => cb.value === type);
             if (checkbox) {
@@ -248,7 +248,7 @@
 
         const day = document.getElementById("selectedDay").value;
         const time = document.getElementById("time").value;
-        const skincareTypes = skincareTypesInput.value.split(",");
+        const skincareTypes = skincareTypesInput.value.split(", ");
         const [hour, minute] = time.split(":").map(Number);
 
         // Optimistic UI Update - This will be refreshed by location.reload() anyway
